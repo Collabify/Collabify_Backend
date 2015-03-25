@@ -8,6 +8,11 @@
       "name": "Ricardo Lopez",
       "email": "rlopez@sporks.io",
       "url": "https://github.com/rlopez4"
+    },
+    {
+      "name": "David Gardner",
+      "email": "smartydude010@hotmail.com",
+      "url": "https://github.com/WhiteNite11"
     }
   ],
   "main": "server.js",
