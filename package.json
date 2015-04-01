@@ -13,6 +13,11 @@
       "name": "David Gardner",
       "email": "smartydude010@hotmail.com",
       "url": "https://github.com/WhiteNite11"
+    },
+    {
+      "name": "Sydney Johnson",
+      "email": "syjohnso@gmail.com",
+      "url": "https://github.com/syjohnso"
     }
   ],
   "main": "server.js",
