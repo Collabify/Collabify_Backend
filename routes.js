@@ -8,12 +8,12 @@ router.route('/users/')
 		// Add a user to the database
 	});
 
-router.route('/users/:user_id/token/')
+router.route('/users/:userId/token/')
 	.post(function (req, res, next) {
 		// Request a new access token
 	});
 
-router.route('/users/:user_id/')
+router.route('/users/:userId/')
 	.delete(function (req, res, next) {
 		// Log out the user and delete them from the database
 	});
@@ -26,7 +26,7 @@ router.route('/events/')
 		// Get all events near provided coordinates
 	});
 
-router.route('/events/:event_id/')
+router.route('/events/:eventId/')
 	.get(function (req, res, next) {
 		// Get current settings for the event (DJ only)
 	})
@@ -37,7 +37,7 @@ router.route('/events/:event_id/')
 		// End event (DJ only)
 	});
 
-router.route('/events/:event_id/users/')
+router.route('/events/:eventId/users/')
 	.post(function (req, res, next) {
 		// Join event (Collabifier only)
 	})
@@ -45,7 +45,7 @@ router.route('/events/:event_id/users/')
 		// Get list of users at event (DJ only)
 	});
 
-router.route('/events/:event_id/users/:user_id/')
+router.route('/events/:eventId/users/:userId/')
 	.put(function (req, res, next) {
 		// Change settings (Collabifier only)
 		// for example, "show_name"
@@ -54,12 +54,12 @@ router.route('/events/:event_id/users/:user_id/')
 		// Leave event (Collabifier only)
 	});
 
-router.route('/events/:event_id/users/:user_id/role/')
+router.route('/events/:eventId/users/:userId/role/')
 	.put(function (req, res, next) {
 		// Change user's role (DJ only)
 	});
 
-router.route('/events/:event_id/playlist/')
+router.route('/events/:eventId/playlist/')
 	.post(function (req, res, next) {
 		// Add song to playlist
 	})
@@ -70,27 +70,30 @@ router.route('/events/:event_id/playlist/')
 		// Reorder songs in the playlist (DJ/Promoted only)
 	});
 
-router.route('/events/:event_id/playlist/:song_id/')
+router.route('/events/:eventId/playlist/:songId/')
 	.delete(function (req, res, next) {
 		// Remove song from playlist
 	});
 
-router.route('/events/:event_id/playlist/:song_id/votes/:user_id/')
+router.route('/events/:eventId/playlist/:songId/votes/:userId/')
 	.put(function (req, res, next) {
 		// Place vote on song
 	});
 
 // Route parameters
-router.param('user_id', function (req, res, next, val) {
-	req.user_id = val;
+router.param('userId', function (req, res, next, val) {
+	req.userId = val;
+	next();
 });
 
-router.param('event_id', function (req, res, next, val) {
-	req.event_id = val;
+router.param('eventId', function (req, res, next, val) {
+	req.eventId = val;
+	next();
 });
 
-router.param('song_id', function (req, res, next, val) {
-	req.song_id = val;
+router.param('songId', function (req, res, next, val) {
+	req.songId = val;
+	next();
 });
 
 module.exports = router;
