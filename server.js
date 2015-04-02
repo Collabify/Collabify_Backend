@@ -21,6 +21,9 @@ var logger			= require('./logger');
 var serverPort = process.env.PORT || 1337;
 logger.info('Using port ' + serverPort);
 
+var serverHost = process.env.HOST || 'INADDR_ANY';
+logger.info('Using host ' + serverHost);
+
 // set up the parsers
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
