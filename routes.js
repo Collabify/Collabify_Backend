@@ -75,9 +75,9 @@ router.route('/events/:event_id/playlist/:song_id/')
 		// Remove song from playlist
 	});
 
-router.route('/events/:event_id/playlist/:song_id/votes/:user_id')
+router.route('/events/:event_id/playlist/:song_id/votes/:user_id/')
 	.put(function (req, res, next) {
-		// Play vote on song
+		// Place vote on song
 	});
 
 // Route parameters
