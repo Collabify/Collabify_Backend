@@ -2,7 +2,7 @@
  * User constructor.
  *
  * @constructor
- * @param {string} name
+ * @param {string} name - The user's Spotify display name
  * @param {string} userId - The Spotify ID for the user
  * @param {string} role - String identifying the user's role ('DJ', 'Collabifier', etc.)
  * @param {string} accessTokenDigest - Hashed copy of the access token
@@ -13,7 +13,7 @@ function User(name, userId, role, accessTokenDigest, refreshToken, settings) {
 	this.name = name;
 	this.userId = userId;
 	this.role = role;
-	this.hashedAccessToken = hashedAccessToken;
+	this.accessTokenDigest = accessTokenDigest;
 	this.refreshToken = refreshToken;
 	this.settings = settings;
 }
