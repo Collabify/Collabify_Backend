@@ -5,7 +5,7 @@ The Collabify backend. If you are contributing to this repo please add yourself 
 First clone the repo and `cd` into the Collabify_Backend folder. Next run `$ npm install` to install all of the dependencies. Don't forget to add a logs folder so the logger has somewhere to put log files.
 
 ## Usage
-You can run the server by using the command `node server.js` or if you want to specify the port you can run `export PORT=PORT_NUMBER` and then `node server.js`. If you want to put it all together you can run `PORT=PORT_NUMBER node server.js`.
+You can run the server by using the command `node server.js`.  If you want to specify the port or hostname, you can run 'PORT=PORT_NUMBER HOST=HOSTNAME node server.js'.  By default, the server listens on port 1337 and on each interface (INADDR_ANY).
 
 To add new modules run `npm install module --save` if it is required for running the server or `npm install module --save-dev` if it is a build tool like grunt or gulp and is not necessary for the server to run.
 
@@ -36,6 +36,9 @@ Each model should have their own file here. Please do not add any business logic
 
 ### logger.js
 This is the config file for the logger. Feel free to change it if you have improvements.
+
+### mocks.js
+This module contains mock data for each of the models, which can be used as a placeholder until more complete functionality is implemented.
 
 ### routes.js
 As the name suggests, all of the routes are defined here. Basically this module will just define the routes and hands it off to the correct controller.

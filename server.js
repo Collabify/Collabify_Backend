@@ -10,11 +10,11 @@
  */
 
 var express			= require('express');
-var app 				= express();
+var app 			= express();
 var server			= require('http').createServer(app)
 var morgan			= require('morgan');
-var io					= require('socket.io').listen(server);
-var bodyParser 	= require('body-parser');
+var io				= require('socket.io').listen(server);
+var bodyParser 		= require('body-parser');
 var routes			= require('./routes');
 var logger			= require('./logger');
 
