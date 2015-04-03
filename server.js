@@ -49,4 +49,4 @@ io.sockets.on('connection', function (socket) {
 });
 
 // listen on port
-server.listen(serverPort);
+server.listen(serverPort, serverHost);
