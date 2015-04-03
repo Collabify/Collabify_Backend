@@ -1,7 +1,7 @@
-var express 	= require('express');
-var router 		= express.Router();
-var logger  	= require('./logger');
-var mocks 		= require('./mocks');
+var express		= require('express');
+var router		= express.Router();
+var logger		= require('./logger');
+var mocks		= require('./mocks');
 
 // Routes
 router.route('/users/')

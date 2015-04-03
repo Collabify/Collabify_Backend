@@ -9,19 +9,19 @@
  *			Ricardo Lopez <rlopez@sporks.io>
  */
 
-var express			= require('express');
+var express 		= require('express');
 var app 			= express();
 var server			= require('http').createServer(app)
 var morgan			= require('morgan');
 var io				= require('socket.io').listen(server);
-var bodyParser 		= require('body-parser');
+var bodyParser		= require('body-parser');
 var routes			= require('./routes');
 var logger			= require('./logger');
 
-var serverPort = process.env.PORT || 1337;
+var serverPort = process.env.PORT || 1338;
 logger.info('Using port ' + serverPort);
 
-var serverHost = process.env.HOST || 'INADDR_ANY';
+var serverHost = process.env.HOST || 'localhost';
 logger.info('Using host ' + serverHost);
 
 // set up the parsers
