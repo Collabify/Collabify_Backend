@@ -15,6 +15,7 @@ var server			= require('http').createServer(app)
 var morgan			= require('morgan');
 var io				= require('socket.io').listen(server);
 var bodyParser		= require('body-parser');
+var mongoose		= require('mongoose');
 var routes			= require('./routes');
 var logger			= require('./logger');
 
@@ -23,6 +24,9 @@ logger.info('Using port ' + serverPort);
 
 var serverHost = process.env.HOST || 'localhost';
 logger.info('Using host ' + serverHost);
+
+var db = process.env.DB || 'test';
+logger.info('Using database ' + db);
 
 // set up the parsers
 app.use(bodyParser.json()); // for parsing application/json
@@ -47,6 +51,11 @@ io.sockets.on('connection', function (socket) {
 	});
 
 });
+
+// connect to database
+mongoose.connect('mongodb://localhost/' + db);
+mongoose.connection.once('open', logger.info.bind(logger, 'connected to database'));
+mongoose.connection.on('error', logger.error.bind(logger, 'database connection error:'));
 
 // listen on port
 server.listen(serverPort, serverHost);
