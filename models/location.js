@@ -1,14 +1,13 @@
-/**
- * Location constructor for locations described by latitude and longitude (in
- * degrees).
- *
- * @constructor
- * @param {number} latitude
- * @param {number} longitude
- */
-function Location(latitude, longitude) {
-	this.latitude = latitude;
-	this.longitude = longitude;
-}
+/** @module */
 
-module.exports = Location;
+/**
+ * Location object definition
+ *
+ * @namespace
+ * @property latitude 	- Latitude in decimal degrees
+ * @property longitude 	- Longitude in decimal degrees
+ */
+module.exports.LocationDef = {
+	latitude: 	{type: Number, required: true},
+	longitude: 	{type: Number, required: true}
+};
