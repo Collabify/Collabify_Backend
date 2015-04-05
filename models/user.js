@@ -1,21 +1,29 @@
-/**
- * User constructor.
- *
- * @constructor
- * @param {string} name - The user's Spotify display name
- * @param {string} userId - The Spotify ID for the user
- * @param {string} role - String identifying the user's role ('DJ', 'Collabifier', etc.)
- * @param {string} accessTokenDigest - Hashed copy of the access token
- * @param {string} refreshToken
- * @param {UserSettings} settings
- */
-function User(name, userId, role, accessTokenDigest, refreshToken, settings) {
-	this.name = name;
-	this.userId = userId;
-	this.role = role;
-	this.accessTokenDigest = accessTokenDigest;
-	this.refreshToken = refreshToken;
-	this.settings = settings;
-}
+var mongoose 			= require('mongoose');
+var Schema				= mongoose.Schema;
+var UserSettingsDef		= require('./user-settings').UserSettingsDef;
 
-module.exports = User;
+/** @module */
+
+/**
+ * User object definition
+ *
+ * @property name		- The user's Spotify display name
+ * @property userId		- The Spotify ID for the user
+ * @property role		- String identifying the user's role ('DJ', 'Collabifier', etc.)
+ * @property settings	- The user's current settings
+ */
+module.exports.UserDef = {
+	name: 		{type: String, required: true},
+	userId: 	{type: String, required: true},
+	role: 		{type: String, default: 'Collabifier'},
+	/** @todo Uncomment when authentication is implemented */
+	// accessTokenDigest: {type: String, required: true},
+	// refreshToken: {type: String, required: true},
+	settings: 	UserSettingsDef
+};
+
+/** User document schema */
+module.exports.UserSchema = new Schema(module.exports.UserDef);
+
+/** User model */
+module.exports.User = mongoose.model('User', module.exports.UserSchema);

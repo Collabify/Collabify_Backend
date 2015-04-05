@@ -1,11 +1,12 @@
-/**
- * Playlist constructor that constructs an empty playlist.
- *
- * @constructor
- */
-function Playlist() {
-	this.hasBeenEdited = false;
-	this.songs = [];
-}
+var SongSchema = require('./song').SongSchema;
 
-module.exports = Playlist;
+/** @module */
+
+/**
+ * Playlist object definition
+ *
+ * @property songs - Array of song sub-documents
+ */
+module.exports.PlaylistDef = {
+	songs: {type: [SongSchema], default: []}
+};

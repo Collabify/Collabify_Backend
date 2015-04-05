@@ -5,7 +5,7 @@ The Collabify backend. If you are contributing to this repo please add yourself 
 First clone the repo and `cd` into the Collabify_Backend folder. Next run `$ npm install` to install all of the dependencies. Don't forget to add a logs folder so the logger has somewhere to put log files.
 
 ## Usage
-You can run the server by using the command `node server.js`.  If you want to specify the port or hostname, you can run 'PORT=PORT_NUMBER HOST=HOSTNAME node server.js'.  By default, the server listens on port 1338 and on the 'localhost' interface (127.0.0.1).  Nginx, which listens on port 1337, will pass all REST endpoint requests to node at localhost:1338.
+You can run the server by using the command `PORT=PORT_NUMBER HOST=HOSTNAME DB=DATABASE node server.js`.  PORT, HOST, and DB are optional and allow you to specify the port, hostname, and database used by the server.  By default, the server listens on port 1338 and on the 'localhost' interface (127.0.0.1).  Nginx, which listens on port 1337, will pass all REST endpoint requests to node at localhost:1338.  The default database is 'test'.
 
 To add new modules run `npm install module --save` if it is required for running the server or `npm install module --save-dev` if it is a build tool like grunt or gulp and is not necessary for the server to run.
 

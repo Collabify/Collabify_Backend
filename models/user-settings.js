@@ -1,11 +1,10 @@
-/**
- * UserSettings constructor.
- *
- * @constructor
- * @param {boolean} showName - Whether to display the user's Spotify username or 'anonymous'
- */
-function UserSettings(showName) {
-	this.showName = showName;
-}
+/** @module */
 
-module.exports = UserSettings;
+/**
+ * UserSettings object definition
+ *
+ * @property showName - Whether to display the user's Spotify username or 'anonymous'
+ */
+module.exports.UserSettingsDef = {
+	showName: {type: Boolean, default: true}
+};

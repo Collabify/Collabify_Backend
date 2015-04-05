@@ -1,22 +1,32 @@
-var Playlist = require('./playlist');
+var mongoose 			= require('mongoose');
+var Schema				= mongoose.Schema;
+var EventSettingsDef	= require('./event-settings').EventSettingsDef;
+var LocationDef			= require('./location').LocationDef;
+var PlaylistDef 		= require('./playlist').PlaylistDef;
+
+/** @module */
 
 /**
- * Event constructor that creates an event with an empty playlist and no users.
+ * Event object definition
  *
- * @constructor
- * @param {string} name
- * @param {string} eventId - The Spotify ID of the DJ who created the event
- * @param {EventSettings} settings
- * @param {Location} location
+ * @property name		- The name of the event
+ * @property eventId	- The Spotify ID of the DJ who created the event
+ * @property userIds	- The Spotify IDs of the users currently at the event
+ * @property location	- The event's location
+ * @property playlist	- The event's current playlist
+ * @property settings	- The settings for the event
  */
-function Event(name, eventId, settings, location) {
-	this.name = name;
-	this.eventId = eventId;
-	this.settings = settings;
-	this.location = location;
-	this.numUsers = 0;
-	this.playlist = new Playlist();
-	this.users = [];
-}
+module.exports.EventDef = {
+	name: 		{type: String, required: true},
+	eventId: 	{type: String, required: true},
+	userIds: 	{type: [String], default: []},
+	location: 	LocationDef,
+	playlist: 	PlaylistDef,
+	settings: 	EventSettingsDef
+};
 
-module.exports = Event;
+/** Event document schema */
+module.exports.EventSchema = new Schema(module.exports.EventDef);
+
+/** Event model */
+module.exports.Event = mongoose.model('Event', module.exports.EventSchema);
