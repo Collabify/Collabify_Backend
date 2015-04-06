@@ -3,6 +3,9 @@ var router				= express.Router();
 var logger				= require('./logger');
 var mocks				= require('./mocks');
 
+var UsersController						= require('./controllers/users-controller');
+var UserTokenController					= require('./controllers/user-token-controller');
+var UserController						= require('./controllers/user-controller');
 var EventsController					= require('./controllers/events-controller');
 var EventController						= require('./controllers/event-controller');
 var EventUsersController				= require('./controllers/event-users-controller');
@@ -16,7 +19,7 @@ var EventPlaylistSongVotesController	= require('./controllers/event-playlist-son
 router.route('/users/')
 	.post(function (req, res, next) {
 		// Add a user to the database
-		res.send('POST ' + req.path);
+		UsersController.post(req, res);
 	});
 
 router.route('/users/:userId/token/')
@@ -26,6 +29,10 @@ router.route('/users/:userId/token/')
 	});
 
 router.route('/users/:userId/')
+	.get(function (req, res, next) {
+		// Get user details
+
+	})
 	.delete(function (req, res, next) {
 		// Log out the user and delete them from the database
 		res.send('DELETE ' + req.path);
@@ -58,11 +65,11 @@ router.route('/events/:eventId/')
 router.route('/events/:eventId/users/')
 	.post(function (req, res, next) {
 		// Join event (Collabifier only)
-		res.send('POST ' + req.path);
+		EventUsersController.post(req, res);
 	})
 	.get(function (req, res, next) {
 		// Get list of users at event (DJ only)
-		res.send(mocks.events[0].users);
+		EventUsersController.get(req, res);
 	});
 
 router.route('/events/:eventId/users/:userId/')

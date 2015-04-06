@@ -4,8 +4,10 @@ var Event 		= require('../models/event').Event;
 
 module.exports.post = function (req, res) {
 	Event.findOne({eventId: req.body.eventId}, function (err, event) {
-		if (event !== null) {
-			logger.error("Event already exists");
+		if (err) {
+			return status.handleUnexpectedError(err, res);
+		} else if (event != null) {
+			logger.error('Event already exists');
 			res.sendStatus(status.ERR_RESOURCE_EXISTS);
 			return;
 		}
@@ -18,7 +20,7 @@ module.exports.post = function (req, res) {
 			}
 
 			res.sendStatus(status.OK_CREATE_RESOURCE);
-		})
+		});
 	});
 };
 
@@ -31,13 +33,9 @@ module.exports.get = function (req, res) {
 	.circle({center: [req.body.latitude, req.body.longitude], radius: 10})
 	.exec(function (err, events) {
 		if (err) {
-			logger.error(err);
-			res.sendStatus(status.ERR_BAD_REQUEST);
-			return;
-		}
-
-		if (events.length == 0) {
-			logger.warn("No nearby events");
+			return status.handleUnexpectedError(err, res);
+		} else if (events.length == 0) {
+			logger.warn('No nearby events');
 			res.sendStatus(status.ERR_RESOURCE_NOT_FOUND);
 			return;
 		}

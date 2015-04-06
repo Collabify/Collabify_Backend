@@ -8,5 +8,10 @@ module.exports = {
 	ERR_UNAUTHORIZED: 401,
 	ERR_RESOURCE_EXISTS: 403,
 	ERR_RESOURCE_NOT_FOUND: 404,
-	ERR_BAD_REQUEST: 400
+	ERR_BAD_REQUEST: 400,
+
+	handleUnexpectedError: function (err, res) {
+		logger.error(err);
+		res.sendStatus(module.exports.ERR_BAD_REQUEST);
+	}
 };
