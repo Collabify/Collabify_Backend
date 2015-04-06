@@ -2,6 +2,15 @@ var logger 		= require('../logger');
 var status		= require('../status');
 var Event 		= require('../models/event').Event;
 
+/** @module */
+
+/**
+ * POST /events/ - Create a new event
+ *
+ * @param 			req			- The client request
+ * @param {Event} 	req.body	- The event to be created
+ * @param 			res			- The server response
+ */
 module.exports.post = function (req, res) {
 	Event.findOne({eventId: req.body.eventId}, function (err, event) {
 		if (err) {
@@ -24,6 +33,13 @@ module.exports.post = function (req, res) {
 	});
 };
 
+/**
+ * GET /events/ - Get all events near provided coordinates
+ *
+ * @param 				req 				- The client request
+ * @param {Location} 	req.body.location 	- The user's current latitude and longitude coordinates
+ * @param {Event[]} 	res 				- List of all nearby events
+ */
 module.exports.get = function (req, res) {
 	Event
 	.find()

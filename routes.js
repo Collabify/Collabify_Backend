@@ -31,11 +31,11 @@ router.route('/users/:userId/token/')
 router.route('/users/:userId/')
 	.get(function (req, res, next) {
 		// Get user details
-
+		UserController.get(req, res);
 	})
 	.delete(function (req, res, next) {
 		// Log out the user and delete them from the database
-		res.send('DELETE ' + req.path);
+		UserController.delete(req, res);
 	});
 
 router.route('/events/')
