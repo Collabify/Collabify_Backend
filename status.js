@@ -1,3 +1,5 @@
+var logger	= require('./logger');
+
 /** @module */
 
 module.exports = {

@@ -25,6 +25,7 @@ router.route('/users/')
 router.route('/users/:userId/token/')
 	.post(function (req, res, next) {
 		// Request a new access token
+		/** @todo Implement me */
 		res.send('POST ' + req.path);
 	});
 
@@ -32,6 +33,10 @@ router.route('/users/:userId/')
 	.get(function (req, res, next) {
 		// Get user details
 		UserController.get(req, res);
+	})
+	.put(function (req, res, next) {
+		// Change settings (Collabifier only)
+		UserController.put(req, res);
 	})
 	.delete(function (req, res, next) {
 		// Log out the user and delete them from the database
@@ -73,33 +78,29 @@ router.route('/events/:eventId/users/')
 	});
 
 router.route('/events/:eventId/users/:userId/')
-	.put(function (req, res, next) {
-		// Change settings (Collabifier only)
-		res.send('PUT ' + req.path);
-	})
 	.delete(function (req, res, next) {
 		// Leave event (Collabifier only)
-		res.send('DELETE ' + req.path);
+		EventUserController.delete(req, res);
 	});
 
 router.route('/events/:eventId/users/:userId/role/')
 	.put(function (req, res, next) {
 		// Change user's role (DJ only)
-		res.send('PUT ' + req.path);
+		EventUserRoleController.put(req, res);
 	});
 
 router.route('/events/:eventId/playlist/')
 	.post(function (req, res, next) {
 		// Add song to playlist
-		res.send('POST ' + req.path);
+		EventPlaylistController.post(req, res);
 	})
 	.get(function (req, res, next) {
 		// Get all songs in the playlist in their proper order
-		res.send(mocks.events[0].playlist.songs);
+		EventPlaylistController.get(req, res);
 	})
 	.put(function (req, res, next) {
 		// Reorder songs in the playlist (DJ/Promoted only)
-		res.send('PUT ' + req.path);
+		EventPlaylistController.put(req, res);
 	});
 
 router.route('/events/:eventId/playlist/:songId/')
