@@ -47,9 +47,6 @@ module.exports.get = function (req, res) {
 		User.find({userId: {$in: event.userIds}}, 'name userId role', function (err, users) {
 			if (err) {
 				return status.handleUnexpectedError(err, res);
-			} else if (users.length == 0) {
-				logger.warn('No users at event');
-				return res.sendStatus(status.ERR_RESOURCE_NOT_FOUND);
 			}
 
 			res.status(status.OK_GET_RESOURCE).send(users);

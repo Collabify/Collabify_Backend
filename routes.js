@@ -25,7 +25,7 @@ router.route('/users/')
 router.route('/users/:userId/token/')
 	.post(function (req, res, next) {
 		// Request a new access token
-		/** @todo Implement me */
+		/** @todo Iteration 2: Implement me */
 		res.send('POST ' + req.path);
 	});
 
@@ -106,12 +106,13 @@ router.route('/events/:eventId/playlist/')
 router.route('/events/:eventId/playlist/:songId/')
 	.delete(function (req, res, next) {
 		// Remove song from playlist
-		res.send('DELETE ' + req.path);
+		EventPlaylistSongController.delete(req, res);
 	});
 
 router.route('/events/:eventId/playlist/:songId/votes/:userId/')
 	.put(function (req, res, next) {
 		// Place vote on song
+		/** @todo Iteration 2: Implement me */
 		res.send('PUT ' + req.path);
 	});
 

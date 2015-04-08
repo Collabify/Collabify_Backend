@@ -4,7 +4,8 @@ var Event 		= require('../models/event').Event;
 var User		= require('../models/user').User;
 
 module.exports.post = function (req, res) {
-	/** @todo check if req.body.song is undefined */
+	/** @todo Check if req.body.song is undefined */
+	/** @todo Make sure user isn't blacklisted */
 	User.findOne({userId: req.body.song.userId}, function (err, user) {
 		if (err) {
 			return status.handleUnexpectedError(err, res);
@@ -13,7 +14,7 @@ module.exports.post = function (req, res) {
 			return res.sendStatus(status.ERR_RESOURCE_NOT_FOUND);
 		} else if (user.eventId != req.eventId) {
 			logger.error('User not at event');
-			return res.sendStatus(status.ERR_BAD_REQUEST);
+			return res.sendStatus(status.ERR_UNAUTHORIZED);
 		}
 
 		Event.findOne({eventId: req.eventId}, function (err, event) {
@@ -35,7 +36,7 @@ module.exports.post = function (req, res) {
 			})[0];
 
 			if (song != undefined) {
-				logger.error('Song already in playlist');
+				logger.error('Song is already in the playlist');
 				return res.sendStatus(status.ERR_RESOURCE_EXISTS);
 			}
 
@@ -92,7 +93,7 @@ module.exports.put = function (req, res) {
 				return res.sendStatus(status.ERR_RESOURCE_NOT_FOUND);
 			} else if (user.eventId != req.eventId) {
 				logger.error('User not at event');
-				return res.sendStatus(status.ERR_RESOURCE_NOT_FOUND);
+				return res.sendStatus(status.ERR_UNAUTHORIZED);
 			} else if (user.role != 'DJ' && user.role != 'Promoted') {
 				logger.error('User is not the DJ or a Promoted Collabifier');
 				return res.sendStatus(status.ERR_UNAUTHORIZED);

@@ -56,6 +56,7 @@ module.exports.post = function (req, res) {
  * @param {Event[]} 	res 				- List of all nearby events
  */
 module.exports.get = function (req, res) {
+	/** @todo Check req.body.location for undefined */
 	Event
 	.find()
 	.select('name eventId location')
