@@ -16,6 +16,7 @@ module.exports.delete = function (req, res) {
 		event.save();
 
 		user.eventId = null;
+		user.role = 'NoRole';
 		user.save();
 
 		res.sendStatus(status.OK_DELETE_RESOURCE);

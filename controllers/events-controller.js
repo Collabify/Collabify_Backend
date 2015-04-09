@@ -28,7 +28,7 @@ module.exports.post = function (req, res) {
 			return res.sendStatus(status.ERR_RESOURCE_EXISTS);
 		}
 
-		Event.create(req.body.event, function (err) {
+		Event.create(req.body, function (err) {
 			if (err) {
 				logger.error(err);
 				return res.sendStatus(status.ERR_BAD_REQUEST);

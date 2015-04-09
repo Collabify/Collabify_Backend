@@ -4,7 +4,7 @@ var User 		= require('../models/user').User;
 var helpers		= require('./helpers');
 
 module.exports.post = function (req, res) {
-	User.findOne({userId: req.headers.userid}, function (err, user) {
+	User.findOne({userId: req.body.userId}, function (err, user) {
 		if (err) {
 			return status.handleUnexpectedError(err, res);
 		} else if (user != null && user.eventId != null) {
@@ -16,13 +16,13 @@ module.exports.post = function (req, res) {
 			// User already logged in, just update their name and settings but
 			// do not modify the eventId or role because these are managed by
 			// the database
-			user.name = name;
-			user.settings = settings;
+			user.name = req.body.name;
+			user.settings = req.body.settings;
 			user.save();
 
 			res.sendStatus(status.OK_UPDATE_RESOURCE);
 		} else {
-			User.create(req.body.user, function (err) {
+			User.create(req.body, function (err) {
 				if (err) {
 					logger.error(err);
 					return res.sendStatus(status.ERR_BAD_REQUEST);
