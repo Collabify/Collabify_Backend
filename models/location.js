@@ -3,7 +3,6 @@
 /**
  * Location object definition
  *
- * @namespace
  * @property latitude 	- Latitude in decimal degrees
  * @property longitude 	- Longitude in decimal degrees
  */

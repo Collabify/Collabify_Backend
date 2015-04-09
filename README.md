@@ -31,14 +31,14 @@ var controller = {
 module.exports = controller
 ```
 
+### doc/
+HTML documentation for the project.  Regenerate by running 'node_modules/.bin/jsdoc -c conf.json'.
+
 ### models/
 Each model should have their own file here. Please do not add any business logic here, just define the model and export it. Once again keep please follow one naming convention.
 
 ### logger.js
 This is the config file for the logger. Feel free to change it if you have improvements.
-
-### mocks.js
-This module contains mock data for each of the models, which can be used as a placeholder until more complete functionality is implemented.
 
 ### routes.js
 As the name suggests, all of the routes are defined here. Basically this module will just define the routes and hands it off to the correct controller.

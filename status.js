@@ -1,7 +1,5 @@
 var logger	= require('./logger');
 
-/** @module */
-
 module.exports = {
 	/** @todo Update these codes to better reflect the status */
 	OK_GET_RESOURCE: 200,

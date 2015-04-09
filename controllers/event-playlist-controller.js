@@ -2,6 +2,31 @@ var logger 		= require('../logger');
 var status		= require('../status');
 var helpers		= require('./helpers');
 
+/** @module */
+
+/**
+ * POST /events/:eventId/playlist/ - Add song to playlist
+ *
+ * <p>Preconditions: <br>
+ * User has logged in <br>
+ * User is at the event <br>
+ * User is not blacklisted <br>
+ * Song is not already in the playlist <br>
+ *
+ * <p>Postconditions: <br>
+ * Song is added to the end of the playlist <br>
+ *
+ * @param 				req 					The client request
+ * @param				req.headers				The headers in the HTTP request
+ * @param {String} 		req.headers.userid 		The user's Spotify ID
+ * @param				req.body				The body of the request
+ * @param {String} 		req.body.title 			The song's title
+ * @param {String} 		req.body.artist 		The artist of the song
+ * @param {String} 		req.body.album 			The album the song appears on
+ * @param {Number} 		req.body.year 			The year the album was released
+ * @param {String} 		req.body.artworkUrl 	The URL to retrieve the album art
+ * @param 				res 					The server response
+ */
 module.exports.post = function (req, res) {
 	helpers.getUserAtEvent(req.headers.userid, req.eventId, res, function (user, event) {
 		// Blacklisted users are not allowed to add songs
@@ -18,6 +43,9 @@ module.exports.post = function (req, res) {
 			return res.sendStatus(status.ERR_RESOURCE_EXISTS);
 		}
 
+		// Manually add the userId
+		req.body.userId = user.userId;
+
 		// Add the song to the playlist
 		event.playlist.songs.push(req.body);
 		event.save();
@@ -26,12 +54,28 @@ module.exports.post = function (req, res) {
 	});
 };
 
+/**
+ * GET /events/:eventId/playlist/ - Get all songs in the playlist in their proper order
+ *
+ * <p>Preconditions: <br>
+ * User has logged in <br>
+ * User is at the event <br>
+ *
+ * @param req The client request
+ * @param req.headers The headers in the HTTP request
+ * @param res The server response -
+ */
 module.exports.get = function (req, res) {
 	helpers.getUserAtEvent(req.headers.userid, req.eventId, res, function (user, event) {
 		res.status(status.OK_GET_RESOURCE).send(event.playlist.songs);
 	});
 };
 
+/**
+ * PUT /events/:eventId/playlist/ - Reorder songs in the playlist
+ *
+ *
+ */
 module.exports.put = function (req, res) {
 	helpers.getEventAsDJOrPromoted(req.headers.userid, req.eventId, res, function (event) {
 		event.playlist = req.body;
