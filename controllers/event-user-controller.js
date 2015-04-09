@@ -8,6 +8,7 @@ var helpers		= require('./helpers');
  * DELETE /events/:eventId/users/:userId - Leave event
  *
  * <p>Preconditions: <br>
+ * Event exists <br>
  * User has logged in <br>
  * User is at the event <br>
  * User is not the DJ for the event <br>

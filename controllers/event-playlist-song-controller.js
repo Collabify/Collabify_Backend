@@ -8,8 +8,9 @@ var helpers		= require('./helpers');
  * DELETE /events/:eventId/playlist/:songId/ - Remove song from the playlist
  *
  * <p>Preconditions: <br>
+ * Event exists <br>
  * User has logged in <br>
- * User is at the event
+ * User is at the event <br>
  * User is the one who added the song, or is the DJ or a Promoted Collabifier <br>
  *
  * <p>Postconditions: <br>

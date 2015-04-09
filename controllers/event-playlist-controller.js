@@ -8,6 +8,7 @@ var helpers		= require('./helpers');
  * POST /events/:eventId/playlist/ - Add song to playlist
  *
  * <p>Preconditions: <br>
+ * Event exists <br>
  * User has logged in <br>
  * User is at the event <br>
  * User is not blacklisted <br>
@@ -58,6 +59,7 @@ module.exports.post = function (req, res) {
  * GET /events/:eventId/playlist/ - Get all songs in the playlist in their proper order
  *
  * <p>Preconditions: <br>
+ * Event exists <br>
  * User has logged in <br>
  * User is at the event <br>
  *
@@ -84,6 +86,7 @@ module.exports.get = function (req, res) {
  * PUT /events/:eventId/playlist/ - Reorder songs in the playlist
  *
  * <p>Preconditions: <br>
+ * Event exists <br>
  * User has logged in <br>
  * User is the DJ or a Promoted Collabifier for the requested event <br>
  *

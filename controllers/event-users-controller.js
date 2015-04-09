@@ -6,18 +6,22 @@ var helpers		= require('./helpers');
 /** @module */
 
 /**
- *
+ * POST /events/:eventId/users/ - Join event
  *
  * <p>Preconditions: <br>
+ * Event exists <br>
  * User has logged in <br>
+ * User is not already at an event <br>
  *
  * <p>Postconditions: <br>
+ * User is added to the event's user list <br>
+ * User's eventId is changed to match the event <br>
+ * User's role is changed to 'Collabifier' <br>
  *
- * @param req The client request
- * @param req.headers The headers in the HTTP request
- * @param {String} req.headers.userid The user's Spotify ID
- * @param req.body The body of the request
- * @param res The server response
+ * @param 			req 					The client request
+ * @param 			req.headers 			The headers in the HTTP request
+ * @param {String} 	req.headers.userid 		The user's Spotify ID
+ * @param 			res 					The server response
  */
 module.exports.post = function (req, res) {
 	helpers.getUser(req.headers.userid, res, function (user) {
@@ -40,9 +44,10 @@ module.exports.post = function (req, res) {
 };
 
 /**
- *
+ * GET /events/:eventId/users/ - Get list of users at event
  *
  * <p>Preconditions: <br>
+ * Event exists <br>
  * User has logged in <br>
  *
  * <p>Postconditions: <br>

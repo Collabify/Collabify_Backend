@@ -15,8 +15,8 @@ module.exports.MAX_EVENT_DISTANCE = 5;
  * POST /events/ - Create a new event
  *
  * <p>Preconditions: <br>
- * User has logged in <br>
  * Event does not already exist <br>
+ * User has logged in <br>
  * User is not at an event already <br>
  *
  * <p>Postconditions: <br>

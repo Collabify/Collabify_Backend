@@ -8,6 +8,7 @@ var helpers 	= require('./helpers');
  * GET /events/:eventId/ - Get current settings for the event
  *
  * <p>Preconditions: <br>
+ * Event exists <br>
  * User has logged in <br>
  * User is the DJ for the requested event <br>
  *
@@ -29,6 +30,7 @@ module.exports.get = function (req, res) {
  * PUT /events/:eventId/ - Change settings for the event
  *
  * <p>Preconditions: <br>
+ * Event exists <br>
  * User has logged in <br>
  * User is the DJ for the requested event <br>
  *
@@ -57,6 +59,7 @@ module.exports.put = function (req, res) {
  * DELETE /events/:eventId/ - End event
  *
  * <p>Preconditions: <br>
+ * Event exists <br>
  * User has logged in <br>
  * User is the DJ for the requested event <br>
  *
