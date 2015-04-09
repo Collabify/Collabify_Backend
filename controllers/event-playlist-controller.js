@@ -61,9 +61,18 @@ module.exports.post = function (req, res) {
  * User has logged in <br>
  * User is at the event <br>
  *
- * @param req The client request
- * @param req.headers The headers in the HTTP request
- * @param res The server response -
+ * @param 			req 				The client request
+ * @param 			req.headers 		The headers in the HTTP request
+ * @param {String} 	req.headers.userid 	The user's Spotify ID
+ * @param 			res 				The server response
+ * @param {String}	res[i].title		The title of the song
+ * @param {String} 	res[i].artist		The name of the artist
+ * @param {String} 	res[i].album		The name of the album the song appears on
+ * @param {Number}	res[i].year			The year the song was released
+ * @param {String} 	res[i].songId		The Spotify ID for the song
+ * @param {String} 	res[i].artworkUrl	The URL where the album art can be found
+ * @param {String} 	res[i].userId		The Spotify ID of the user who added the song
+ * @param {Number}	res[i].votes		The song's current number of (upvotes - downvotes)
  */
 module.exports.get = function (req, res) {
 	helpers.getUserAtEvent(req.headers.userid, req.eventId, res, function (user, event) {
@@ -74,7 +83,26 @@ module.exports.get = function (req, res) {
 /**
  * PUT /events/:eventId/playlist/ - Reorder songs in the playlist
  *
+ * <p>Preconditions: <br>
+ * User has logged in <br>
+ * User is the DJ or a Promoted Collabifier for the requested event <br>
  *
+ * <p>Postconditions: <br>
+ * Songs in the playlist are reordered accordingly
+ *
+ * @param 			req 				The client request
+ * @param 			req.headers 		The headers in the HTTP request
+ * @param {String}	req.headers.userid 	The user's Spotify ID
+ * @param 			req.body 			The body of the request
+ * @param {String}	req[i].title		The title of the song
+ * @param {String} 	req[i].artist		The name of the artist
+ * @param {String} 	req[i].album		The name of the album the song appears on
+ * @param {Number}	req[i].year			The year the song was released
+ * @param {String} 	req[i].songId		The Spotify ID for the song
+ * @param {String} 	req[i].artworkUrl	The URL where the album art can be found
+ * @param {String} 	req[i].userId		The Spotify ID of the user who added the song
+ * @param {Number}	[req[i].votes=0]	The song's current number of (upvotes - downvotes)
+ * @param			res					The server response
  */
 module.exports.put = function (req, res) {
 	helpers.getEventAsDJOrPromoted(req.headers.userid, req.eventId, res, function (event) {

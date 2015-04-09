@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: models/event-settings.js</title>
+    <title>JSDoc: Source: controllers/event-playlist-song-controller.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: models/event-settings.js</h1>
+    <h1 class="page-title">Source: controllers/event-playlist-song-controller.js</h1>
 
     
 
@@ -26,21 +26,46 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/** @module */
+            <pre class="prettyprint source linenums"><code>var logger 		= require('../logger');
+var status		= require('../status');
+var helpers		= require('./helpers');
 
-/**
- * EventSettings object definition
+ /** @module */
+
+ /**
+ * DELETE /events/:eventId/playlist/:songId/ - Remove song from the playlist
  *
- * @property {String}	[password=null]					The (optional) password for the event
- * @property {Boolean}	[locationRestricted=true]		Whether to restrict the event to nearby users
- * @property {Boolean}	[allowVoting=true]				Whether to allow users to vote on songs
+ * &lt;p>Preconditions: &lt;br>
+ * User has logged in &lt;br>
+ * User is at the event
+ * User is the one who added the song, or is the DJ or a Promoted Collabifier &lt;br>
+ *
+ * &lt;p>Postconditions: &lt;br>
+ * Song is removed from the event's playlist &lt;br>
+ *
+ * @param 				req 					The client request
+ * @param 				req.headers 			The headers in the HTTP request
+ * @param {String}		req.headers.userid 		The user's Spotify ID
+ * @param 				res 					The server response
  */
-module.exports.EventSettingsDef = {
-	password: 			{type: String, default: null},
-	locationRestricted: {type: Boolean, default: true},
-	allowVoting: 		{type: Boolean, default: true}
-};
-</code></pre>
+module.exports.delete = function (req, res) {
+	helpers.getUserAtEvent(req.headers.userid, req.eventId, res, function (user, event) {
+		var song = helpers.getSongFromPlaylist(event, req.songId);
+
+		if (song == undefined) {
+			logger.error('Song not in playlist');
+			return res.sendStatus(status.ERROR_RESOURCE_NOT_FOUND);
+		} else if (user.userId != song.userId &amp;&amp; user.role != 'DJ' &amp;&amp; user.role != 'Promoted') {
+			logger.error('User is not allowed to delete the song');
+			return res.sendStatus(status.ERR_UNAUTHORIZED);
+		}
+
+		song.remove();
+		event.save();
+
+		res.sendStatus(status.OK_DELETE_RESOURCE);
+	});
+};</code></pre>
         </article>
     </section>
 

@@ -11,12 +11,13 @@ var helpers 	= require('./helpers');
  * User has logged in <br>
  * User is the DJ for the requested event <br>
  *
- * @param 					req 					The client request
- * @param					req.headers				The headers in the HTTP request
- * @param {String} 			req.headers.userid 		The user's Spotify ID
- * @param 				 	res 					The server response
- * @param {String}			res.password			The event password (or null if there isn't one)
- * @param {Boolean}			res.locationRestricted	Whether to restrict the event to nearby users
+ * @param 					req 						The client request
+ * @param					req.headers					The headers in the HTTP request
+ * @param {String} 			req.headers.userid 			The user's Spotify ID
+ * @param 				 	res 						The server response
+ * @param {String}			res.password				The event password (or null if there isn't one)
+ * @param {Boolean}			res.locationRestricted		Whether to restrict the event to nearby users
+ * @param {Boolean}			res.allowVoting				Whether to allow users to vote on songs
  */
 module.exports.get = function (req, res) {
 	helpers.getEventAsDJ(req.headers.userid, req.eventId, res, function (event) {

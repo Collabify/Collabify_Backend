@@ -3,8 +3,8 @@
 /**
  * Location object definition
  *
- * @property latitude 	- Latitude in decimal degrees
- * @property longitude 	- Longitude in decimal degrees
+ * @property {Number}	latitude 	Latitude in decimal degrees
+ * @property {Number}	longitude 	Longitude in decimal degrees
  */
 module.exports.LocationDef = {
 	latitude: 	{type: Number, required: true},

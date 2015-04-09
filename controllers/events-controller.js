@@ -23,13 +23,16 @@ module.exports.MAX_EVENT_DISTANCE = 5;
  * Event is created <br>
  * User is assigned the 'DJ' role for the event <br>
  *
- * @param 				req						The client request
- * @param				req.headers				The headers in the HTTP request
- * @param {String} 		req.headers.userid		The user's Spotify ID
- * @param				req.body				The body of the request
- * @param {String} 		req.body.name			The name of the event
- * @param {Location} 	req.body.location		The event's latitude and longituded
- * @param 				res						The server response
+ * @param 				req												The client request
+ * @param				req.headers										The headers in the HTTP request
+ * @param {String} 		req.headers.userid								The user's Spotify ID
+ * @param				req.body										The body of the request
+ * @param {String} 		req.body.name									The name of the event
+ * @param {Location} 	req.body.location								The event's latitude and longitude
+ * @param {String}		[req.body.location.password=null]				The event password (or null if there isn't one)
+ * @param {Boolean}		[req.body.location.locationRestricted=true]		Whether to restrict the event to nearby users
+ * @param {Boolean}		[req.body.location.allowVoting=true]			Whether to allow users to vote on songs
+ * @param 				res												The server response
  */
 module.exports.post = function (req, res) {
 	helpers.getUser(req.headers.userid, res, function (user) {

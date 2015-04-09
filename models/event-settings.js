@@ -3,9 +3,9 @@
 /**
  * EventSettings object definition
  *
- * @property password				- The (optional) password for the event
- * @property locationRestricted		- Whether to restrict the event to nearby users
- * @property allowVoting			- Whether to allow users to vote on songs
+ * @property {String}	[password=null]					The (optional) password for the event
+ * @property {Boolean}	[locationRestricted=true]		Whether to restrict the event to nearby users
+ * @property {Boolean}	[allowVoting=true]				Whether to allow users to vote on songs
  */
 module.exports.EventSettingsDef = {
 	password: 			{type: String, default: null},

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: models/event-settings.js</title>
+    <title>JSDoc: Source: controllers/event-user-controller.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: models/event-settings.js</h1>
+    <h1 class="page-title">Source: controllers/event-user-controller.js</h1>
 
     
 
@@ -26,21 +26,55 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/** @module */
+            <pre class="prettyprint source linenums"><code>var logger 		= require('../logger');
+var status		= require('../status');
+var helpers		= require('./helpers');
+
+/** @module */
 
 /**
- * EventSettings object definition
+ * DELETE /events/:eventId/users/:userId - Leave event
  *
- * @property {String}	[password=null]					The (optional) password for the event
- * @property {Boolean}	[locationRestricted=true]		Whether to restrict the event to nearby users
- * @property {Boolean}	[allowVoting=true]				Whether to allow users to vote on songs
+ * &lt;p>Preconditions: &lt;br>
+ * User has logged in &lt;br>
+ * User is at the event &lt;br>
+ * User is not the DJ for the event &lt;br>
+ *
+ * &lt;p>Postconditions: &lt;br>
+ * User is removed from the list of users at the event &lt;br>
+ * User's eventId is reset to null &lt;br>
+ * User's role is reset to 'NoRole' &lt;br>
+ *
+ * @param 			req 					The client request
+ * @param 			req.headers 			The headers in the HTTP request
+ * @param {String} 	req.headers.userid 		The user's Spotify ID
+ * @param 			res 					The server response
  */
-module.exports.EventSettingsDef = {
-	password: 			{type: String, default: null},
-	locationRestricted: {type: Boolean, default: true},
-	allowVoting: 		{type: Boolean, default: true}
-};
-</code></pre>
+module.exports.delete = function (req, res) {
+	helpers.getUserAtEvent(req.userId, req.eventId, res, function (user, event) {
+		if (user.role == 'DJ') {
+			logger.error('DJ cannot leave event');
+			return res.sendStatus(status.ERR_UNAUTHORIZED);
+		}
+
+		var userIdIndex = event.userIds.indexOf(user.userId);
+
+		if (userIdIndex == -1) {
+			logger.error('User not at event');
+			return res.sendStatus(status.ERR_BAD_REQUEST);
+		}
+
+		// Remove the user from the event
+		event.userIds.splice(userIdIndex, 1);
+		event.save();
+
+		user.eventId = null;
+		user.role = 'NoRole';
+		user.save();
+
+		res.sendStatus(status.OK_DELETE_RESOURCE);
+	});
+};</code></pre>
         </article>
     </section>
 

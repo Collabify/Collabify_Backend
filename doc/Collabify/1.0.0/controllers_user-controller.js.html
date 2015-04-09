@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: controllers/helpers.js</title>
+    <title>JSDoc: Source: controllers/user-controller.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: controllers/helpers.js</h1>
+    <h1 class="page-title">Source: controllers/user-controller.js</h1>
 
     
 
@@ -28,97 +28,90 @@
         <article>
             <pre class="prettyprint source linenums"><code>var logger 		= require('../logger');
 var status		= require('../status');
-var Event 		= require('../models/event').Event;
-var User		= require('../models/user').User;
+var helpers		= require('./helpers');
 
-module.exports.getUser = function (userId, select, res, callback) {
-	if (arguments.length == 3) {
-		// select parameter was not passed
-		callback = arguments[2];
-		res = arguments[1];
-		select = null;
-	}
+/** @module */
 
-	User.findOne({userId: userId}, select, function (err, user) {
-		if (err) {
-			return status.handleUnexpectedError(err, res);
-		} else if (user == null) {
-			logger.error('User not found');
-			return res.sendStatus(status.ERR_RESOURCE_NOT_FOUND);
-		}
-
-		callback(user);
+/**
+ *
+ *
+ * &lt;p>Preconditions: &lt;br>
+ * User has logged in &lt;br>
+ *
+ * &lt;p>Postconditions: &lt;br>
+ *
+ * @param req The client request
+ * @param req.headers The headers in the HTTP request
+ * @param {String} req.headers.userid The user's Spotify ID
+ * @param req.body The body of the request
+ * @param res The server response
+ */
+module.exports.get = function (req, res) {
+	helpers.getUser(req.userId, 'name userId eventId role settings', res, function (user) {
+		res.status(status.OK_GET_RESOURCE).send(user);
 	});
 };
 
-module.exports.getEvent = function (eventId, select, res, callback) {
-	if (arguments.length == 3) {
-		// select parameter was not passed
-		callback = arguments[2];
-		res = arguments[1];
-		select = null;
-	}
-
-	Event.findOne({eventId: eventId}, select, function (err, event) {
-		if (err) {
-			return status.handleUnexpectedError(err, res);
-		} else if (event == null) {
-			logger.error('Event not found');
-			return res.sendStatus(status.ERR_RESOURCE_NOT_FOUND);
-		}
-
-		callback(event);
+/**
+ *
+ *
+ * &lt;p>Preconditions: &lt;br>
+ * User has logged in &lt;br>
+ *
+ * &lt;p>Postconditions: &lt;br>
+ *
+ * @param req The client request
+ * @param req.headers The headers in the HTTP request
+ * @param {String} req.headers.userid The user's Spotify ID
+ * @param req.body The body of the request
+ * @param res The server response
+ */
+module.exports.put = function (req, res) {
+	helpers.getUser(req.userId, res, function (user) {
+		user.settings = req.body;
+		res.sendStatus(status.OK_UPDATE_RESOURCE);
 	});
 };
 
-module.exports.getUserAtEvent = function (userId, eventId, res, callback) {
-	module.exports.getUser(userId, res, function (user) {
-		if (user.eventId != eventId) {
-			logger.error('User not at event');
-			return res.sendStatus(status.ERR_UNAUTHORIZED);
+/**
+ *
+ *
+ * &lt;p>Preconditions: &lt;br>
+ * User has logged in &lt;br>
+ *
+ * &lt;p>Postconditions: &lt;br>
+ *
+ * @param req The client request
+ * @param req.headers The headers in the HTTP request
+ * @param {String} req.headers.userid The user's Spotify ID
+ * @param req.body The body of the request
+ * @param res The server response
+ */
+module.exports.delete = function (req, res) {
+	helpers.getUser(req.userId, res, function (user) {
+		// Before logging out the user, remove them from their event if they were
+		// at one
+		if (user.eventId != null) {
+			helpers.getEvent(user.eventId, res, function (event) {
+				var userIdIndex = event.userIds.indexOf(user.userId);
+
+				if (userIdIndex == -1) {
+					logger.error('User not at event');
+					return res.sendStatus(status.ERR_BAD_REQUEST);
+				}
+
+				// Remove the user from the event
+				event.userIds.splice(userIdIndex, 1);
+				event.save();
+			});
 		}
 
-		module.exports.getEvent(eventId, res, function (event) {
-			callback(user, event);
-		});
+		// Log out the user
+		user.remove();
+
+		res.sendStatus(status.OK_DELETE_RESOURCE);
 	});
-};
-
-module.exports.getEventAsDJ = function (userId, eventId, res, callback) {
-	module.exports.getUserAtEvent(userId, eventId, res, function (user, event) {
-		if (user.role != 'DJ') {
-			logger.error('User is not the DJ');
-			return res.sendStatus(status.ERR_UNAUTHORIZED);
-		}
-
-		callback(event);
-	});
-};
-
-module.exports.getEventAsDJOrPromoted = function (userId, eventId, res, callback) {
-	module.exports.getUserAtEvent(userId, eventId, res, function (user, event) {
-		if (user.role != 'DJ' &amp;&amp; user.role != 'Promoted') {
-			logger.error('User is not the DJ or a Promoted Collabifier');
-			return res.sendStatus(status.ERR_UNAUTHORIZED);
-		}
-
-		callback(event);
-	});
-};
-
-module.exports.getSongFromPlaylist = function (event, songId) {
-	/** @todo Find a better way to do this */
-	var song = event.playlist.songs.filter(function (song) {
-		if (song.songId == songId) {
-			return true;
-		}
-
-		return false;
-	})[0];
-
-	return song;
-};
-</code></pre>
+};</code></pre>
         </article>
     </section>
 

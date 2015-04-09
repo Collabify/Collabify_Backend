@@ -2,12 +2,42 @@ var logger 		= require('../logger');
 var status		= require('../status');
 var helpers		= require('./helpers');
 
+/** @module */
+
+/**
+ *
+ *
+ * <p>Preconditions: <br>
+ * User has logged in <br>
+ *
+ * <p>Postconditions: <br>
+ *
+ * @param req The client request
+ * @param req.headers The headers in the HTTP request
+ * @param {String} req.headers.userid The user's Spotify ID
+ * @param req.body The body of the request
+ * @param res The server response
+ */
 module.exports.get = function (req, res) {
 	helpers.getUser(req.userId, 'name userId eventId role settings', res, function (user) {
 		res.status(status.OK_GET_RESOURCE).send(user);
 	});
 };
 
+/**
+ *
+ *
+ * <p>Preconditions: <br>
+ * User has logged in <br>
+ *
+ * <p>Postconditions: <br>
+ *
+ * @param req The client request
+ * @param req.headers The headers in the HTTP request
+ * @param {String} req.headers.userid The user's Spotify ID
+ * @param req.body The body of the request
+ * @param res The server response
+ */
 module.exports.put = function (req, res) {
 	helpers.getUser(req.userId, res, function (user) {
 		user.settings = req.body;
@@ -15,6 +45,20 @@ module.exports.put = function (req, res) {
 	});
 };
 
+/**
+ *
+ *
+ * <p>Preconditions: <br>
+ * User has logged in <br>
+ *
+ * <p>Postconditions: <br>
+ *
+ * @param req The client request
+ * @param req.headers The headers in the HTTP request
+ * @param {String} req.headers.userid The user's Spotify ID
+ * @param req.body The body of the request
+ * @param res The server response
+ */
 module.exports.delete = function (req, res) {
 	helpers.getUser(req.userId, res, function (user) {
 		// Before logging out the user, remove them from their event if they were

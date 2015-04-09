@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: models/playlist</title>
+    <title>JSDoc: Module: controllers/event-playlist-song-controller</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: models/playlist</h1>
+    <h1 class="page-title">Module: controllers/event-playlist-song-controller</h1>
 
     
 
@@ -52,17 +52,31 @@
     
 
     
-        <h3 class="subsection-title">Members</h3>
+
+    
+        <h3 class="subsection-title">Methods</h3>
 
         
             
-<h4 class="name" id=".PlaylistDef"><span class="type-signature">(static) </span>PlaylistDef<span class="type-signature"></span></h4>
 
+    
+
+    <h4 class="name" id=".delete"><span class="type-signature">(static) </span>delete<span class="signature">(req, res)</span><span class="type-signature"></span></h4>
+
+    
 
 
 
 <div class="description">
-    Playlist object definition
+    DELETE /events/:eventId/playlist/:songId/ - Remove song from the playlist
+
+<p>Preconditions: <br>
+User has logged in <br>
+User is at the event
+User is the one who added the song, or is the DJ or a Promoted Collabifier <br>
+
+<p>Postconditions: <br>
+Song is removed from the event's playlist <br>
 </div>
 
 
@@ -71,11 +85,12 @@
 
 
 
-    <h5 class="subsection-title">Properties:</h5>
 
+
+    <h5>Parameters:</h5>
     
 
-<table class="props">
+<table class="params">
     <thead>
     <tr>
         
@@ -85,11 +100,7 @@
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -101,42 +112,136 @@
 
         <tr>
             
-                <td class="name"><code>songs</code></td>
+                <td class="name"><code>req</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The client request
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>headers</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The headers in the HTTP request
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>userid</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;Song></span>
+<span class="param-type">String</span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                    []
-                
-                </td>
-            
 
-            <td class="description last">Array of song sub-documents</td>
+            <td class="description last">The user's Spotify ID</td>
         </tr>
 
     
     </tbody>
 </table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>res</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The server response</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -170,7 +275,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_playlist.js.html">models/playlist.js</a>, <a href="models_playlist.js.html#line10">line 10</a>
+        <a href="controllers_event-playlist-song-controller.js.html">controllers/event-playlist-song-controller.js</a>, <a href="controllers_event-playlist-song-controller.js.html#line23">line 23</a>
     </li></ul></dd>
     
 
@@ -186,9 +291,17 @@
 
 
 
-        
-    
 
+
+
+
+
+
+
+
+
+
+        
     
 
     

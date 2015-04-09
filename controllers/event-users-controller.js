@@ -3,6 +3,22 @@ var status		= require('../status');
 var User 		= require('../models/user').User;
 var helpers		= require('./helpers');
 
+/** @module */
+
+/**
+ *
+ *
+ * <p>Preconditions: <br>
+ * User has logged in <br>
+ *
+ * <p>Postconditions: <br>
+ *
+ * @param req The client request
+ * @param req.headers The headers in the HTTP request
+ * @param {String} req.headers.userid The user's Spotify ID
+ * @param req.body The body of the request
+ * @param res The server response
+ */
 module.exports.post = function (req, res) {
 	helpers.getUser(req.headers.userid, res, function (user) {
 		if (user.eventId != null) {
@@ -23,6 +39,20 @@ module.exports.post = function (req, res) {
 	});
 };
 
+/**
+ *
+ *
+ * <p>Preconditions: <br>
+ * User has logged in <br>
+ *
+ * <p>Postconditions: <br>
+ *
+ * @param req The client request
+ * @param req.headers The headers in the HTTP request
+ * @param {String} req.headers.userid The user's Spotify ID
+ * @param req.body The body of the request
+ * @param res The server response
+ */
 module.exports.get = function (req, res) {
 	// First, make sure the DJ is the one making the request
 	helpers.getEventAsDJ(req.headers.userid, req.eventId, res, function (event) {

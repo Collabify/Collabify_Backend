@@ -6,14 +6,14 @@ var Schema		= mongoose.Schema;
 /**
  * Song object definition
  *
- * @property title		- The title of the song
- * @property artist		- The name of the artist
- * @property album		- The name of the album the song appears on
- * @property year		- The year the song was released
- * @property songId		- The Spotify ID for the song
- * @property artworkUrl	- The URL where the album art can be found
- * @property userId		- The Spotify ID of the user who added the song
- * @property votes		- The song's current number of (upvotes - downvotes)
+ * @property {String} 	title			The title of the song
+ * @property {String} 	artist			The name of the artist
+ * @property {String} 	album			The name of the album the song appears on
+ * @property {Number}	year			The year the song was released
+ * @property {String} 	songId			The Spotify ID for the song
+ * @property {String} 	artworkUrl		The URL where the album art can be found
+ * @property {String} 	userId			The Spotify ID of the user who added the song
+ * @property {Number} 	[votes=0]		The song's current number of (upvotes - downvotes)
  */
 module.exports.SongDef = {
 	title: 		{type: String, required: true},
