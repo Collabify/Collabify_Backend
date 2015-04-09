@@ -14,7 +14,9 @@ var helpers 	= require('./helpers');
  * @param 					req 					The client request
  * @param					req.headers				The headers in the HTTP request
  * @param {String} 			req.headers.userid 		The user's Spotify ID
- * @param 				 	res 					The server response - the event's settings
+ * @param 				 	res 					The server response
+ * @param {String}			res.password			The event password (or null if there isn't one)
+ * @param {Boolean}			res.locationRestricted	Whether to restrict the event to nearby users
  */
 module.exports.get = function (req, res) {
 	helpers.getEventAsDJ(req.headers.userid, req.eventId, res, function (event) {

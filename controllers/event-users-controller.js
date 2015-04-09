@@ -24,8 +24,10 @@ module.exports.post = function (req, res) {
 };
 
 module.exports.get = function (req, res) {
+	console.log(req.headers.userid);
+	console.log(req.eventId);
 	// First, make sure the DJ is the one making the request
-	helpers.getEventAsDJ(req.headers.userid, req.eventId, function (event) {
+	helpers.getEventAsDJ(req.headers.userid, req.eventId, res, function (event) {
 		// Find all users at the event
 		User.find({userId: {$in: event.userIds}}, 'name userId role', function (err, users) {
 			if (err) {
