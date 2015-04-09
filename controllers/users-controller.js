@@ -4,7 +4,7 @@ var User 		= require('../models/user').User;
 var helpers		= require('./helpers');
 
 module.exports.post = function (req, res) {
-	User.findOne({userId: req.body.userId}, function (err, user) {
+	User.findOne({userId: req.headers.userid}, function (err, user) {
 		if (err) {
 			return status.handleUnexpectedError(err, res);
 		} else if (user != null && user.eventId != null) {
@@ -22,6 +22,9 @@ module.exports.post = function (req, res) {
 
 			res.sendStatus(status.OK_UPDATE_RESOURCE);
 		} else {
+			// Manually add the userId
+			req.body.userId = req.headers.userid;
+
 			User.create(req.body, function (err) {
 				if (err) {
 					logger.error(err);
