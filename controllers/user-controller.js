@@ -1,50 +1,26 @@
 var logger 		= require('../logger');
 var status		= require('../status');
-var User 		= require('../models/user').User;
+var helpers		= require('./helpers');
 
 module.exports.get = function (req, res) {
-	User.findOne({userId: req.userId}, 'name userId eventId role settings', function (err, user) {
-		if (err) {
-			return status.handleUnexpectedError(err, res);
-		} else if (user == null) {
-			logger.error('User not found');
-			return res.sendStatus(status.ERR_RESOURCE_NOT_FOUND);
-		}
-
+	helpers.getUser(req.userId, 'name userId eventId role settings', res, function (user) {
 		res.status(status.OK_GET_RESOURCE).send(user);
 	});
 };
 
 module.exports.put = function (req, res) {
-	User.update({userId: req.userId}, {settings: req.body.settings}, function (err, user) {
-		if (err) {
-			return status.handleUnexpectedError(err, res);
-		}
-
+	helpers.getUser(req.userId, res, function (user) {
+		user.settings = req.body;
 		res.sendStatus(status.OK_UPDATE_RESOURCE);
 	});
 };
 
 module.exports.delete = function (req, res) {
-	User.findOne({userId: req.userId}, function (err, user) {
-		if (err) {
-			return status.handleUnexpectedError(err, res);
-		} else if (user == null) {
-			logger.error('User not found');
-			return res.sendStatus(status.ERR_RESOURCE_NOT_FOUND);
-		}
-
+	helpers.getUser(req.userId, res, function (user) {
 		// Before logging out the user, remove them from their event if they were
 		// at one
 		if (user.eventId != null) {
-			Event.findOne({eventId: user.eventId}, function (err, event) {
-				if (err) {
-					return status.handleUnexpectedError(err, res);
-				} else if (event == null) {
-					logger.error('Event not found');
-					return res.sendStatus(status.ERR_RESOURCE_NOT_FOUND);
-				}
-
+			helpers.getEvent(user.eventId, res, function (event) {
 				var userIdIndex = event.userIds.indexOf(user.userId);
 
 				if (userIdIndex == -1) {

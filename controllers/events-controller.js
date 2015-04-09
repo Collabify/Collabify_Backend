@@ -1,7 +1,6 @@
 var logger 		= require('../logger');
 var status		= require('../status');
 var Event 		= require('../models/event').Event;
-var User 		= require('../models/user').User;
 var helpers 	= require('./helpers');
 
 /** @module */
@@ -60,7 +59,8 @@ module.exports.get = function (req, res) {
 
 	Event
 		.find()
-		.select('name eventId location')
+		.select(null)
+		//.select('name eventId location')
 		.where('location')
 		.within()
 		/** @todo Verify that this is a correct spatial query */

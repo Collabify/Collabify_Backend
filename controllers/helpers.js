@@ -3,8 +3,15 @@ var status		= require('../status');
 var Event 		= require('../models/event').Event;
 var User		= require('../models/user').User;
 
-module.exports.getUser = function (userId, res, callback) {
-	User.findOne({userId: userId}, function (err, user) {
+module.exports.getUser = function (userId, select, res, callback) {
+	if (arguments.length == 3) {
+		// select parameter was not passed
+		callback = arguments[2];
+		res = arguments[1];
+		select = null;
+	}
+
+	User.findOne({userId: userId}, select, function (err, user) {
 		if (err) {
 			return status.handleUnexpectedError(err, res);
 		} else if (user == null) {
@@ -16,8 +23,15 @@ module.exports.getUser = function (userId, res, callback) {
 	});
 };
 
-module.exports.getEvent = function (eventId, res, callback) {
-	Event.findOne({eventId: eventId}, function (err, event) {
+module.exports.getEvent = function (eventId, select, res, callback) {
+	if (arguments.length == 3) {
+		// select parameter was not passed
+		callback = arguments[2];
+		res = arguments[1];
+		select = null;
+	}
+
+	Event.findOne({eventId: eventId}, select, function (err, event) {
 		if (err) {
 			return status.handleUnexpectedError(err, res);
 		} else if (event == null) {
@@ -67,7 +81,7 @@ module.exports.getEventAsDJOrPromoted = function (userId, eventId, res, callback
 module.exports.getSongFromPlaylist = function (event, songId) {
 	/** @todo Find a better way to do this */
 	var song = event.playlist.songs.filter(function (song) {
-		if (song.songId == req.body.song.songId) {
+		if (song.songId == songId) {
 			return true;
 		}
 

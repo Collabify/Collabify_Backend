@@ -1,23 +1,35 @@
 var logger 		= require('../logger');
 var status		= require('../status');
 var User 		= require('../models/user').User;
+var helpers		= require('./helpers');
 
 module.exports.post = function (req, res) {
-	User.findOne({userId: req.body.user.userId}, function (err, user) {
+	User.findOne({userId: req.headers.userid}, function (err, user) {
 		if (err) {
 			return status.handleUnexpectedError(err, res);
-		} else if (user !== null) {
-			logger.error('User has already logged in');
+		} else if (user != null && user.eventId != null) {
+			logger.error('User is already at an event');
 			return res.sendStatus(status.ERR_RESOURCE_EXISTS);
 		}
 
-		User.create(req.body.user, function (err) {
-			if (err) {
-				logger.error(err);
-				return res.sendStatus(status.ERR_BAD_REQUEST);
-			}
+		if (user != null) {
+			// User already logged in, just update their name and settings but
+			// do not modify the eventId or role because these are managed by
+			// the database
+			user.name = name;
+			user.settings = settings;
+			user.save();
 
-			res.sendStatus(status.OK_CREATE_RESOURCE);
-		});
+			res.sendStatus(status.OK_UPDATE_RESOURCE);
+		} else {
+			User.create(req.body.user, function (err) {
+				if (err) {
+					logger.error(err);
+					return res.sendStatus(status.ERR_BAD_REQUEST);
+				}
+
+				res.sendStatus(status.OK_CREATE_RESOURCE);
+			});
+		}
 	});
 };
