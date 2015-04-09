@@ -16,14 +16,23 @@ module.exports.post = function (req, res) {
 			// User already logged in, just update their name and settings but
 			// do not modify the eventId or role because these are managed by
 			// the database
-			user.name = req.body.name;
-			user.settings = req.body.settings;
+			if (req.body.name != undefined) {
+				user.name = req.body.name;
+			}
+
+			if (req.body.name != undefined) {
+				user.settings = req.body.settings;
+			}
+
 			user.save();
 
 			res.sendStatus(status.OK_UPDATE_RESOURCE);
 		} else {
 			// Manually add the userId
 			req.body.userId = req.headers.userid;
+
+			// Make sure the user isn't linked to an event yet
+			req.body.eventId = null;
 
 			User.create(req.body, function (err) {
 				if (err) {

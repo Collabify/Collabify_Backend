@@ -78,7 +78,7 @@ module.exports.get = function (req, res) {
 	/** @todo Implement the spatial query correctly */
 	Event
 		.find()
-		.select('name eventId location')
+		.select('name eventId location settings')
 		.where('location')
 		.within()
 		.circle({
