@@ -1,28 +1,16 @@
 var logger 		= require('../logger');
 var status		= require('../status');
-var Event 		= require('../models/event').Event;
 var User 		= require('../models/user').User;
+var helpers		= require('./helpers');
 
 module.exports.post = function (req, res) {
-	User.findOne({userId: req.body.userId}, function (err, user) {
-		if (err) {
-			return status.handleUnexpectedError(err, res);
-		} else if (user === null) {
-			logger.error("User hasn't logged in");
-			return res.sendStatus(status.ERR_UNAUTHORIZED);
-		} else if (user.eventId != null) {
+	helpers.getUser(req.headers.userid, res, function (user) {
+		if (user.eventId != null) {
 			logger.error('User is already at an event');
 			return res.sendStatus(status.ERR_RESOURCE_EXISTS);
 		}
 
-		Event.findOne({eventId: req.eventId}, function (err, event) {
-			if (err) {
-				return status.handleUnexpectedError(err, res);
-			} else if (event == null) {
-				logger.error('Event not found');
-				return res.sendStatus(status.ERR_RESOURCE_NOT_FOUND);
-			}
-
+		helpers.getEvent(req.eventId, res, function (event) {
 			user.eventId = req.eventId;
 			user.save();
 
@@ -35,15 +23,8 @@ module.exports.post = function (req, res) {
 };
 
 module.exports.get = function (req, res) {
-	/** @todo Return data within object property */
-	Event.findOne({eventId: req.eventId}, 'userIds', function (err, event) {
-		if (err) {
-			return status.handleUnexpectedError(err, res);
-		} else if (event == null) {
-			logger.error('Event not found');
-			return res.sendStatus(status.ERR_RESOURCE_NOT_FOUND);
-		}
-
+	// First, make sure the DJ is the one making the request
+	helpers.getEventAsDJ(req.headers.userid, req.eventId, function (event) {
 		User.find({userId: {$in: event.userIds}}, 'name userId role', function (err, users) {
 			if (err) {
 				return status.handleUnexpectedError(err, res);

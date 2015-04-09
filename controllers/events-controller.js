@@ -1,6 +1,8 @@
 var logger 		= require('../logger');
 var status		= require('../status');
 var Event 		= require('../models/event').Event;
+var User 		= require('../models/user').User;
+var helpers 	= require('./helpers');
 
 /** @module */
 
@@ -8,7 +10,7 @@ var Event 		= require('../models/event').Event;
  * The max distance, in decimal degress, that a user can be from an event and
  * still join it
  */
-module.exports.MAX_EVENT_DISTANCE = 10;
+module.exports.MAX_EVENT_DISTANCE = 5;
 
 /**
  * POST /events/ - Create a new event
@@ -18,13 +20,8 @@ module.exports.MAX_EVENT_DISTANCE = 10;
  * @param 			res				- The server response
  */
 module.exports.post = function (req, res) {
-	User.findOne({userId: req.body.event.eventId}, function (err, user) {
-		if (err) {
-			return status.handleUnexpectedError(err, res);
-		} else if (user == null) {
-			logger.error('User not found');
-			return res.sendStatus(status.ERR_RESOURCE_NOT_FOUND);
-		} else if (user.eventId == user.userId) {
+	helpers.getUser(req.headers.userid, res, function (user) {
+		if (user.eventId == user.userId) {
 			logger.error('Event already exists');
 			return res.sendStatus(status.ERR_RESOURCE_EXISTS);
 		} else if (user.eventId != null) {
@@ -38,8 +35,9 @@ module.exports.post = function (req, res) {
 				return res.sendStatus(status.ERR_BAD_REQUEST);
 			}
 
-			// Because the user is creating the event (they are the DJ), their
-			// eventId should match their userId
+			// Because the user is creating the event (they are now a DJ),
+			// their eventId should match their userId
+			user.role = 'DJ';
 			user.eventId = user.userId;
 			user.save();
 
@@ -56,24 +54,26 @@ module.exports.post = function (req, res) {
  * @param {Event[]} 	res 				- List of all nearby events
  */
 module.exports.get = function (req, res) {
-	/** @todo Check req.body.location for undefined */
-	Event
-	.find()
-	.select('name eventId location')
-	.where('location')
-	.within()
-	.circle({
-		center: [req.body.location.latitude, req.body.location.longitude],
-		radius: module.exports.MAX_EVENT_DISTANCE
-	})
-	.exec(function (err, events) {
-		if (err) {
-			return status.handleUnexpectedError(err, res);
-		} else if (events.length == 0) {
-			logger.warn('No nearby events');
-			return res.sendStatus(status.ERR_RESOURCE_NOT_FOUND);
-		}
+	/** @todo Verify latitude and longitude get converted properly */
+	var latitude = Number(req.headers.latitude);
+	var longitude = Number(req.headers.longitude);
 
-		res.status(status.OK_GET_RESOURCE).send(events);
-	});
+	Event
+		.find()
+		.select('name eventId location')
+		.where('location')
+		.within()
+		/** @todo Verify that this is a correct spatial query */
+		.circle({
+			center: [latitude, longitude],
+			radius: module.exports.MAX_EVENT_DISTANCE,
+			spherical: true
+		})
+		.exec(function (err, events) {
+			if (err) {
+				return status.handleUnexpectedError(err, res);
+			}
+
+			res.status(status.OK_GET_RESOURCE).send(events);
+		});
 };

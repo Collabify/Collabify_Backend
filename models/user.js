@@ -10,14 +10,14 @@ var UserSettingsDef		= require('./user-settings').UserSettingsDef;
  * @property name		- The user's Spotify display name
  * @property userId		- The Spotify ID for the user
  * @property eventId	- The ID of the event the user is at, or null if they aren't at one
- * @property role		- String identifying the user's role ('DJ', 'Collabifier', etc.)
+ * @property role		- String identifying the user's role ('NoRole', 'DJ', 'Collabifier', etc.)
  * @property settings	- The user's current settings
  */
 module.exports.UserDef = {
 	name: 		{type: String, required: true},
 	userId: 	{type: String, required: true},
 	eventId: 	{type: String, default: null},
-	role: 		{type: String, default: 'Collabifier'},
+	role: 		{type: String, default: 'NoRole'},
 	/** @todo Uncomment when authentication is implemented */
 	// accessTokenDigest: {type: String, required: true},
 	// refreshToken: {type: String, required: true},
