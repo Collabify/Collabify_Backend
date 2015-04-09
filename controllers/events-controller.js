@@ -42,7 +42,7 @@ module.exports.post = function (req, res) {
 		}
 
 		// Manually fill in the eventId
-		req.body.eventId = user.eventId;
+		req.body.eventId = user.userId;
 
 		Event.create(req.body, function (err) {
 			if (err) {
