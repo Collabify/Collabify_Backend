@@ -15,7 +15,7 @@ module.exports.post = function (req, res) {
 			user.eventId = req.eventId;
 			user.save();
 
-			event.userIds.push(req.body.userId);
+			event.userIds.push(user.userId);
 			event.save();
 
 			res.sendStatus(status.OK_CREATE_RESOURCE);
@@ -24,8 +24,6 @@ module.exports.post = function (req, res) {
 };
 
 module.exports.get = function (req, res) {
-	console.log(req.headers.userid);
-	console.log(req.eventId);
 	// First, make sure the DJ is the one making the request
 	helpers.getEventAsDJ(req.headers.userid, req.eventId, res, function (event) {
 		// Find all users at the event
