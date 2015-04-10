@@ -14,6 +14,8 @@ var EventPlaylistController				= require('./controllers/event-playlist-controlle
 var EventPlaylistSongController			= require('./controllers/event-playlist-song-controller');
 var EventPlaylistSongVotesController	= require('./controllers/event-playlist-song-votes-controller');
 
+/** @module */
+
 // Routes
 router.route('/users/')
 	.post(function (req, res, next) {

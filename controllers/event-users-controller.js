@@ -49,14 +49,15 @@ module.exports.post = function (req, res) {
  * <p>Preconditions: <br>
  * Event exists <br>
  * User has logged in <br>
+ * User is the DJ for the requested event <br>
  *
- * <p>Postconditions: <br>
- *
- * @param req The client request
- * @param req.headers The headers in the HTTP request
- * @param {String} req.headers.userid The user's Spotify ID
- * @param req.body The body of the request
- * @param res The server response
+ * @param 			req 					The client request
+ * @param 			req.headers 			The headers in the HTTP request
+ * @param {String} 	req.headers.userid 		The user's Spotify ID
+ * @param 			res 					The server response
+ * @param {String}	res[i].name				The user's name
+ * @param {String}	res[i].userId			The user's Spotify ID
+ * @param {String}	res[i].role				The user's role
  */
 module.exports.get = function (req, res) {
 	// First, make sure the DJ is the one making the request

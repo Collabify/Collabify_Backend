@@ -1,3 +1,5 @@
+var logger		= require('../logger');
+var status		= require('../status');
 var helpers		= require('./helpers');
 
 /** @module */
@@ -34,9 +36,16 @@ module.exports.put = function (req, res) {
 			} else if (req.body.role == 'DJ') {
 				logger.error('Cannot promote user to DJ');
 				return res.sendStatus(status.ERR_UNAUTHORIZED);
+			} else if (req.body.role != 'Collabifier'
+					   && req.body.role != 'Promoted'
+					   && req.body.role != 'Blacklisted') {
+				logger.error('Invalid role');
+				return res.sendStatus(status.ERR_BAD_REQUEST);
 			}
 
 			user.role = req.body.role;
+			user.save();
+
 			res.sendStatus(status.OK_UPDATE_RESOURCE);
 		});
 	});

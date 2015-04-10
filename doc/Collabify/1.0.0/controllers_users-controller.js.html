@@ -34,18 +34,21 @@ var helpers		= require('./helpers');
 /** @module */
 
 /**
- *
- *
- * &lt;p>Preconditions: &lt;br>
- * User has logged in &lt;br>
+ * POST /users/ - Add a user to the database
  *
  * &lt;p>Postconditions: &lt;br>
+ * User is logged into the database if they weren't already &lt;br>
+ * If the user was already logged in, their details are updated &lt;br>
  *
- * @param req The client request
- * @param req.headers The headers in the HTTP request
- * @param {String} req.headers.userid The user's Spotify ID
- * @param req.body The body of the request
- * @param res The server response
+ * @param 					req 									The client request
+ * @param 					req.headers 							The headers in the HTTP request
+ * @param {String} 			req.headers.userid 						The user's Spotify ID
+ * @param 					req.body 								The body of the request
+ * @param {String} 			req.body.name 							The user's Spotify display name
+ * @param {String} 			req.body.userId 						The user's Spotify ID
+ * @param {UserSettings} 	req.body.settings 						The user's settings
+ * @param {Boolean} 		[req.body.settings.showName=true] 		Whether to display the user's Spotify username or 'anonymous'
+ * @param 					res 									The server response
  */
 module.exports.post = function (req, res) {
 	User.findOne({userId: req.headers.userid}, function (err, user) {
@@ -64,7 +67,7 @@ module.exports.post = function (req, res) {
 				user.name = req.body.name;
 			}
 
-			if (req.body.name != undefined) {
+			if (req.body.settings != undefined) {
 				user.settings = req.body.settings;
 			}
 
@@ -77,6 +80,7 @@ module.exports.post = function (req, res) {
 
 			// Make sure the user isn't linked to an event yet
 			req.body.eventId = null;
+			req.body.role = 'NoRole';
 
 			User.create(req.body, function (err) {
 				if (err) {
@@ -98,13 +102,13 @@ module.exports.post = function (req, res) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_event-controller.html">controllers/event-controller</a></li><li><a href="module-controllers_event-playlist-controller.html">controllers/event-playlist-controller</a></li><li><a href="module-controllers_event-playlist-song-controller.html">controllers/event-playlist-song-controller</a></li><li><a href="module-controllers_event-user-controller.html">controllers/event-user-controller</a></li><li><a href="module-controllers_event-user-role-controller.html">controllers/event-user-role-controller</a></li><li><a href="module-controllers_event-users-controller.html">controllers/event-users-controller</a></li><li><a href="module-controllers_events-controller.html">controllers/events-controller</a></li><li><a href="module-controllers_user-controller.html">controllers/user-controller</a></li><li><a href="module-controllers_users-controller.html">controllers/users-controller</a></li><li><a href="module-models_event.html">models/event</a></li><li><a href="module-models_event-settings.html">models/event-settings</a></li><li><a href="module-models_location.html">models/location</a></li><li><a href="module-models_playlist.html">models/playlist</a></li><li><a href="module-models_song.html">models/song</a></li><li><a href="module-models_user.html">models/user</a></li><li><a href="module-models_user-settings.html">models/user-settings</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_event-controller.html">controllers/event-controller</a></li><li><a href="module-controllers_event-playlist-controller.html">controllers/event-playlist-controller</a></li><li><a href="module-controllers_event-playlist-song-controller.html">controllers/event-playlist-song-controller</a></li><li><a href="module-controllers_event-user-controller.html">controllers/event-user-controller</a></li><li><a href="module-controllers_event-user-role-controller.html">controllers/event-user-role-controller</a></li><li><a href="module-controllers_event-users-controller.html">controllers/event-users-controller</a></li><li><a href="module-controllers_events-controller.html">controllers/events-controller</a></li><li><a href="module-controllers_helpers.html">controllers/helpers</a></li><li><a href="module-controllers_user-controller.html">controllers/user-controller</a></li><li><a href="module-controllers_users-controller.html">controllers/users-controller</a></li><li><a href="module-models_event.html">models/event</a></li><li><a href="module-models_event-settings.html">models/event-settings</a></li><li><a href="module-models_location.html">models/location</a></li><li><a href="module-models_playlist.html">models/playlist</a></li><li><a href="module-models_song.html">models/song</a></li><li><a href="module-models_user.html">models/user</a></li><li><a href="module-models_user-settings.html">models/user-settings</a></li><li><a href="module-routes.html">routes</a></li><li><a href="module-status.html">status</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Thu Apr 09 2015 18:16:00 GMT-0500 (CDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Thu Apr 09 2015 22:09:57 GMT-0500 (CDT)
 </footer>
 
 <script> prettyPrint(); </script>

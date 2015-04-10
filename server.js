@@ -7,6 +7,8 @@
  *
  *	Authors:
  *			Ricardo Lopez <rlopez@sporks.io>
+ *			David Gardner <smartydude010@hotmail.com>
+ *			Sydney Johnson <syjohnso@gmail.com>
  */
 
 var express 		= require('express');

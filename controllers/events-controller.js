@@ -23,16 +23,19 @@ module.exports.MAX_EVENT_DISTANCE = 5;
  * Event is created <br>
  * User is assigned the 'DJ' role for the event <br>
  *
- * @param 				req												The client request
- * @param				req.headers										The headers in the HTTP request
- * @param {String} 		req.headers.userid								The user's Spotify ID
- * @param				req.body										The body of the request
- * @param {String} 		req.body.name									The name of the event
- * @param {Location} 	req.body.location								The event's latitude and longitude
- * @param {String}		[req.body.location.password=null]				The event password (or null if there isn't one)
- * @param {Boolean}		[req.body.location.locationRestricted=true]		Whether to restrict the event to nearby users
- * @param {Boolean}		[req.body.location.allowVoting=true]			Whether to allow users to vote on songs
- * @param 				res												The server response
+ * @param 						req												The client request
+ * @param						req.headers										The headers in the HTTP request
+ * @param {String} 				req.headers.userid								The user's Spotify ID
+ * @param						req.body										The body of the request
+ * @param {String} 				req.body.name									The name of the event
+ * @param {Location}			req.body.location								The location of the event
+ * @param {Number}				req.body.location.latitude						The latitude of the event
+ * @param {Number}				req.body.location.longitude						The longitude of the event
+ * @param {EventSettings}		req.body.settings								The settings for the event
+ * @param {String}				[req.body.settings.password=null]				The event password (or null if there isn't one)
+ * @param {Boolean}				[req.body.settings.locationRestricted=true]		Whether to restrict the event to nearby users
+ * @param {Boolean}				[req.body.settings.allowVoting=true]			Whether to allow users to vote on songs
+ * @param 						res												The server response
  */
 module.exports.post = function (req, res) {
 	helpers.getUser(req.headers.userid, res, function (user) {
@@ -67,14 +70,22 @@ module.exports.post = function (req, res) {
 /**
  * GET /events/ - Get all events near provided coordinates
  *
- * @param 				req 						The client request
- * @param				req.headers					The headers in the HTTP request
- * @param {String}		req.headers.latitude		The user's current latitude
- * @param {String} 		req.headers.longitude		The user's current longitude
- * @param {Event[]} 	res 						The server response - list of all nearby events
+ * @param 						req 									The client request
+ * @param						req.headers								The headers in the HTTP request
+ * @param {String}				req.headers.latitude					The user's current latitude
+ * @param {String} 				req.headers.longitude					The user's current longitude
+ * @param 						res 									The server response
+ * @param {String}				res[i].name								The event's name
+ * @param {String}				res[i].eventId							The Spotify ID for the user who created the event
+ * @param {Location}			res[i].location							The location of the event
+ * @param {String}				res[i].location.latitude				The latitude of the event
+ * @param {String}				res[i].location.longitude				The longitude of the event
+ * @param {EventSettings}		res[i].settings							The settings for the event
+ * @param {String}				res[i].settings.password				The event password (or null if there isn't one)
+ * @param {Boolean}				res[i].settings.locationRestricted		Whether to restrict the event to nearby users
+ * @param {Boolean}				res[i].settings.allowVoting				Whether to allow users to vote on songs
  */
 module.exports.get = function (req, res) {
-	/** @todo Verify latitude and longitude get converted properly */
 	var latitude = Number(req.headers.latitude);
 	var longitude = Number(req.headers.longitude);
 

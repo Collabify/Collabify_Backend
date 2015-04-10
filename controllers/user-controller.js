@@ -5,18 +5,19 @@ var helpers		= require('./helpers');
 /** @module */
 
 /**
- *
+ * GET /users/:userId/ - Get user details
  *
  * <p>Preconditions: <br>
  * User has logged in <br>
  *
- * <p>Postconditions: <br>
- *
- * @param req The client request
- * @param req.headers The headers in the HTTP request
- * @param {String} req.headers.userid The user's Spotify ID
- * @param req.body The body of the request
- * @param res The server response
+ * @param 					req 						The client request
+ * @param 					res 						The server response
+ * @param {String} 			res.name 					The user's name
+ * @param {String} 			res.userId 					The user's Spotify ID
+ * @param {String} 			res.eventId 				The ID of the event the user is at, or null if they aren't at one
+ * @param {String} 			res.role 					The user's role
+ * @param {UserSettings} 	res.settings 				The user's current settings
+ * @param {Boolean} 		res.settings.showName		Whether to display the user's Spotify username or 'anonymous'
  */
 module.exports.get = function (req, res) {
 	helpers.getUser(req.userId, 'name userId eventId role settings', res, function (user) {
@@ -25,18 +26,18 @@ module.exports.get = function (req, res) {
 };
 
 /**
- *
+ * PUT /users/:userId/ - Change user settings
  *
  * <p>Preconditions: <br>
  * User has logged in <br>
  *
  * <p>Postconditions: <br>
+ * User's settings are updated
  *
- * @param req The client request
- * @param req.headers The headers in the HTTP request
- * @param {String} req.headers.userid The user's Spotify ID
- * @param req.body The body of the request
- * @param res The server response
+ * @param 				req 					The client request
+ * @param 				req.body 				The body of the request
+ * @param {String} 		req.body.showName 		Whether to display the user's Spotify username or 'anonymous'
+ * @param 				res 					The server response
  */
 module.exports.put = function (req, res) {
 	helpers.getUser(req.userId, res, function (user) {
@@ -46,41 +47,34 @@ module.exports.put = function (req, res) {
 };
 
 /**
- *
+ * DELETE /users/:userId/ - Log out the user and delete them from the database
  *
  * <p>Preconditions: <br>
  * User has logged in <br>
  *
  * <p>Postconditions: <br>
+ * User is removed from the database <br>
+ * If the user was a DJ for an event, the event is ended <br>
+ * If the user was at an event, they are removed from the event's user list <br>
  *
  * @param req The client request
- * @param req.headers The headers in the HTTP request
- * @param {String} req.headers.userid The user's Spotify ID
- * @param req.body The body of the request
  * @param res The server response
  */
 module.exports.delete = function (req, res) {
 	helpers.getUser(req.userId, res, function (user) {
-		// Before logging out the user, remove them from their event if they were
-		// at one
-		if (user.eventId != null) {
-			helpers.getEvent(user.eventId, res, function (event) {
-				var userIdIndex = event.userIds.indexOf(user.userId);
-
-				if (userIdIndex == -1) {
-					logger.error('User not at event');
-					return res.sendStatus(status.ERR_BAD_REQUEST);
-				}
-
-				// Remove the user from the event
-				event.userIds.splice(userIdIndex, 1);
-				event.save();
-			});
+		var logOut = function () {
+			user.remove();
+			res.sendStatus(status.OK_DELETE_RESOURCE);
 		}
 
-		// Log out the user
-		user.remove();
+		if (user.eventId != null) {
+			if (user.role == 'DJ') {
+				return helpers.endEvent(user.userId, user.eventId, res, logOut);
+			} else {
+				return helpers.leaveEvent(user.userId, user.eventId, res, logOut);
+			}
+		}
 
-		res.sendStatus(status.OK_DELETE_RESOURCE);
+		logOut();
 	});
 };

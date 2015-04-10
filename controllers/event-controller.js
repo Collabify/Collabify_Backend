@@ -74,24 +74,7 @@ module.exports.put = function (req, res) {
  * @param 				res 					The server response
  */
 module.exports.delete = function (req, res) {
-	helpers.getEventAsDJ(req.headers.userid, req.eventId, res, function (event) {
-		// Remove users from the event
-		User.update({userId: {$in: event.userIds}}, {eventId: null, role: 'NoRole'}, function (err) {
-			if (err) {
-				return status.handleUnexpectedError(err, res);
-			}
-
-			// End the event
-			event.remove();
-
-			// Update the DJ
-			helpers.getUser(req.headers.userid, res, function (user) {
-				user.eventId = null;
-				user.role = 'NoRole';
-				user.save();
-			});
-
-			res.sendStatus(status.OK_DELETE_RESOURCE);
-		});
+	helpers.endEvent(req.headers.userid, req.eventId, res, function () {
+		res.sendStatus(status.OK_DELETE_RESOURCE);
 	});
 };

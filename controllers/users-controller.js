@@ -6,18 +6,21 @@ var helpers		= require('./helpers');
 /** @module */
 
 /**
- *
- *
- * <p>Preconditions: <br>
- * User has logged in <br>
+ * POST /users/ - Add a user to the database
  *
  * <p>Postconditions: <br>
+ * User is logged into the database if they weren't already <br>
+ * If the user was already logged in, their details are updated <br>
  *
- * @param req The client request
- * @param req.headers The headers in the HTTP request
- * @param {String} req.headers.userid The user's Spotify ID
- * @param req.body The body of the request
- * @param res The server response
+ * @param 					req 									The client request
+ * @param 					req.headers 							The headers in the HTTP request
+ * @param {String} 			req.headers.userid 						The user's Spotify ID
+ * @param 					req.body 								The body of the request
+ * @param {String} 			req.body.name 							The user's Spotify display name
+ * @param {String} 			req.body.userId 						The user's Spotify ID
+ * @param {UserSettings} 	req.body.settings 						The user's settings
+ * @param {Boolean} 		[req.body.settings.showName=true] 		Whether to display the user's Spotify username or 'anonymous'
+ * @param 					res 									The server response
  */
 module.exports.post = function (req, res) {
 	User.findOne({userId: req.headers.userid}, function (err, user) {
@@ -36,7 +39,7 @@ module.exports.post = function (req, res) {
 				user.name = req.body.name;
 			}
 
-			if (req.body.name != undefined) {
+			if (req.body.settings != undefined) {
 				user.settings = req.body.settings;
 			}
 
@@ -49,6 +52,7 @@ module.exports.post = function (req, res) {
 
 			// Make sure the user isn't linked to an event yet
 			req.body.eventId = null;
+			req.body.role = 'NoRole';
 
 			User.create(req.body, function (err) {
 				if (err) {
