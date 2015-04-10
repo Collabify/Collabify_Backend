@@ -109,7 +109,7 @@ module.exports.get = function (req, res) {
  */
 module.exports.put = function (req, res) {
 	helpers.getEventAsDJOrPromoted(req.headers.userid, req.eventId, res, function (event) {
-		event.playlist = req.body;
+		event.playlist.songs = req.body;
 		event.save();
 
 		res.sendStatus(status.OK_UPDATE_RESOURCE);
