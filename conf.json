@@ -1,0 +1,17 @@
+{
+	"source": {
+		"include": [
+			"./routes.js",
+			"./server.js",
+			"./status.js",
+			"./controllers",
+			"./models"
+		]
+	},
+	"opts": {
+		"destination": "./doc/",
+		"package": "./package.json",
+		"readme": "./README.md",
+		"recurse": true
+	}
+}

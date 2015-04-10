@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controllers/helpers.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controllers/helpers.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>var logger 		= require('../logger');
+var status		= require('../status');
+var Event 		= require('../models/event').Event;
+var User		= require('../models/user').User;
+
+/** @module */
+
+/**
+ * Finds a user in the database and, if found, passes it to a callback
+ *
+ * @param {String}		userId			The userId to search for
+ * @param {String}		[select=null]	Optional select parameter
+ * @param 				res				The server response
+ * @param {Function}	callback(user)	Callback with the user found
+ */
+module.exports.getUser = function (userId, select, res, callback) {
+	if (arguments.length == 3) {
+		// select parameter was not passed
+		callback = arguments[2];
+		res = arguments[1];
+		select = null;
+	}
+
+	User.findOne({userId: userId}, select, function (err, user) {
+		if (err) {
+			return status.handleUnexpectedError(err, res);
+		} else if (user == null) {
+			logger.error('User not found');
+			return res.sendStatus(status.ERR_RESOURCE_NOT_FOUND);
+		}
+
+		callback(user);
+	});
+};
+
+/**
+ * Finds an event in the database and, if found, passes it to a callback
+ *
+ * @param {String}		eventId			The eventId to search for
+ * @param {String}		[select=null]	Optional select parameter
+ * @param 				res				The server response
+ * @param {Function}	callback(event)	Callback with the event found
+ */
+module.exports.getEvent = function (eventId, select, res, callback) {
+	if (arguments.length == 3) {
+		// select parameter was not passed
+		callback = arguments[2];
+		res = arguments[1];
+		select = null;
+	}
+
+	Event.findOne({eventId: eventId}, select, function (err, event) {
+		if (err) {
+			return status.handleUnexpectedError(err, res);
+		} else if (event == null) {
+			logger.error('Event not found');
+			return res.sendStatus(status.ERR_RESOURCE_NOT_FOUND);
+		}
+
+		callback(event);
+	});
+};
+
+/**
+ * Finds a user and event, making sure the user is at that event.  If found,
+ * they are passed to a callback
+ *
+ * @param {String} 		userId 					The userId to search for
+ * @param {String} 		eventId 				The eventId to search for
+ * @param 				res 					The server response
+ * @param {Function}	callback(user, event)	Callback with the user and event found
+ */
+module.exports.getUserAtEvent = function (userId, eventId, res, callback) {
+	module.exports.getUser(userId, res, function (user) {
+		if (user.eventId != eventId) {
+			logger.error('User not at event');
+			return res.sendStatus(status.ERR_UNAUTHORIZED);
+		}
+
+		module.exports.getEvent(eventId, res, function (event) {
+			callback(user, event);
+		});
+	});
+};
+
+/**
+ * Finds a user and event, making sure the user is the DJ of the event.  If
+ * found, the event is passed to a callback
+ *
+ * @param {String}		userId 			The userId to search for
+ * @param {String}		eventId 		The eventId to search for
+ * @param 				res 			The server response
+ * @param {Function} 	callback(event) Callback with the event found
+ */
+module.exports.getEventAsDJ = function (userId, eventId, res, callback) {
+	module.exports.getUserAtEvent(userId, eventId, res, function (user, event) {
+		if (user.role != 'DJ') {
+			logger.error('User is not the DJ');
+			return res.sendStatus(status.ERR_UNAUTHORIZED);
+		}
+
+		callback(event);
+	});
+};
+
+/**
+ * Finds a user and event, making sure the user is the DJ or a Promoted Collabifier
+ * of the event.  If found, the event is passed to a callback
+ *
+ * @param {String}		userId 			The userId to search for
+ * @param {String}		eventId 		The eventId to search for
+ * @param 				res 			The server response
+ * @param {Function} 	callback(event) Callback with the event found
+ */
+module.exports.getEventAsDJOrPromoted = function (userId, eventId, res, callback) {
+	module.exports.getUserAtEvent(userId, eventId, res, function (user, event) {
+		if (user.role != 'DJ' &amp;&amp; user.role != 'Promoted') {
+			logger.error('User is not the DJ or a Promoted Collabifier');
+			return res.sendStatus(status.ERR_UNAUTHORIZED);
+		}
+
+		callback(event);
+	});
+};
+
+/**
+ * Removes the user from the event.  If successful, the callback is invoked.
+ *
+ * @param {String}		userId 		The userId to search for
+ * @param {String} 		eventId 	The eventId to search for
+ * @param 				res 		The server response
+ * @param {Function} 	callback()  Callback to invoke after leaving the event
+ */
+module.exports.leaveEvent = function (userId, eventId, res, callback) {
+	module.exports.getUserAtEvent(userId, eventId, res, function (user, event) {
+		if (user.role == 'DJ') {
+			logger.error('DJ cannot leave event');
+			return res.sendStatus(status.ERR_UNAUTHORIZED);
+		}
+
+		var userIdIndex = event.userIds.indexOf(user.userId);
+
+		if (userIdIndex == -1) {
+			logger.error('User not at event');
+			return res.sendStatus(status.ERR_BAD_REQUEST);
+		}
+
+		// Remove the user from the event
+		event.userIds.splice(userIdIndex, 1);
+		event.save();
+
+		user.eventId = null;
+		user.role = 'NoRole';
+		user.save();
+
+		callback();
+	});
+};
+
+/**
+ * Ends the event.  If successful, the callback is invoked.
+ *
+ * @param {String}		userId 		The userId to search for
+ * @param {String} 		eventId 	The eventId to search for
+ * @param 				res 		The server response
+ * @param {Function} 	callback()  Callback to invoke after ending the event
+ */
+module.exports.endEvent = function (userId, eventId, res, callback) {
+	module.exports.getEventAsDJ(userId, eventId, res, function (event) {
+		// Remove users from the event
+		User.update({userId: {$in: event.userIds}}, {eventId: null, role: 'NoRole'}, function (err) {
+			if (err) {
+				return status.handleUnexpectedError(err, res);
+			}
+
+			// End the event
+			event.remove();
+
+			// Update the DJ
+			module.exports.getUser(userId, res, function (user) {
+				user.eventId = null;
+				user.role = 'NoRole';
+				user.save();
+			});
+
+			callback();
+		});
+	});
+};
+
+/**
+ * Attempts to find the song in the event's playlist
+ *
+ * @param {Event} 	event 	The event whose playlist is to be searched
+ * @param {String} 	songId 	The songId to search for
+ */
+module.exports.getSongFromPlaylist = function (event, songId) {
+	/** @todo Find a better way to do this */
+	var song = event.playlist.songs.filter(function (song) {
+		if (song.songId == songId) {
+			return true;
+		}
+
+		return false;
+	})[0];
+
+	return song;
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_event-controller.html">controllers/event-controller</a></li><li><a href="module-controllers_event-playlist-controller.html">controllers/event-playlist-controller</a></li><li><a href="module-controllers_event-playlist-song-controller.html">controllers/event-playlist-song-controller</a></li><li><a href="module-controllers_event-user-controller.html">controllers/event-user-controller</a></li><li><a href="module-controllers_event-user-role-controller.html">controllers/event-user-role-controller</a></li><li><a href="module-controllers_event-users-controller.html">controllers/event-users-controller</a></li><li><a href="module-controllers_events-controller.html">controllers/events-controller</a></li><li><a href="module-controllers_helpers.html">controllers/helpers</a></li><li><a href="module-controllers_user-controller.html">controllers/user-controller</a></li><li><a href="module-controllers_users-controller.html">controllers/users-controller</a></li><li><a href="module-models_event.html">models/event</a></li><li><a href="module-models_event-settings.html">models/event-settings</a></li><li><a href="module-models_location.html">models/location</a></li><li><a href="module-models_playlist.html">models/playlist</a></li><li><a href="module-models_song.html">models/song</a></li><li><a href="module-models_user.html">models/user</a></li><li><a href="module-models_user-settings.html">models/user-settings</a></li><li><a href="module-routes.html">routes</a></li><li><a href="module-status.html">status</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Thu Apr 09 2015 22:09:57 GMT-0500 (CDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

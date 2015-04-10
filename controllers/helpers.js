@@ -1,0 +1,208 @@
+var logger 		= require('../logger');
+var status		= require('../status');
+var Event 		= require('../models/event').Event;
+var User		= require('../models/user').User;
+
+/** @module */
+
+/**
+ * Finds a user in the database and, if found, passes it to a callback
+ *
+ * @param {String}		userId			The userId to search for
+ * @param {String}		[select=null]	Optional select parameter
+ * @param 				res				The server response
+ * @param {Function}	callback(user)	Callback with the user found
+ */
+module.exports.getUser = function (userId, select, res, callback) {
+	if (arguments.length == 3) {
+		// select parameter was not passed
+		callback = arguments[2];
+		res = arguments[1];
+		select = null;
+	}
+
+	User.findOne({userId: userId}, select, function (err, user) {
+		if (err) {
+			return status.handleUnexpectedError(err, res);
+		} else if (user == null) {
+			logger.error('User not found');
+			return res.sendStatus(status.ERR_RESOURCE_NOT_FOUND);
+		}
+
+		callback(user);
+	});
+};
+
+/**
+ * Finds an event in the database and, if found, passes it to a callback
+ *
+ * @param {String}		eventId			The eventId to search for
+ * @param {String}		[select=null]	Optional select parameter
+ * @param 				res				The server response
+ * @param {Function}	callback(event)	Callback with the event found
+ */
+module.exports.getEvent = function (eventId, select, res, callback) {
+	if (arguments.length == 3) {
+		// select parameter was not passed
+		callback = arguments[2];
+		res = arguments[1];
+		select = null;
+	}
+
+	Event.findOne({eventId: eventId}, select, function (err, event) {
+		if (err) {
+			return status.handleUnexpectedError(err, res);
+		} else if (event == null) {
+			logger.error('Event not found');
+			return res.sendStatus(status.ERR_RESOURCE_NOT_FOUND);
+		}
+
+		callback(event);
+	});
+};
+
+/**
+ * Finds a user and event, making sure the user is at that event.  If found,
+ * they are passed to a callback
+ *
+ * @param {String} 		userId 					The userId to search for
+ * @param {String} 		eventId 				The eventId to search for
+ * @param 				res 					The server response
+ * @param {Function}	callback(user, event)	Callback with the user and event found
+ */
+module.exports.getUserAtEvent = function (userId, eventId, res, callback) {
+	module.exports.getUser(userId, res, function (user) {
+		if (user.eventId != eventId) {
+			logger.error('User not at event');
+			return res.sendStatus(status.ERR_UNAUTHORIZED);
+		}
+
+		module.exports.getEvent(eventId, res, function (event) {
+			callback(user, event);
+		});
+	});
+};
+
+/**
+ * Finds a user and event, making sure the user is the DJ of the event.  If
+ * found, the event is passed to a callback
+ *
+ * @param {String}		userId 			The userId to search for
+ * @param {String}		eventId 		The eventId to search for
+ * @param 				res 			The server response
+ * @param {Function} 	callback(event) Callback with the event found
+ */
+module.exports.getEventAsDJ = function (userId, eventId, res, callback) {
+	module.exports.getUserAtEvent(userId, eventId, res, function (user, event) {
+		if (user.role != 'DJ') {
+			logger.error('User is not the DJ');
+			return res.sendStatus(status.ERR_UNAUTHORIZED);
+		}
+
+		callback(event);
+	});
+};
+
+/**
+ * Finds a user and event, making sure the user is the DJ or a Promoted Collabifier
+ * of the event.  If found, the event is passed to a callback
+ *
+ * @param {String}		userId 			The userId to search for
+ * @param {String}		eventId 		The eventId to search for
+ * @param 				res 			The server response
+ * @param {Function} 	callback(event) Callback with the event found
+ */
+module.exports.getEventAsDJOrPromoted = function (userId, eventId, res, callback) {
+	module.exports.getUserAtEvent(userId, eventId, res, function (user, event) {
+		if (user.role != 'DJ' && user.role != 'Promoted') {
+			logger.error('User is not the DJ or a Promoted Collabifier');
+			return res.sendStatus(status.ERR_UNAUTHORIZED);
+		}
+
+		callback(event);
+	});
+};
+
+/**
+ * Removes the user from the event.  If successful, the callback is invoked.
+ *
+ * @param {String}		userId 		The userId to search for
+ * @param {String} 		eventId 	The eventId to search for
+ * @param 				res 		The server response
+ * @param {Function} 	callback()  Callback to invoke after leaving the event
+ */
+module.exports.leaveEvent = function (userId, eventId, res, callback) {
+	module.exports.getUserAtEvent(userId, eventId, res, function (user, event) {
+		if (user.role == 'DJ') {
+			logger.error('DJ cannot leave event');
+			return res.sendStatus(status.ERR_UNAUTHORIZED);
+		}
+
+		var userIdIndex = event.userIds.indexOf(user.userId);
+
+		if (userIdIndex == -1) {
+			logger.error('User not at event');
+			return res.sendStatus(status.ERR_BAD_REQUEST);
+		}
+
+		// Remove the user from the event
+		event.userIds.splice(userIdIndex, 1);
+		event.save();
+
+		user.eventId = null;
+		user.role = 'NoRole';
+		user.save();
+
+		callback();
+	});
+};
+
+/**
+ * Ends the event.  If successful, the callback is invoked.
+ *
+ * @param {String}		userId 		The userId to search for
+ * @param {String} 		eventId 	The eventId to search for
+ * @param 				res 		The server response
+ * @param {Function} 	callback()  Callback to invoke after ending the event
+ */
+module.exports.endEvent = function (userId, eventId, res, callback) {
+	module.exports.getEventAsDJ(userId, eventId, res, function (event) {
+		// Remove users from the event
+		User.update({userId: {$in: event.userIds}}, {eventId: null, role: 'NoRole'}, function (err) {
+			if (err) {
+				return status.handleUnexpectedError(err, res);
+			}
+
+			// End the event
+			event.remove();
+
+			// Update the DJ
+			module.exports.getUser(userId, res, function (user) {
+				user.eventId = null;
+				user.role = 'NoRole';
+				user.save();
+			});
+
+			callback();
+		});
+	});
+};
+
+/**
+ * Attempts to find the song in the event's playlist
+ *
+ * @param {Event} 	event 	The event whose playlist is to be searched
+ * @param {String} 	songId 	The songId to search for
+ */
+module.exports.getSongFromPlaylist = function (event, songId) {
+	/** @todo Find a better way to do this */
+	var song = event.playlist.songs.filter(function (song) {
+		if (song.songId == songId) {
+			return true;
+		}
+
+		return false;
+	})[0];
+
+	return song;
+};

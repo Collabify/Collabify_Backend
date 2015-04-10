@@ -9,12 +9,12 @@ var PlaylistDef 		= require('./playlist').PlaylistDef;
 /**
  * Event object definition
  *
- * @property name		- The name of the event
- * @property eventId	- The Spotify ID of the DJ who created the event
- * @property userIds	- The Spotify IDs of the users currently at the event
- * @property location	- The event's location
- * @property playlist	- The event's current playlist
- * @property settings	- The settings for the event
+ * @property {String}			name				The name of the event
+ * @property {String}			eventId				The Spotify ID of the DJ who created the event
+ * @property {String[]}			[userIds=[]]		The Spotify IDs of the users currently at the event
+ * @property {Location}			location			The event's latitude and longitude
+ * @property {Playlist}			playlist			The event's current playlist
+ * @property {EventSettings}	settings			The settings for the event
  */
 module.exports.EventDef = {
 	name: 		{type: String, required: true},
