@@ -26,7 +26,7 @@ module.exports.MAX_EVENT_DISTANCE = 5;
  * @param 						req												The client request
  * @param						req.headers										The headers in the HTTP request
  * @param {String} 				req.headers.userid								The user's Spotify ID
- * @param						req.body										The body of the request
+ * @param {Event}				req.body										The body of the request - The event to be created
  * @param {String} 				req.body.name									The name of the event
  * @param {Location}			req.body.location								The location of the event
  * @param {Number}				req.body.location.latitude						The latitude of the event
@@ -35,7 +35,19 @@ module.exports.MAX_EVENT_DISTANCE = 5;
  * @param {String}				[req.body.settings.password=null]				The event password (or null if there isn't one)
  * @param {Boolean}				[req.body.settings.locationRestricted=true]		Whether to restrict the event to nearby users
  * @param {Boolean}				[req.body.settings.allowVoting=true]			Whether to allow users to vote on songs
- * @param 						res												The server response
+ * @param {Event}				res												The server response - The newly created event
+ * @param {String} 				res.name										The name of the event
+ * @param {String}				res.eventId										The ID of the event, equal to the DJ's userId
+ * @param {String[]}			res.userIds										The event initially has no users attending
+ * @param {Location}			res.location									The location of the event
+ * @param {Number}				res.location.latitude							The latitude of the event
+ * @param {Number}				res.location.longitude							The longitude of the event
+ * @param {Playlist}			res.playlist									The playlist for the event
+ * @param {Song[]}				res.playlist.songs								The playlist is initially empty
+ * @param {EventSettings}		res.settings									The settings for the event
+ * @param {String}				res.settings.password							The event password (or null if there isn't one)
+ * @param {Boolean}				res.settings.locationRestricted					Whether to restrict the event to nearby users
+ * @param {Boolean}				res.settings.allowVoting						Whether to allow users to vote on songs
  */
 module.exports.post = function (req, res) {
 	helpers.getUser(req.headers.userid, res, function (user) {
@@ -62,7 +74,10 @@ module.exports.post = function (req, res) {
 			user.eventId = user.userId;
 			user.save();
 
-			res.sendStatus(status.OK_CREATE_RESOURCE);
+			// Return the newly created event
+			helpers.getEvent(req.body.eventId, res, function (event) {
+				res.status(status.OK_CREATE_RESOURCE).send(event);
+			});
 		});
 	});
 };
@@ -74,16 +89,16 @@ module.exports.post = function (req, res) {
  * @param						req.headers								The headers in the HTTP request
  * @param {String}				req.headers.latitude					The user's current latitude
  * @param {String} 				req.headers.longitude					The user's current longitude
- * @param 						res 									The server response
- * @param {String}				res[i].name								The event's name
- * @param {String}				res[i].eventId							The Spotify ID for the user who created the event
- * @param {Location}			res[i].location							The location of the event
- * @param {String}				res[i].location.latitude				The latitude of the event
- * @param {String}				res[i].location.longitude				The longitude of the event
- * @param {EventSettings}		res[i].settings							The settings for the event
- * @param {String}				res[i].settings.password				The event password (or null if there isn't one)
- * @param {Boolean}				res[i].settings.locationRestricted		Whether to restrict the event to nearby users
- * @param {Boolean}				res[i].settings.allowVoting				Whether to allow users to vote on songs
+ * @param {Event[]}				res 									The server response - A list of all nearby events
+ * @param {String}				res[].name								The event's name
+ * @param {String}				res[].eventId							The Spotify ID for the user who created the event
+ * @param {Location}			res[].location							The location of the event
+ * @param {String}				res[].location.latitude					The latitude of the event
+ * @param {String}				res[].location.longitude				The longitude of the event
+ * @param {EventSettings}		res[].settings							The settings for the event
+ * @param {String}				res[].settings.password					The event password (or null if there isn't one)
+ * @param {Boolean}				res[].settings.locationRestricted		Whether to restrict the event to nearby users
+ * @param {Boolean}				res[].settings.allowVoting				Whether to allow users to vote on songs
  */
 module.exports.get = function (req, res) {
 	var latitude = Number(req.headers.latitude);

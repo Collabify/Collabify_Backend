@@ -310,20 +310,44 @@ still join it
 
             <td class="type">
             
+                
+<span class="param-type">Array.&lt;Event></span>
+
+
+            
             </td>
 
             
 
             
 
-            <td class="description last">The server response</td>
-        </tr>
+            <td class="description last">The server response - A list of all nearby events
+                <h6>Properties</h6>
+                
 
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
 
         <tr>
             
-                <td class="name"><code>res[i].name</code></td>
+                <td class="name"><code>name</code></td>
             
 
             <td class="type">
@@ -346,7 +370,7 @@ still join it
 
         <tr>
             
-                <td class="name"><code>res[i].eventId</code></td>
+                <td class="name"><code>eventId</code></td>
             
 
             <td class="type">
@@ -369,7 +393,7 @@ still join it
 
         <tr>
             
-                <td class="name"><code>res[i].location</code></td>
+                <td class="name"><code>location</code></td>
             
 
             <td class="type">
@@ -385,14 +409,33 @@ still join it
 
             
 
-            <td class="description last">The location of the event</td>
-        </tr>
+            <td class="description last">The location of the event
+                <h6>Properties</h6>
+                
 
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
 
         <tr>
             
-                <td class="name"><code>res[i].location.latitude</code></td>
+                <td class="name"><code>latitude</code></td>
             
 
             <td class="type">
@@ -415,7 +458,7 @@ still join it
 
         <tr>
             
-                <td class="name"><code>res[i].location.longitude</code></td>
+                <td class="name"><code>longitude</code></td>
             
 
             <td class="type">
@@ -435,10 +478,17 @@ still join it
         </tr>
 
     
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
 
         <tr>
             
-                <td class="name"><code>res[i].settings</code></td>
+                <td class="name"><code>settings</code></td>
             
 
             <td class="type">
@@ -454,14 +504,33 @@ still join it
 
             
 
-            <td class="description last">The settings for the event</td>
-        </tr>
+            <td class="description last">The settings for the event
+                <h6>Properties</h6>
+                
 
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
 
         <tr>
             
-                <td class="name"><code>res[i].settings.password</code></td>
+                <td class="name"><code>password</code></td>
             
 
             <td class="type">
@@ -484,7 +553,7 @@ still join it
 
         <tr>
             
-                <td class="name"><code>res[i].settings.locationRestricted</code></td>
+                <td class="name"><code>locationRestricted</code></td>
             
 
             <td class="type">
@@ -507,7 +576,7 @@ still join it
 
         <tr>
             
-                <td class="name"><code>res[i].settings.allowVoting</code></td>
+                <td class="name"><code>allowVoting</code></td>
             
 
             <td class="type">
@@ -524,6 +593,20 @@ still join it
             
 
             <td class="description last">Whether to allow users to vote on songs</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -564,7 +647,7 @@ still join it
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_events-controller.js.html">controllers/events-controller.js</a>, <a href="controllers_events-controller.js.html#line88">line 88</a>
+        <a href="controllers_events-controller.js.html">controllers/events-controller.js</a>, <a href="controllers_events-controller.js.html#line103">line 103</a>
     </li></ul></dd>
     
 
@@ -756,13 +839,18 @@ User is assigned the 'DJ' role for the event <br>
 
             <td class="type">
             
+                
+<span class="param-type">Event</span>
+
+
+            
             </td>
 
             
 
             
 
-            <td class="description last">The body of the request
+            <td class="description last">The body of the request - The event to be created
                 <h6>Properties</h6>
                 
 
@@ -1095,13 +1183,398 @@ User is assigned the 'DJ' role for the event <br>
 
             <td class="type">
             
+                
+<span class="param-type">Event</span>
+
+
+            
             </td>
 
             
 
             
 
-            <td class="description last">The server response</td>
+            <td class="description last">The server response - The newly created event
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the event</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>eventId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the event, equal to the DJ's userId</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>userIds</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The event initially has no users attending</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>location</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Location</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The location of the event
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>latitude</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The latitude of the event</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>longitude</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The longitude of the event</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>playlist</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Playlist</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The playlist for the event
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>songs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;Song></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The playlist is initially empty</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>settings</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">EventSettings</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The settings for the event
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>password</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The event password (or null if there isn't one)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>locationRestricted</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether to restrict the event to nearby users</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>allowVoting</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether to allow users to vote on songs</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -1142,7 +1615,7 @@ User is assigned the 'DJ' role for the event <br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_events-controller.js.html">controllers/events-controller.js</a>, <a href="controllers_events-controller.js.html#line40">line 40</a>
+        <a href="controllers_events-controller.js.html">controllers/events-controller.js</a>, <a href="controllers_events-controller.js.html#line52">line 52</a>
     </li></ul></dd>
     
 
@@ -1190,7 +1663,7 @@ User is assigned the 'DJ' role for the event <br>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Thu Apr 09 2015 22:09:57 GMT-0500 (CDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Sat Apr 11 2015 01:34:20 GMT-0500 (CDT)
 </footer>
 
 <script> prettyPrint(); </script>

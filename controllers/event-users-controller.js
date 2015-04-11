@@ -18,10 +18,17 @@ var helpers		= require('./helpers');
  * User's eventId is changed to match the event <br>
  * User's role is changed to 'Collabifier' <br>
  *
- * @param 			req 					The client request
- * @param 			req.headers 			The headers in the HTTP request
- * @param {String} 	req.headers.userid 		The user's Spotify ID
- * @param 			res 					The server response
+ * @param 					req 						The client request
+ * @param 					req.headers 				The headers in the HTTP request
+ * @param {String} 			req.headers.userid 			The user's Spotify ID
+ * @param {User}			res 						The server response - The user who joined the event
+ * @param {String} 			res.name 					The user's Spotify display name
+ * @param {String} 			res.userId 					The user's Spotify ID
+ * @param {String}			res.eventId					The ID of the event that the user just joined
+ * @param {String}			res.role					The user defaults to a Collabifier
+ * @param {UserSettings} 	res.settings 				The user's settings
+ * @param {Boolean} 		res.settings.showName 		Whether to display the user's Spotify username or 'anonymous'
+ *
  */
 module.exports.post = function (req, res) {
 	helpers.getUser(req.headers.userid, res, function (user) {
@@ -38,13 +45,13 @@ module.exports.post = function (req, res) {
 			event.userIds.push(user.userId);
 			event.save();
 
-			res.sendStatus(status.OK_CREATE_RESOURCE);
+			res.status(status.OK_CREATE_RESOURCE).send(user);
 		});
 	});
 };
 
 /**
- * GET /events/:eventId/users/ - Get list of users at event
+ * GET /events/:eventId/users/ - Get list of users at event (not including the DJ)
  *
  * <p>Preconditions: <br>
  * Event exists <br>
@@ -54,10 +61,10 @@ module.exports.post = function (req, res) {
  * @param 			req 					The client request
  * @param 			req.headers 			The headers in the HTTP request
  * @param {String} 	req.headers.userid 		The user's Spotify ID
- * @param 			res 					The server response
- * @param {String}	res[i].name				The user's name
- * @param {String}	res[i].userId			The user's Spotify ID
- * @param {String}	res[i].role				The user's role
+ * @param {User[]}	res 					The server response - The list of users at the event not including the DJ
+ * @param {String}	res[].name				The user's name
+ * @param {String}	res[].userId			The user's Spotify ID
+ * @param {String}	res[].role				The user's role
  */
 module.exports.get = function (req, res) {
 	// First, make sure the DJ is the one making the request

@@ -48,13 +48,20 @@ var helpers		= require('./helpers');
  * @param 				req 					The client request
  * @param				req.headers				The headers in the HTTP request
  * @param {String} 		req.headers.userid 		The user's Spotify ID
- * @param				req.body				The body of the request
+ * @param {Song}		req.body				The body of the request - The song to add
  * @param {String} 		req.body.title 			The song's title
  * @param {String} 		req.body.artist 		The artist of the song
  * @param {String} 		req.body.album 			The album the song appears on
  * @param {Number} 		req.body.year 			The year the album was released
  * @param {String} 		req.body.artworkUrl 	The URL to retrieve the album art
- * @param 				res 					The server response
+ * @param {Song}		res 					The server response - The newly added song
+ * @param {String} 		res.title 				The song's title
+ * @param {String} 		res.artist 				The artist of the song
+ * @param {String} 		res.album 				The album the song appears on
+ * @param {Number} 		res.year 				The year the album was released
+ * @param {String} 		res.artworkUrl 			The URL to retrieve the album art
+ * @param {String} 		res.userId				The Spotify ID of the user who added the song
+ * @param {Number}		res.votes				The song's vote count starts at 0
  */
 module.exports.post = function (req, res) {
 	helpers.getUserAtEvent(req.headers.userid, req.eventId, res, function (user, event) {
@@ -79,7 +86,10 @@ module.exports.post = function (req, res) {
 		event.playlist.songs.push(req.body);
 		event.save();
 
-		return res.sendStatus(status.OK_CREATE_RESOURCE);
+		// Retrieve the newly created song object
+		song = helpers.getSongFromPlaylist(event, req.body.songId);
+
+		res.status(status.OK_CREATE_RESOURCE).send(song);
 	});
 };
 
@@ -94,15 +104,15 @@ module.exports.post = function (req, res) {
  * @param 			req 				The client request
  * @param 			req.headers 		The headers in the HTTP request
  * @param {String} 	req.headers.userid 	The user's Spotify ID
- * @param 			res 				The server response
- * @param {String}	res[i].title		The title of the song
- * @param {String} 	res[i].artist		The name of the artist
- * @param {String} 	res[i].album		The name of the album the song appears on
- * @param {Number}	res[i].year			The year the song was released
- * @param {String} 	res[i].songId		The Spotify ID for the song
- * @param {String} 	res[i].artworkUrl	The URL where the album art can be found
- * @param {String} 	res[i].userId		The Spotify ID of the user who added the song
- * @param {Number}	res[i].votes		The song's current number of (upvotes - downvotes)
+ * @param {Song[]}	res 				The server response - All songs in the playlist
+ * @param {String}	res[].title			The title of the song
+ * @param {String} 	res[].artist		The name of the artist
+ * @param {String} 	res[].album			The name of the album the song appears on
+ * @param {Number}	res[].year			The year the song was released
+ * @param {String} 	res[].songId		The Spotify ID for the song
+ * @param {String} 	res[].artworkUrl	The URL where the album art can be found
+ * @param {String} 	res[].userId		The Spotify ID of the user who added the song
+ * @param {Number}	res[].votes			The song's current number of (upvotes - downvotes)
  */
 module.exports.get = function (req, res) {
 	helpers.getUserAtEvent(req.headers.userid, req.eventId, res, function (user, event) {
@@ -121,26 +131,34 @@ module.exports.get = function (req, res) {
  * &lt;p>Postconditions: &lt;br>
  * Songs in the playlist are reordered accordingly
  *
- * @param 			req 				The client request
- * @param 			req.headers 		The headers in the HTTP request
- * @param {String}	req.headers.userid 	The user's Spotify ID
- * @param 			req.body 			The body of the request
- * @param {String}	req[i].title		The title of the song
- * @param {String} 	req[i].artist		The name of the artist
- * @param {String} 	req[i].album		The name of the album the song appears on
- * @param {Number}	req[i].year			The year the song was released
- * @param {String} 	req[i].songId		The Spotify ID for the song
- * @param {String} 	req[i].artworkUrl	The URL where the album art can be found
- * @param {String} 	req[i].userId		The Spotify ID of the user who added the song
- * @param {Number}	[req[i].votes=0]	The song's current number of (upvotes - downvotes)
- * @param			res					The server response
+ * @param 			req 					The client request
+ * @param 			req.headers 			The headers in the HTTP request
+ * @param {String}	req.headers.userid 		The user's Spotify ID
+ * @param {Song[]}	req.body 				The body of the request - The reordered list of songs
+ * @param {String}	req.body[].title		The title of the song
+ * @param {String} 	req.body[].artist		The name of the artist
+ * @param {String} 	req.body[].album		The name of the album the song appears on
+ * @param {Number}	req.body[].year			The year the song was released
+ * @param {String} 	req.body[].songId		The Spotify ID for the song
+ * @param {String} 	req.body[].artworkUrl	The URL where the album art can be found
+ * @param {String} 	req.body[].userId		The Spotify ID of the user who added the song
+ * @param {Number}	req.body[].votes		The song's current number of (upvotes - downvotes)
+ * @param {Song[]}	res						The server response - The reordered list of songs
+ * @param {String}	res[].title				The title of the song
+ * @param {String} 	res[].artist			The name of the artist
+ * @param {String} 	res[].album				The name of the album the song appears on
+ * @param {Number}	res[].year				The year the song was released
+ * @param {String} 	res[].songId			The Spotify ID for the song
+ * @param {String} 	res[].artworkUrl		The URL where the album art can be found
+ * @param {String} 	res[].userId			The Spotify ID of the user who added the song
+ * @param {Number}	res[].votes				The song's current number of (upvotes - downvotes)
  */
 module.exports.put = function (req, res) {
 	helpers.getEventAsDJOrPromoted(req.headers.userid, req.eventId, res, function (event) {
-		event.playlist = req.body;
+		event.playlist.songs = req.body;
 		event.save();
 
-		res.sendStatus(status.OK_UPDATE_RESOURCE);
+		res.status(status.OK_UPDATE_RESOURCE).send(event.playlist.songs);
 	});
 };</code></pre>
         </article>
@@ -158,7 +176,7 @@ module.exports.put = function (req, res) {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Thu Apr 09 2015 22:09:57 GMT-0500 (CDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Sat Apr 11 2015 01:34:20 GMT-0500 (CDT)
 </footer>
 
 <script> prettyPrint(); </script>

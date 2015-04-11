@@ -15,7 +15,7 @@ var helpers 	= require('./helpers');
  * @param 					req 						The client request
  * @param					req.headers					The headers in the HTTP request
  * @param {String} 			req.headers.userid 			The user's Spotify ID
- * @param 				 	res 						The server response
+ * @param {EventSettings} 	res 						The server response - The current event settings
  * @param {String}			res.password				The event password (or null if there isn't one)
  * @param {Boolean}			res.locationRestricted		Whether to restrict the event to nearby users
  * @param {Boolean}			res.allowVoting				Whether to allow users to vote on songs
@@ -37,21 +37,24 @@ module.exports.get = function (req, res) {
  * <p>Postconditions: <br>
  * The event's settings are updated <br>
  *
- * @param 				req 							The client request
- * @param				req.headers						The headers in the HTTP request
- * @param {String} 		req.headers.userid 				The user's Spotify ID
- * @param 				req.body 						The body of the request
- * @param {String}		req.body.password				The password for the event, or null if there isn't one
- * @param {Boolean}		req.body.locationRestricted		Whether to restrict the event to nearby users
- * @param {Boolean}		req.body.allowVoting			Whether to allow users to vote on songs
- * @param 				res 							The server response
+ * @param 					req 							The client request
+ * @param					req.headers						The headers in the HTTP request
+ * @param {String} 			req.headers.userid 				The user's Spotify ID
+ * @param {EventSettings}	req.body 						The body of the request - The new event settings
+ * @param {String}			req.body.password				The password for the event, or null if there isn't one
+ * @param {Boolean}			req.body.locationRestricted		Whether to restrict the event to nearby users
+ * @param {Boolean}			req.body.allowVoting			Whether to allow users to vote on songs
+ * @param {EventSettings}	res 							The server response - The new event settings
+ * @param {String}			res.password					The password for the event, or null if there isn't one
+ * @param {Boolean}			res.locationRestricted			Whether to restrict the event to nearby users
+ * @param {Boolean}			res.allowVoting					Whether to allow users to vote on songs
  */
 module.exports.put = function (req, res) {
 	helpers.getEventAsDJ(req.headers.userid, req.eventId, res, function (event) {
 		event.settings = req.body;
 		event.save();
 
-		res.sendStatus(status.OK_UPDATE_RESOURCE);
+		res.status(status.OK_UPDATE_RESOURCE).send(event.settings);
 	});
 };
 

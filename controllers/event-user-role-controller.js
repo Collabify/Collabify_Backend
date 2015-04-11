@@ -24,6 +24,7 @@ var helpers		= require('./helpers');
  * @param 			req.body 				The body of the request
  * @param {String} 	req.body.role 			The new role for the affected user
  * @param 			res 					The server response
+ * @param {String}	res.role				The new role for the affected user
  */
 module.exports.put = function (req, res) {
 	// First make sure the DJ is the one making the request
@@ -46,7 +47,7 @@ module.exports.put = function (req, res) {
 			user.role = req.body.role;
 			user.save();
 
-			res.sendStatus(status.OK_UPDATE_RESOURCE);
+			res.status(status.OK_UPDATE_RESOURCE).send({role: user.role});
 		});
 	});
 };

@@ -11,7 +11,7 @@ var helpers		= require('./helpers');
  * User has logged in <br>
  *
  * @param 					req 						The client request
- * @param 					res 						The server response
+ * @param {User}			res 						The server response - The requested user
  * @param {String} 			res.name 					The user's name
  * @param {String} 			res.userId 					The user's Spotify ID
  * @param {String} 			res.eventId 				The ID of the event the user is at, or null if they aren't at one
@@ -34,15 +34,18 @@ module.exports.get = function (req, res) {
  * <p>Postconditions: <br>
  * User's settings are updated
  *
- * @param 				req 					The client request
- * @param 				req.body 				The body of the request
- * @param {String} 		req.body.showName 		Whether to display the user's Spotify username or 'anonymous'
- * @param 				res 					The server response
+ * @param 					req 					The client request
+ * @param {UserSettings}	req.body 				The body of the request - The new user settings
+ * @param {String} 			req.body.showName 		Whether to display the user's Spotify username or 'anonymous'
+ * @param {UserSettings}	res 					The server response - The new user settings
+ * @param {String}			res.showName			Whether to display the user's Spotify username or 'anonymous'
  */
 module.exports.put = function (req, res) {
 	helpers.getUser(req.userId, res, function (user) {
 		user.settings = req.body;
-		res.sendStatus(status.OK_UPDATE_RESOURCE);
+		user.save();
+
+		res.status(status.OK_UPDATE_RESOURCE).send(user.settings);
 	});
 };
 
