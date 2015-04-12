@@ -49,6 +49,8 @@
     "winston": "^0.9.0"
   },
   "devDependencies": {
-    "jsdoc": "git+https://github.com/jsdoc3/jsdoc.git"
+    "jsdoc": "git+https://github.com/jsdoc3/jsdoc.git",
+    "mocha": "^2.2.4",
+    "request": "^2.55.0"
   }
 }

@@ -32,10 +32,13 @@ module.exports = controller
 ```
 
 ### doc/
-HTML documentation for the project.  Regenerate by running 'node_modules/.bin/jsdoc -c conf.json'.
+HTML documentation for the project.  Regenerate by running 'make doc'.
 
 ### models/
 Each model should have their own file here. Please do not add any business logic here, just define the model and export it. Once again keep please follow one naming convention.
+
+### test/
+Unit tests for the project.  Run with 'make test'.
 
 ### logger.js
 This is the config file for the logger. Feel free to change it if you have improvements.
