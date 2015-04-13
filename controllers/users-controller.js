@@ -31,9 +31,6 @@ module.exports.post = function (req, res) {
 	User.findOne({userId: req.headers.userid}, function (err, user) {
 		if (err) {
 			return status.handleUnexpectedError(err, res);
-		} else if (user != null && user.eventId != null) {
-			logger.error('User is already at an event');
-			return res.sendStatus(status.ERR_RESOURCE_EXISTS);
 		}
 
 		if (user != null) {
@@ -50,7 +47,7 @@ module.exports.post = function (req, res) {
 
 			user.save();
 
-			res.sendStatus(status.OK_UPDATE_RESOURCE);
+			res.status(status.OK_UPDATE_RESOURCE).send(user);
 		} else {
 			// Manually add the userId
 			req.body.userId = req.headers.userid;
