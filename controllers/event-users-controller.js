@@ -34,7 +34,7 @@ module.exports.post = function (req, res) {
 	helpers.getUser(req.headers.userid, res, function (user) {
 		if (user.eventId == req.eventId) {
 			// Nothing to do, the user is already at the event
-			return res.sendStatus(status.OK_UPDATE_RESOURCE);
+			return res.status(status.OK_CREATE_RESOURCE).send(user);
 		} else if (user.eventId != null) {
 			logger.error('User is already at an event');
 			return res.sendStatus(status.ERR_RESOURCE_EXISTS);
