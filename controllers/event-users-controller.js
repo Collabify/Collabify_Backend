@@ -11,12 +11,12 @@ var helpers		= require('./helpers');
  * <p>Preconditions: <br>
  * Event exists <br>
  * User has logged in <br>
- * User is not already at an event <br>
+ * User is not at another event <br>
  *
  * <p>Postconditions: <br>
- * User is added to the event's user list <br>
- * User's eventId is changed to match the event <br>
- * User's role is changed to 'Collabifier' <br>
+ * User is added to the event's user list if they weren't already <br>
+ * User's eventId is changed to match the event if they weren't already at the event <br>
+ * User's role is changed to 'Collabifier' if they weren't already at the event <br>
  *
  * @param 					req 						The client request
  * @param 					req.headers 				The headers in the HTTP request
@@ -32,7 +32,10 @@ var helpers		= require('./helpers');
  */
 module.exports.post = function (req, res) {
 	helpers.getUser(req.headers.userid, res, function (user) {
-		if (user.eventId != null) {
+		if (user.eventId == req.eventId) {
+			// Nothing to do, the user is already at the event
+			return res.sendStatus(status.OK_UPDATE_RESOURCE);
+		} else if (user.eventId != null) {
 			logger.error('User is already at an event');
 			return res.sendStatus(status.ERR_RESOURCE_EXISTS);
 		}
