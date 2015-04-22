@@ -3,7 +3,6 @@ var router				= express.Router();
 var logger				= require('./logger');
 
 var UsersController							= require('./controllers/users-controller');
-var UserTokenController						= require('./controllers/user-token-controller');
 var UserController							= require('./controllers/user-controller');
 var EventsController						= require('./controllers/events-controller');
 var EventController							= require('./controllers/event-controller');
@@ -23,25 +22,20 @@ router.route('/users/')
 		UsersController.post(req, res);
 	});
 
-router.route('/users/:userId/token/')
-	.post(function (req, res, next) {
-		// Request a new access token
-		/** @todo Iteration 2: Implement me */
-		res.send('POST ' + req.path);
-	});
-
 router.route('/users/:userId/')
 	.get(function (req, res, next) {
 		// Get user details
 		UserController.get(req, res);
 	})
+
+router.route('/users/:userId/settings')
 	.put(function (req, res, next) {
 		// Change settings (Collabifier only)
-		UserController.put(req, res);
+		UserSettingsController.put(req, res);
 	})
 	.delete(function (req, res, next) {
 		// Log out the user and delete them from the database
-		UserController.delete(req, res);
+		UserSettingsController.delete(req, res);
 	});
 
 router.route('/events/')
