@@ -189,6 +189,26 @@ module.exports.endEvent = function (userId, eventId, res, callback) {
 };
 
 /**
+ * Attempts to find the user's vote for the song
+ *
+ * @param 	{Song} 				song 	The song to search
+ * @param 	{String} 			userId 	The userId of the vote to search for
+ * @return 	{Vote|Undefined}			The vote or undefined if not found
+ */
+module.exports.getVoteFromSong = function (song, userId) {
+	/** @todo Find a better way to do this */
+	var vote = song.votes.filter(function (vote) {
+		if (vote.userId == userId) {
+			return true;
+		}
+
+		return false;
+	})[0];
+
+	return vote;
+};
+
+/**
  * Attempts to find the song in the event's playlist
  *
  * @param {Event} 	event 	The event whose playlist is to be searched
@@ -205,4 +225,64 @@ module.exports.getSongFromPlaylist = function (event, songId) {
 	})[0];
 
 	return song;
+};
+
+/**
+ * Deep copies the provided object
+ *
+ * @todo Obviously this isn't a good way of deep copying
+ *
+ * @param 	{Object}	object		The object to deep copy
+ * @return 	{Object}				A deep copy of the object
+ */
+module.exports.deepCopy = function (object) {
+	return JSON.parse(JSON.stringify(object));
+};
+
+/**
+ * Creates a deep copy of the song, filtered so that only the vote placed
+ * by the user is returned.  The user's vote is placed in a 'vote' property for
+ * the song.
+ *
+ * @param	{Song}		song		The song to filter
+ * @param	{String}	userId		The user's Spotify ID
+ * @return	{Song}					The filtered song
+ */
+module.exports.filterVotesForSong = function (song, userId) {
+	var copy = module.exports.deepCopy(song);
+	var vote = module.exports.getVoteFromSong(copy, userId);
+
+	if (vote == undefined) {
+		// User hasn't placed a vote on the song, return default data
+		vote = {
+			isUpvoted: false,
+			isDownvoted: false
+		};
+	}
+
+	copy.vote = vote;
+
+	delete vote.userId;
+	delete copy.votes;
+
+	return copy;
+};
+
+/**
+ * Creates a deep copy of the playlist, filtered so that only the votes
+ * placed by the user are returned.  The user's vote is placed in a 'vote'
+ * property for each song.
+ *
+ * @param	{Playlist}	playlist	The playlist to filter
+ * @param 	{String}	userId		The user's Spotify ID
+ * @return	{Playlist}				The filtered playlist
+ */
+module.exports.filterVotesForPlaylist = function (playlist, userId) {
+	var copy = module.exports.deepCopy(playlist);
+
+	copy.songs = copy.songs.map(function (song) {
+		return module.exports.filterVotesForSong(song, userId);
+	});
+
+	return copy;
 };

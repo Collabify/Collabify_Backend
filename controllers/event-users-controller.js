@@ -18,23 +18,35 @@ var helpers		= require('./helpers');
  * User's eventId is changed to match the event if they weren't already at the event <br>
  * User's role is changed to 'Collabifier' if they weren't already at the event <br>
  *
- * @param 					req 						The client request
- * @param 					req.headers 				The headers in the HTTP request
- * @param {String} 			req.headers.userid 			The user's Spotify ID
- * @param {User}			res 						The server response - The user who joined the event
- * @param {String} 			res.name 					The user's Spotify display name
- * @param {String} 			res.userId 					The user's Spotify ID
- * @param {String}			res.eventId					The ID of the event that the user just joined
- * @param {String}			res.role					The user defaults to a Collabifier
- * @param {UserSettings} 	res.settings 				The user's settings
- * @param {Boolean} 		res.settings.showName 		Whether to display the user's Spotify username or 'anonymous'
+ * @param 					req 								The client request
+ * @param 					req.headers 						The headers in the HTTP request
+ * @param {String} 			req.headers.userid 					The user's Spotify ID
+ * @param {Event}			res									The server response - The event the user just joined
+ * @param {String} 			res.name							The name of the event
+ * @param {String}			res.eventId							The ID of the event, equal to the DJ's userId
+ * @param {Location}		res.location						The location of the event
+ * @param {Number}			res.location.latitude				The latitude of the event
+ * @param {Number}			res.location.longitude				The longitude of the event
+ * @param {Playlist}		res.playlist						The playlist for the event
+ * @param {Song[]}			res.playlist.songs					The songs in the playlist
+ * @param {EventSettings}	res.settings						The settings for the event
+ * @param {String}			res.settings.password				The event password (or null if there isn't one)
+ * @param {Boolean}			res.settings.locationRestricted		Whether to restrict the event to nearby users
+ * @param {Boolean}			res.settings.allowVoting			Whether to allow users to vote on songs
  *
  */
 module.exports.post = function (req, res) {
 	helpers.getUser(req.headers.userid, res, function (user) {
 		if (user.eventId == req.eventId) {
 			// Nothing to do, the user is already at the event
-			return res.status(status.OK_CREATE_RESOURCE).send(user);
+			helpers.getEvent(req.eventId, res, function (event) {
+
+				// Return the event that the user just joined, but don't send the user list
+				// (shouldn't be visible to anyone but the DJ)
+				var eventCopy = JSON.parse(JSON.stringify(event));
+				delete eventCopy.userIds;
+				res.status(status.OK_CREATE_RESOURCE).send(eventCopy);
+			});
 		} else if (user.eventId != null) {
 			logger.error('User is already at an event');
 			return res.sendStatus(status.ERR_RESOURCE_EXISTS);
@@ -48,7 +60,11 @@ module.exports.post = function (req, res) {
 			event.userIds.push(user.userId);
 			event.save();
 
-			res.status(status.OK_CREATE_RESOURCE).send(user);
+			// Return the event that the user just joined, but don't send the user list
+			// (shouldn't be visible to anyone but the DJ)
+			var eventCopy = JSON.parse(JSON.stringify(event));
+			delete eventCopy.userIds;
+			res.status(status.OK_CREATE_RESOURCE).send(eventCopy);
 		});
 	});
 };
