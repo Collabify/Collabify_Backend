@@ -1,5 +1,6 @@
 var mongoose 	= require('mongoose');
 var Schema		= mongoose.Schema;
+var VoteDef 	= require('./vote').VoteDef;
 
 /** @module */
 
@@ -13,7 +14,8 @@ var Schema		= mongoose.Schema;
  * @property {String} 	songId			The Spotify ID for the song
  * @property {String} 	artworkUrl		The URL where the album art can be found
  * @property {String} 	userId			The Spotify ID of the user who added the song
- * @property {Number} 	[votes=0]		The song's current number of (upvotes - downvotes)
+ * @property {Number} 	[voteCount=0]	The song's current number of (upvotes - downvotes)
+ * @property {Vote[]}	votes			The individual votes placed by each user
  */
 module.exports.SongDef = {
 	title: 		{type: String, required: true},
@@ -23,8 +25,8 @@ module.exports.SongDef = {
 	songId: 	{type: String, required: true},
 	artworkUrl: {type: String, required: true},
 	userId: 	{type: String, required: true},
-	/** @todo Implement votes on a user basis */
-	votes: 		{type: Number, min: 0, default: 0}
+	voteCount: 	{type: Number, default: 0},
+	votes: 		{type: [VoteDef], default: []}
 };
 
 /** Song document schema */

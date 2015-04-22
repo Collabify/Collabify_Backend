@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: controllers/event-user-controller.js</title>
+    <title>JSDoc: Source: models/vote.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: controllers/event-user-controller.js</h1>
+    <h1 class="page-title">Source: models/vote.js</h1>
 
     
 
@@ -26,33 +26,21 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>var logger 		= require('../logger');
-var status		= require('../status');
-var helpers		= require('./helpers');
-
-/** @module */
+            <pre class="prettyprint source linenums"><code>/** @module */
 
 /**
- * DELETE /events/:eventId/users/:userId - Leave event
+ * Vote object definition
  *
- * &lt;p>Preconditions: &lt;br>
- * Event exists &lt;br>
- * User has logged in &lt;br>
- * User is at the event &lt;br>
- * User is not the DJ for the event &lt;br>
+ * Note that the song cannot be upvoted and downvoted simultaneously by a single user.
  *
- * &lt;p>Postconditions: &lt;br>
- * User is removed from the list of users at the event &lt;br>
- * User's eventId is reset to null &lt;br>
- * User's role is reset to 'NoRole' &lt;br>
- *
- * @param 	req		The client request
- * @param 	res 	The server response
+ * @property {String} 	userId 			The Spotify ID of the user who placed this vote
+ * @property {Boolean} 	isUpvoted 		Whether the user has upvoted the song
+ * @property {Boolean} 	isDownvoted 	Whether the user has downvoted the song
  */
-module.exports.delete = function (req, res) {
-	helpers.leaveEvent(req.userId, req.eventId, res, function () {
-		res.sendStatus(status.OK_DELETE_RESOURCE);
-	});
+module.exports.VoteDef = {
+	userId: 		{type: String, required: true},
+	isUpvoted: 		{type: Boolean, required: true},
+	isDownvoted: 	{type: Boolean, required: true}
 };</code></pre>
         </article>
     </section>

@@ -61,6 +61,166 @@
 
     
 
+    <h4 class="name" id=".deepCopy"><span class="type-signature">(static) </span>deepCopy<span class="signature">(object)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Deep copies the provided object
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>object</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The object to deep copy</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line257">line 257</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="tag-todo">To Do:</dt>
+    <dd class="tag-todo">
+        <ul>
+            <li>Obviously this isn't a good way of deep copying</li>
+        </ul>
+    </dd>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A deep copy of the object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id=".endEvent"><span class="type-signature">(static) </span>endEvent<span class="signature">(userId, eventId, res, callback())</span><span class="type-signature"></span></h4>
 
     
@@ -225,7 +385,755 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line168">line 168</a>
+        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line188">line 188</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".filterVotesForPlaylist"><span class="type-signature">(static) </span>filterVotesForPlaylist<span class="signature">(playlist, userId)</span><span class="type-signature"> &rarr; {Playlist}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Creates a deep copy of the playlist, filtered so that only the votes
+placed by the user are returned.  The user's vote is placed in a 'vote'
+property for each song.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>playlist</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Playlist</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The playlist to filter</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>userId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The user's Spotify ID</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line299">line 299</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The filtered playlist
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Playlist</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".filterVotesForSong"><span class="type-signature">(static) </span>filterVotesForSong<span class="signature">(song, userId)</span><span class="type-signature"> &rarr; {Song}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Creates a deep copy of the song, filtered so that only the vote placed
+by the user is returned.  The user's vote is placed in a 'vote' property for
+the song.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>song</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Song</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The song to filter</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>userId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The user's Spotify ID</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line270">line 270</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The filtered song
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Song</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".getDJOrPromotedUserAtEvent"><span class="type-signature">(static) </span>getDJOrPromotedUserAtEvent<span class="signature">(userId, eventId, res, callback(event))</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Finds a user and event, making sure the user is the DJ or a Promoted Collabifier
+of the event.  If found, they are passed to a callback
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>userId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The userId to search for</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>eventId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The eventId to search for</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>res</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The server response</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback(event)</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Callback with the event found</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line135">line 135</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".getDJUserAtEvent"><span class="type-signature">(static) </span>getDJUserAtEvent<span class="signature">(userId, eventId, res, callback(event))</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Finds a user and event, making sure the user is the DJ of the event.  If
+found, they are passed to a callback
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>userId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The userId to search for</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>eventId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The eventId to search for</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>res</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The server response</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback(event)</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Callback with the event found</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line115">line 115</a>
     </li></ul></dd>
     
 
@@ -507,15 +1415,15 @@
 
     
 
-    <h4 class="name" id=".getEventAsDJ"><span class="type-signature">(static) </span>getEventAsDJ<span class="signature">(userId, eventId, res, callback(event))</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".getNichtBlacklistedUserAtEvent"><span class="type-signature">(static) </span>getNichtBlacklistedUserAtEvent<span class="signature">(userId, eventId, res, callback(event))</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Finds a user and event, making sure the user is the DJ of the event.  If
-found, the event is passed to a callback
+    Finds a user and event, making sure the user is not Blacklisted at the event.  If
+found, they are passed to a callback
 </div>
 
 
@@ -703,203 +1611,7 @@ found, the event is passed to a callback
 
     
 
-    <h4 class="name" id=".getEventAsDJOrPromoted"><span class="type-signature">(static) </span>getEventAsDJOrPromoted<span class="signature">(userId, eventId, res, callback(event))</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Finds a user and event, making sure the user is the DJ or a Promoted Collabifier
-of the event.  If found, the event is passed to a callback
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>userId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The userId to search for</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>eventId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The eventId to search for</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>res</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The server response</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>callback(event)</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Callback with the event found</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line115">line 115</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id=".getSongFromPlaylist"><span class="type-signature">(static) </span>getSongFromPlaylist<span class="signature">(event, songId)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".getSongFromPlaylist"><span class="type-signature">(static) </span>getSongFromPlaylist<span class="signature">(event, songId)</span><span class="type-signature"> &rarr; {Song|Undefined}</span></h4>
 
     
 
@@ -1022,7 +1734,7 @@ of the event.  If found, the event is passed to a callback
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line197">line 197</a>
+        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line216">line 216</a>
     </li></ul></dd>
     
 
@@ -1045,6 +1757,31 @@ of the event.  If found, the event is passed to a callback
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The song or undefined if not found
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Song</span>
+|
+
+<span class="param-type">Undefined</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -1500,6 +2237,185 @@ they are passed to a callback
 
     
 
+    <h4 class="name" id=".getVoteFromSong"><span class="type-signature">(static) </span>getVoteFromSong<span class="signature">(song, userId)</span><span class="type-signature"> &rarr; {Vote|Undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Attempts to find the user's vote for the song
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>song</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Song</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The song to search</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>userId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The userId of the vote to search for</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line236">line 236</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The vote or undefined if not found
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Vote</span>
+|
+
+<span class="param-type">Undefined</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id=".leaveEvent"><span class="type-signature">(static) </span>leaveEvent<span class="signature">(userId, eventId, res, callback())</span><span class="type-signature"></span></h4>
 
     
@@ -1664,7 +2580,7 @@ they are passed to a callback
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line134">line 134</a>
+        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line154">line 154</a>
     </li></ul></dd>
     
 
@@ -1706,13 +2622,13 @@ they are passed to a callback
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_event-controller.html">controllers/event-controller</a></li><li><a href="module-controllers_event-playlist-controller.html">controllers/event-playlist-controller</a></li><li><a href="module-controllers_event-playlist-song-controller.html">controllers/event-playlist-song-controller</a></li><li><a href="module-controllers_event-user-controller.html">controllers/event-user-controller</a></li><li><a href="module-controllers_event-user-role-controller.html">controllers/event-user-role-controller</a></li><li><a href="module-controllers_event-users-controller.html">controllers/event-users-controller</a></li><li><a href="module-controllers_events-controller.html">controllers/events-controller</a></li><li><a href="module-controllers_helpers.html">controllers/helpers</a></li><li><a href="module-controllers_user-controller.html">controllers/user-controller</a></li><li><a href="module-controllers_users-controller.html">controllers/users-controller</a></li><li><a href="module-models_event.html">models/event</a></li><li><a href="module-models_event-settings.html">models/event-settings</a></li><li><a href="module-models_location.html">models/location</a></li><li><a href="module-models_playlist.html">models/playlist</a></li><li><a href="module-models_song.html">models/song</a></li><li><a href="module-models_user.html">models/user</a></li><li><a href="module-models_user-settings.html">models/user-settings</a></li><li><a href="module-routes.html">routes</a></li><li><a href="module-status.html">status</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_event-controller.html">controllers/event-controller</a></li><li><a href="module-controllers_event-playlist-controller.html">controllers/event-playlist-controller</a></li><li><a href="module-controllers_event-playlist-song-controller.html">controllers/event-playlist-song-controller</a></li><li><a href="module-controllers_event-playlist-song-votes-user-controller.html">controllers/event-playlist-song-votes-user-controller</a></li><li><a href="module-controllers_event-user-controller.html">controllers/event-user-controller</a></li><li><a href="module-controllers_event-user-role-controller.html">controllers/event-user-role-controller</a></li><li><a href="module-controllers_event-users-controller.html">controllers/event-users-controller</a></li><li><a href="module-controllers_events-controller.html">controllers/events-controller</a></li><li><a href="module-controllers_helpers.html">controllers/helpers</a></li><li><a href="module-controllers_user-controller.html">controllers/user-controller</a></li><li><a href="module-controllers_users-controller.html">controllers/users-controller</a></li><li><a href="module-models_event.html">models/event</a></li><li><a href="module-models_event-settings.html">models/event-settings</a></li><li><a href="module-models_location.html">models/location</a></li><li><a href="module-models_playlist.html">models/playlist</a></li><li><a href="module-models_song.html">models/song</a></li><li><a href="module-models_user.html">models/user</a></li><li><a href="module-models_user-settings.html">models/user-settings</a></li><li><a href="module-models_vote.html">models/vote</a></li><li><a href="module-routes.html">routes</a></li><li><a href="module-status.html">status</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Tue Apr 14 2015 08:31:46 GMT-0500 (CDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Wed Apr 22 2015 01:03:50 GMT-0500 (CDT)
 </footer>
 
 <script> prettyPrint(); </script>

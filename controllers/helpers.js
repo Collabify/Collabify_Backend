@@ -84,42 +84,62 @@ module.exports.getUserAtEvent = function (userId, eventId, res, callback) {
 };
 
 /**
- * Finds a user and event, making sure the user is the DJ of the event.  If
- * found, the event is passed to a callback
+ * Finds a user and event, making sure the user is not Blacklisted at the event.  If
+ * found, they are passed to a callback
  *
  * @param {String}		userId 			The userId to search for
  * @param {String}		eventId 		The eventId to search for
  * @param 				res 			The server response
  * @param {Function} 	callback(event) Callback with the event found
  */
-module.exports.getEventAsDJ = function (userId, eventId, res, callback) {
+module.exports.getNichtBlacklistedUserAtEvent = function (userId, eventId, res, callback) {
+	module.exports.getUserAtEvent(userId, eventId, res, function (user, event) {
+		if (user.role == 'Blacklisted') {
+			logger.error('User is Blacklisted');
+			return res.sendStatus(status.ERR_UNAUTHORIZED);
+		}
+
+		callback(user, event);
+	});
+};
+
+/**
+ * Finds a user and event, making sure the user is the DJ of the event.  If
+ * found, they are passed to a callback
+ *
+ * @param {String}		userId 			The userId to search for
+ * @param {String}		eventId 		The eventId to search for
+ * @param 				res 			The server response
+ * @param {Function} 	callback(event) Callback with the event found
+ */
+module.exports.getDJUserAtEvent = function (userId, eventId, res, callback) {
 	module.exports.getUserAtEvent(userId, eventId, res, function (user, event) {
 		if (user.role != 'DJ') {
 			logger.error('User is not the DJ');
 			return res.sendStatus(status.ERR_UNAUTHORIZED);
 		}
 
-		callback(event);
+		callback(user, event);
 	});
 };
 
 /**
  * Finds a user and event, making sure the user is the DJ or a Promoted Collabifier
- * of the event.  If found, the event is passed to a callback
+ * of the event.  If found, they are passed to a callback
  *
  * @param {String}		userId 			The userId to search for
  * @param {String}		eventId 		The eventId to search for
  * @param 				res 			The server response
  * @param {Function} 	callback(event) Callback with the event found
  */
-module.exports.getEventAsDJOrPromoted = function (userId, eventId, res, callback) {
+module.exports.getDJOrPromotedUserAtEvent = function (userId, eventId, res, callback) {
 	module.exports.getUserAtEvent(userId, eventId, res, function (user, event) {
 		if (user.role != 'DJ' && user.role != 'Promoted') {
 			logger.error('User is not the DJ or a Promoted Collabifier');
 			return res.sendStatus(status.ERR_UNAUTHORIZED);
 		}
 
-		callback(event);
+		callback(user, event);
 	});
 };
 
@@ -166,7 +186,7 @@ module.exports.leaveEvent = function (userId, eventId, res, callback) {
  * @param {Function} 	callback()  Callback to invoke after ending the event
  */
 module.exports.endEvent = function (userId, eventId, res, callback) {
-	module.exports.getEventAsDJ(userId, eventId, res, function (event) {
+	module.exports.getDJUserAtEvent(userId, eventId, res, function (user, event) {
 		// Remove users from the event
 		User.update({userId: {$in: event.userIds}}, {eventId: null, role: 'NoRole'}, function (err) {
 			if (err) {
@@ -177,11 +197,9 @@ module.exports.endEvent = function (userId, eventId, res, callback) {
 			event.remove();
 
 			// Update the DJ
-			module.exports.getUser(userId, res, function (user) {
-				user.eventId = null;
-				user.role = 'NoRole';
-				user.save();
-			});
+			user.eventId = null;
+			user.role = 'NoRole';
+			user.save();
 
 			callback();
 		});
@@ -191,8 +209,9 @@ module.exports.endEvent = function (userId, eventId, res, callback) {
 /**
  * Attempts to find the song in the event's playlist
  *
- * @param {Event} 	event 	The event whose playlist is to be searched
- * @param {String} 	songId 	The songId to search for
+ * @param 	{Event} 			event 	The event whose playlist is to be searched
+ * @param 	{String} 			songId 	The songId to search for
+ * @return 	{Song|Undefined}			The song or undefined if not found
  */
 module.exports.getSongFromPlaylist = function (event, songId) {
 	/** @todo Find a better way to do this */
@@ -205,4 +224,84 @@ module.exports.getSongFromPlaylist = function (event, songId) {
 	})[0];
 
 	return song;
+};
+
+/**
+ * Attempts to find the user's vote for the song
+ *
+ * @param 	{Song} 				song 	The song to search
+ * @param 	{String} 			userId 	The userId of the vote to search for
+ * @return 	{Vote|Undefined}			The vote or undefined if not found
+ */
+module.exports.getVoteFromSong = function (song, userId) {
+	/** @todo Find a better way to do this */
+	var vote = song.votes.filter(function (vote) {
+		if (vote.userId == userId) {
+			return true;
+		}
+
+		return false;
+	})[0];
+
+	return vote;
+};
+
+/**
+ * Deep copies the provided object
+ *
+ * @todo Obviously this isn't a good way of deep copying
+ *
+ * @param 	{Object}	object		The object to deep copy
+ * @return 	{Object}				A deep copy of the object
+ */
+module.exports.deepCopy = function (object) {
+	return JSON.parse(JSON.stringify(object));
+};
+
+/**
+ * Creates a deep copy of the song, filtered so that only the vote placed
+ * by the user is returned.  The user's vote is placed in a 'vote' property for
+ * the song.
+ *
+ * @param	{Song}		song		The song to filter
+ * @param	{String}	userId		The user's Spotify ID
+ * @return	{Song}					The filtered song
+ */
+module.exports.filterVotesForSong = function (song, userId) {
+	var copy = module.exports.deepCopy(song);
+	var vote = module.exports.getVoteFromSong(copy, userId);
+
+	if (vote == undefined) {
+		// User hasn't placed a vote on the song, return default data
+		vote = {
+			isUpvoted: false,
+			isDownvoted: false
+		};
+	}
+
+	copy.vote = vote;
+
+	delete vote.userId;
+	delete copy.votes;
+
+	return copy;
+};
+
+/**
+ * Creates a deep copy of the playlist, filtered so that only the votes
+ * placed by the user are returned.  The user's vote is placed in a 'vote'
+ * property for each song.
+ *
+ * @param	{Playlist}	playlist	The playlist to filter
+ * @param 	{String}	userId		The user's Spotify ID
+ * @return	{Playlist}				The filtered playlist
+ */
+module.exports.filterVotesForPlaylist = function (playlist, userId) {
+	var copy = module.exports.deepCopy(playlist);
+
+	copy.songs = copy.songs.map(function (song) {
+		return module.exports.filterVotesForSong(song, userId);
+	});
+
+	return copy;
 };

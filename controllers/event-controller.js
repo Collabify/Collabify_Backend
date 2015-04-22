@@ -21,7 +21,7 @@ var helpers 	= require('./helpers');
  * @param {Boolean}			res.allowVoting				Whether to allow users to vote on songs
  */
 module.exports.get = function (req, res) {
-	helpers.getEventAsDJ(req.headers.userid, req.eventId, res, function (event) {
+	helpers.getDJUserAtEvent(req.headers.userid, req.eventId, res, function (user, event) {
 		res.status(status.OK_GET_RESOURCE).send(event.settings);
 	});
 };
@@ -50,7 +50,7 @@ module.exports.get = function (req, res) {
  * @param {Boolean}			res.allowVoting					Whether to allow users to vote on songs
  */
 module.exports.put = function (req, res) {
-	helpers.getEventAsDJ(req.headers.userid, req.eventId, res, function (event) {
+	helpers.getDJUserAtEvent(req.headers.userid, req.eventId, res, function (user, event) {
 		event.settings = req.body;
 		event.save();
 

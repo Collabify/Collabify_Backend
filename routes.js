@@ -2,17 +2,17 @@ var express				= require('express');
 var router				= express.Router();
 var logger				= require('./logger');
 
-var UsersController						= require('./controllers/users-controller');
-var UserTokenController					= require('./controllers/user-token-controller');
-var UserController						= require('./controllers/user-controller');
-var EventsController					= require('./controllers/events-controller');
-var EventController						= require('./controllers/event-controller');
-var EventUsersController				= require('./controllers/event-users-controller');
-var EventUserController					= require('./controllers/event-user-controller');
-var EventUserRoleController				= require('./controllers/event-user-role-controller');
-var EventPlaylistController				= require('./controllers/event-playlist-controller');
-var EventPlaylistSongController			= require('./controllers/event-playlist-song-controller');
-var EventPlaylistSongVotesController	= require('./controllers/event-playlist-song-votes-controller');
+var UsersController							= require('./controllers/users-controller');
+var UserTokenController						= require('./controllers/user-token-controller');
+var UserController							= require('./controllers/user-controller');
+var EventsController						= require('./controllers/events-controller');
+var EventController							= require('./controllers/event-controller');
+var EventUsersController					= require('./controllers/event-users-controller');
+var EventUserController						= require('./controllers/event-user-controller');
+var EventUserRoleController					= require('./controllers/event-user-role-controller');
+var EventPlaylistController					= require('./controllers/event-playlist-controller');
+var EventPlaylistSongController				= require('./controllers/event-playlist-song-controller');
+var EventPlaylistSongVotesUserController	= require('./controllers/event-playlist-song-votes-user-controller');
 
 /** @module */
 
@@ -100,7 +100,7 @@ router.route('/events/:eventId/playlist/')
 		EventPlaylistController.get(req, res);
 	})
 	.put(function (req, res, next) {
-		// Reorder songs in the playlist (DJ/Promoted only)
+		// Reorder songs in the playlist (DJ only)
 		EventPlaylistController.put(req, res);
 	});
 
@@ -113,8 +113,7 @@ router.route('/events/:eventId/playlist/:songId/')
 router.route('/events/:eventId/playlist/:songId/votes/:userId/')
 	.put(function (req, res, next) {
 		// Place vote on song
-		/** @todo Iteration 2: Implement me */
-		res.send('PUT ' + req.path);
+		EventPlaylistSongVotesUserController.put(req, res);
 	});
 
 // Route parameters

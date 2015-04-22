@@ -423,7 +423,7 @@ User is at the event <br>
 
         <tr>
             
-                <td class="name"><code>votes</code></td>
+                <td class="name"><code>voteCount</code></td>
             
 
             <td class="type">
@@ -440,6 +440,75 @@ User is at the event <br>
             
 
             <td class="description last">The song's current number of (upvotes - downvotes)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vote</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Vote</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The vote placed by the user for the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isUpvoted</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether the user upvoted the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isDownvoted</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether the user downvoted the song</td>
         </tr>
 
     
@@ -487,7 +556,7 @@ User is at the event <br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_event-playlist-controller.js.html">controllers/event-playlist-controller.js</a>, <a href="controllers_event-playlist-controller.js.html#line89">line 89</a>
+        <a href="controllers_event-playlist-controller.js.html">controllers/event-playlist-controller.js</a>, <a href="controllers_event-playlist-controller.js.html#line90">line 90</a>
     </li></ul></dd>
     
 
@@ -809,6 +878,29 @@ Song is added to the end of the playlist <br>
 
         <tr>
             
+                <td class="name"><code>songId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The Spotify ID for the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>artworkUrl</code></td>
             
 
@@ -980,6 +1072,29 @@ Song is added to the end of the playlist <br>
 
         <tr>
             
+                <td class="name"><code>songId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The Spotify ID for the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>artworkUrl</code></td>
             
 
@@ -1026,7 +1141,7 @@ Song is added to the end of the playlist <br>
 
         <tr>
             
-                <td class="name"><code>votes</code></td>
+                <td class="name"><code>voteCount</code></td>
             
 
             <td class="type">
@@ -1050,6 +1165,29 @@ Song is added to the end of the playlist <br>
 </table>
 
             </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code></code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Vote</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
         </tr>
 
     
@@ -1090,7 +1228,7 @@ Song is added to the end of the playlist <br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_event-playlist-controller.js.html">controllers/event-playlist-controller.js</a>, <a href="controllers_event-playlist-controller.js.html#line38">line 38</a>
+        <a href="controllers_event-playlist-controller.js.html">controllers/event-playlist-controller.js</a>, <a href="controllers_event-playlist-controller.js.html#line41">line 41</a>
     </li></ul></dd>
     
 
@@ -1128,15 +1266,15 @@ Song is added to the end of the playlist <br>
 
 
 <div class="description">
-    PUT /events/:eventId/playlist/ - Reorder songs in the playlist
+    PUT /events/:eventId/playlist/ - Move a song in the playlist
 
 <p>Preconditions: <br>
 Event exists <br>
 User has logged in <br>
-User is the DJ or a Promoted Collabifier for the requested event <br>
+User is the DJ for the requested event <br>
 
 <p>Postconditions: <br>
-Songs in the playlist are reordered accordingly
+The specified song is moved from the old index to the new index
 </div>
 
 
@@ -1266,59 +1404,10 @@ Songs in the playlist are reordered accordingly
         </tr>
 
     
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
 
         <tr>
             
-                <td class="name"><code>body</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;Song></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The body of the request - The reordered list of songs
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>title</code></td>
+                <td class="name"><code>oldindex</code></td>
             
 
             <td class="type">
@@ -1334,14 +1423,14 @@ Songs in the playlist are reordered accordingly
 
             
 
-            <td class="description last">The title of the song</td>
+            <td class="description last">The old index for the song</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>artist</code></td>
+                <td class="name"><code>newindex</code></td>
             
 
             <td class="type">
@@ -1357,145 +1446,7 @@ Songs in the playlist are reordered accordingly
 
             
 
-            <td class="description last">The name of the artist</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>album</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The name of the album the song appears on</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>year</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The year the song was released</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>songId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The Spotify ID for the song</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>artworkUrl</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The URL where the album art can be found</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>userId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The Spotify ID of the user who added the song</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>votes</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The song's current number of (upvotes - downvotes)</td>
+            <td class="description last">The new index for the song</td>
         </tr>
 
     
@@ -1719,7 +1670,7 @@ Songs in the playlist are reordered accordingly
 
         <tr>
             
-                <td class="name"><code>votes</code></td>
+                <td class="name"><code>voteCount</code></td>
             
 
             <td class="type">
@@ -1736,6 +1687,75 @@ Songs in the playlist are reordered accordingly
             
 
             <td class="description last">The song's current number of (upvotes - downvotes)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vote</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Vote</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The vote placed by the user for the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isUpvoted</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether the user upvoted the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isDownvoted</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether the user downvoted the song</td>
         </tr>
 
     
@@ -1792,6 +1812,13 @@ Songs in the playlist are reordered accordingly
     
 
     
+    <dt class="tag-todo">To Do:</dt>
+    <dd class="tag-todo">
+        <ul>
+            <li>Once WebSockets are implemented, this endpoint should work for Promoted users as well</li>
+        </ul>
+    </dd>
+    
 </dl>
 
 
@@ -1825,13 +1852,13 @@ Songs in the playlist are reordered accordingly
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_event-controller.html">controllers/event-controller</a></li><li><a href="module-controllers_event-playlist-controller.html">controllers/event-playlist-controller</a></li><li><a href="module-controllers_event-playlist-song-controller.html">controllers/event-playlist-song-controller</a></li><li><a href="module-controllers_event-user-controller.html">controllers/event-user-controller</a></li><li><a href="module-controllers_event-user-role-controller.html">controllers/event-user-role-controller</a></li><li><a href="module-controllers_event-users-controller.html">controllers/event-users-controller</a></li><li><a href="module-controllers_events-controller.html">controllers/events-controller</a></li><li><a href="module-controllers_helpers.html">controllers/helpers</a></li><li><a href="module-controllers_user-controller.html">controllers/user-controller</a></li><li><a href="module-controllers_users-controller.html">controllers/users-controller</a></li><li><a href="module-models_event.html">models/event</a></li><li><a href="module-models_event-settings.html">models/event-settings</a></li><li><a href="module-models_location.html">models/location</a></li><li><a href="module-models_playlist.html">models/playlist</a></li><li><a href="module-models_song.html">models/song</a></li><li><a href="module-models_user.html">models/user</a></li><li><a href="module-models_user-settings.html">models/user-settings</a></li><li><a href="module-routes.html">routes</a></li><li><a href="module-status.html">status</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_event-controller.html">controllers/event-controller</a></li><li><a href="module-controllers_event-playlist-controller.html">controllers/event-playlist-controller</a></li><li><a href="module-controllers_event-playlist-song-controller.html">controllers/event-playlist-song-controller</a></li><li><a href="module-controllers_event-playlist-song-votes-user-controller.html">controllers/event-playlist-song-votes-user-controller</a></li><li><a href="module-controllers_event-user-controller.html">controllers/event-user-controller</a></li><li><a href="module-controllers_event-user-role-controller.html">controllers/event-user-role-controller</a></li><li><a href="module-controllers_event-users-controller.html">controllers/event-users-controller</a></li><li><a href="module-controllers_events-controller.html">controllers/events-controller</a></li><li><a href="module-controllers_helpers.html">controllers/helpers</a></li><li><a href="module-controllers_user-controller.html">controllers/user-controller</a></li><li><a href="module-controllers_users-controller.html">controllers/users-controller</a></li><li><a href="module-models_event.html">models/event</a></li><li><a href="module-models_event-settings.html">models/event-settings</a></li><li><a href="module-models_location.html">models/location</a></li><li><a href="module-models_playlist.html">models/playlist</a></li><li><a href="module-models_song.html">models/song</a></li><li><a href="module-models_user.html">models/user</a></li><li><a href="module-models_user-settings.html">models/user-settings</a></li><li><a href="module-models_vote.html">models/vote</a></li><li><a href="module-routes.html">routes</a></li><li><a href="module-status.html">status</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Tue Apr 14 2015 08:31:46 GMT-0500 (CDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Wed Apr 22 2015 01:03:50 GMT-0500 (CDT)
 </footer>
 
 <script> prettyPrint(); </script>

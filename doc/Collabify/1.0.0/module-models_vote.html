@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: controllers/event-user-controller.js</title>
+    <title>JSDoc: Module: models/vote</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,45 +17,216 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: controllers/event-user-controller.js</h1>
+    <h1 class="page-title">Module: models/vote</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>var logger 		= require('../logger');
-var status		= require('../status');
-var helpers		= require('./helpers');
+        
+    
+</header>
 
-/** @module */
+<article>
+    <div class="container-overview">
+    
+        
 
-/**
- * DELETE /events/:eventId/users/:userId - Leave event
- *
- * &lt;p>Preconditions: &lt;br>
- * Event exists &lt;br>
- * User has logged in &lt;br>
- * User is at the event &lt;br>
- * User is not the DJ for the event &lt;br>
- *
- * &lt;p>Postconditions: &lt;br>
- * User is removed from the list of users at the event &lt;br>
- * User's eventId is reset to null &lt;br>
- * User's role is reset to 'NoRole' &lt;br>
- *
- * @param 	req		The client request
- * @param 	res 	The server response
- */
-module.exports.delete = function (req, res) {
-	helpers.leaveEvent(req.userId, req.eventId, res, function () {
-		res.sendStatus(status.OK_DELETE_RESOURCE);
-	});
-};</code></pre>
-        </article>
-    </section>
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id=".VoteDef"><span class="type-signature">(static) </span>VoteDef<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Vote object definition
+
+Note that the song cannot be upvoted and downvoted simultaneously by a single user.
+</div>
+
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>userId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The Spotify ID of the user who placed this vote</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isUpvoted</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether the user has upvoted the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isDownvoted</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether the user has downvoted the song</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_vote.js.html">models/vote.js</a>, <a href="models_vote.js.html#line12">line 12</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
