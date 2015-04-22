@@ -45,7 +45,7 @@ module.exports.post = function (req, res) {
 				// (shouldn't be visible to anyone but the DJ)
 				var eventCopy = JSON.parse(JSON.stringify(event));
 				delete eventCopy.userIds;
-				res.status(status.OK_CREATE_RESOURCE).send(eventCopy);
+				return res.status(status.OK_CREATE_RESOURCE).send(eventCopy);
 			});
 		} else if (user.eventId != null) {
 			logger.error('User is already at an event');
