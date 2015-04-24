@@ -269,26 +269,28 @@ module.exports.deepCopy = function (object) {
  *
  * @param	{Song}		song		The song to filter
  * @param	{String}	userId		The user's Spotify ID
- * @return	{Song}					The filtered song
+ * @return	{Song|null}				The filtered song, or null if the original song was null
  */
 module.exports.filterVotesForSong = function (song, userId) {
-	var copy = module.exports.deepCopy(song);
-	var vote = module.exports.getVoteFromSong(copy, userId);
+	if (song == null) {
+		return null;
+	}
+
+	var songCopy = module.exports.deepCopy(song);
+	var vote = module.exports.getVoteFromSong(songCopy, userId);
 
 	if (vote == undefined) {
 		// User hasn't placed a vote on the song, return default data
-		vote = {
+		songCopy.vote = {
 			isUpvoted: false,
 			isDownvoted: false
 		};
 	}
 
-	copy.vote = vote;
+	delete songCopy.vote.userId;
+	delete songCopy.votes;
 
-	delete vote.userId;
-	delete copy.votes;
-
-	return copy;
+	return songCopy;
 };
 
 /**
@@ -301,25 +303,20 @@ module.exports.filterVotesForSong = function (song, userId) {
  * @return	{Playlist}				The filtered playlist
  */
 module.exports.filterVotesForPlaylist = function (playlist, userId) {
-	var copy = module.exports.deepCopy(playlist);
-
-	// No need to keep vote information for the current and next songs
-	if (copy.currentSong != null) {
-		delete copy.currentSong.voteCount;
-		delete copy.currentSong.votes;
-	}
-
-	if (copy.nextSong != null) {
-		delete copy.nextSong.voteCount;
-		delete copy.nextSong.votes;
-	}
+	var songsCopy = module.exports.deepCopy(playlist.songs);
 
 	// Filter votes in the playlist's song list
-	copy.songs = copy.songs.map(function (song) {
+	songsCopy = songsCopy.map(function (song) {
 		return module.exports.filterVotesForSong(song, userId);
 	});
 
-	return copy;
+	var playlistCopy = {
+		currentSong: module.exports.filterVotesForSong(playlist.currentSong, userId),
+		nextSong: module.exports.filterVotesForSong(playlist.nextSong, userId),
+		songs: songsCopy
+	}
+
+	return playlistCopy;
 };
 
 /**
@@ -327,9 +324,15 @@ module.exports.filterVotesForPlaylist = function (playlist, userId) {
  * song, those are updated before the song list.
  *
  * @param {Event}	event	The event whose playlist the song is being added to
+ * @param {String}	userId	The Spotify ID of the user adding the song
  * @param {Song}	song	The song to add
  */
-module.exports.addSongToPlaylist = function (event, song) {
+module.exports.addSongToPlaylist = function (event, userId, song) {
+	// Manually add the userId, voteCount, and votes fields
+	song.userId = userId;
+	song.voteCount = 0;
+	song.votes = [];
+
 	if (event.playlist.currentSong == null) {
 		event.playlist.currentSong = song;
 	} else if (event.playlist.nextSong == null) {

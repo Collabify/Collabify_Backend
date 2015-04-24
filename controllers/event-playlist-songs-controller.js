@@ -75,10 +75,7 @@ module.exports.post = function (req, res) {
 			return res.sendStatus(status.ERR_RESOURCE_EXISTS);
 		}
 
-		// Manually add the userId
-		req.body.userId = user.userId;
-
-		helpers.addSongToPlaylist(event, req.body);
+		helpers.addSongToPlaylist(event, user.userId, req.body);
 
 		var playlist = helpers.filterVotesForPlaylist(event.playlist, req.headers.userid);
 		res.status(status.OK_CREATE_RESOURCE).send(playlist);

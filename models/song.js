@@ -25,7 +25,7 @@ module.exports.SongDef = {
 	songId: 	{type: String, required: true},
 	artworkUrl: {type: String, required: true},
 	userId: 	{type: String, required: true},
-	voteCount: 	{type: Number, default: 0},
+	voteCount: 	{type: Number, required: true},
 	votes: 		{type: [VoteDef], default: []}
 };
 
