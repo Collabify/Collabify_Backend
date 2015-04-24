@@ -104,26 +104,6 @@ module.exports.getNichtBlacklistedUserAtEvent = function (userId, eventId, res, 
 };
 
 /**
- * Finds a user and event, making sure the user is the DJ of the event.  If
- * found, they are passed to a callback
- *
- * @param {String}		userId 			The userId to search for
- * @param {String}		eventId 		The eventId to search for
- * @param 				res 			The server response
- * @param {Function} 	callback(event) Callback with the event found
- */
-module.exports.getDJUserAtEvent = function (userId, eventId, res, callback) {
-	module.exports.getUserAtEvent(userId, eventId, res, function (user, event) {
-		if (user.role != 'DJ') {
-			logger.error('User is not the DJ');
-			return res.sendStatus(status.ERR_UNAUTHORIZED);
-		}
-
-		callback(user, event);
-	});
-};
-
-/**
  * Finds a user and event, making sure the user is the DJ or a Promoted Collabifier
  * of the event.  If found, they are passed to a callback
  *
@@ -185,7 +165,7 @@ module.exports.leaveEvent = function (userId, eventId, res, callback) {
  * @param {Function} 	callback()  Callback to invoke after ending the event
  */
 module.exports.endEvent = function (eventId, res, callback) {
-	module.exports.getDJUserAtEvent(eventId, res, function (user, event) {
+	module.exports.getEvent(eventId, res, function (event) {
 		// Remove users from the event
 		User.update({userId: {$in: event.userIds}}, {eventId: null, role: 'NoRole'}, function (err) {
 			if (err) {
@@ -196,9 +176,11 @@ module.exports.endEvent = function (eventId, res, callback) {
 			event.remove();
 
 			// Update the DJ
-			user.eventId = null;
-			user.role = 'NoRole';
-			user.save();
+			module.exports.getUser(eventId, res, function (user) {
+				user.eventId = null;
+				user.role = 'NoRole';
+				user.save();
+			})
 
 			callback();
 		});

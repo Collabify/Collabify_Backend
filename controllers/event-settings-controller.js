@@ -19,7 +19,7 @@ var status		= require('../status');
  * @param {Boolean}			res.allowVoting				Whether to allow users to vote on songs
  */
 module.exports.get = function (req, res) {
-	helpers.getDJUserAtEvent(req.eventId, res, function (user, event) {
+	helpers.getEvent(req.eventId, res, function (event) {
 		res.status(status.OK_GET_RESOURCE).send(event.settings);
 	});
 };
@@ -46,7 +46,7 @@ module.exports.get = function (req, res) {
  * @param {Boolean}			res.allowVoting					Whether to allow users to vote on songs
  */
 module.exports.put = function (req, res) {
-	helpers.getDJUserAtEvent(req.eventId, res, function (user, event) {
+	helpers.getEvent(req.eventId, res, function (event) {
 		event.settings = req.body;
 		event.save();
 
