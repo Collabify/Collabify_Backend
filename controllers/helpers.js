@@ -180,13 +180,12 @@ module.exports.leaveEvent = function (userId, eventId, res, callback) {
 /**
  * Ends the event.  If successful, the callback is invoked.
  *
- * @param {String}		userId 		The userId to search for
  * @param {String} 		eventId 	The eventId to search for
  * @param 				res 		The server response
  * @param {Function} 	callback()  Callback to invoke after ending the event
  */
-module.exports.endEvent = function (userId, eventId, res, callback) {
-	module.exports.getDJUserAtEvent(userId, eventId, res, function (user, event) {
+module.exports.endEvent = function (eventId, res, callback) {
+	module.exports.getDJUserAtEvent(eventId, res, function (user, event) {
 		// Remove users from the event
 		User.update({userId: {$in: event.userIds}}, {eventId: null, role: 'NoRole'}, function (err) {
 			if (err) {
@@ -207,13 +206,13 @@ module.exports.endEvent = function (userId, eventId, res, callback) {
 };
 
 /**
- * Attempts to find the song in the event's playlist
+ * Attempts to find the song in the playlist's song list, which doesn't include the current or next songs
  *
  * @param 	{Event} 			event 	The event whose playlist is to be searched
  * @param 	{String} 			songId 	The songId to search for
  * @return 	{Song|Undefined}			The song or undefined if not found
  */
-module.exports.getSongFromPlaylist = function (event, songId) {
+module.exports.getSongFromSongs = function (event, songId) {
 	/** @todo Find a better way to do this */
 	var song = event.playlist.songs.filter(function (song) {
 		if (song.songId == songId) {
@@ -224,6 +223,29 @@ module.exports.getSongFromPlaylist = function (event, songId) {
 	})[0];
 
 	return song;
+};
+
+/**
+ * Attempts to find the song in the event's playlist, including the current and next songs
+ *
+ * @param 	{Event} 			event 	The event whose playlist is to be searched
+ * @param 	{String} 			songId 	The songId to search for
+ * @return 	{Song|Undefined}			The song or undefined if not found
+ */
+module.exports.getSongFromPlaylist = function (event, songId) {
+	var song = event.playlist.currentSong;
+
+	if (song != null && song.songId == songId) {
+		return song;
+	}
+
+	song = event.playlist.nextSong;
+
+	if (song != null && song.songId == songId) {
+		return song;
+	}
+
+	return module.exports.getSongFromSongs(event, songId);
 };
 
 /**
@@ -299,9 +321,40 @@ module.exports.filterVotesForSong = function (song, userId) {
 module.exports.filterVotesForPlaylist = function (playlist, userId) {
 	var copy = module.exports.deepCopy(playlist);
 
+	// No need to keep vote information for the current and next songs
+	if (copy.currentSong != null) {
+		delete copy.currentSong.voteCount;
+		delete copy.currentSong.votes;
+	}
+
+	if (copy.nextSong != null) {
+		delete copy.nextSong.voteCount;
+		delete copy.nextSong.votes;
+	}
+
+	// Filter votes in the playlist's song list
 	copy.songs = copy.songs.map(function (song) {
 		return module.exports.filterVotesForSong(song, userId);
 	});
 
 	return copy;
 };
+
+/**
+ * Add song to the event's playlist.  If the playlist doesn't have a current song or next
+ * song, those are updated before the song list.
+ *
+ * @param {Event}	event	The event whose playlist the song is being added to
+ * @param {Song}	song	The song to add
+ */
+module.exports.addSongToPlaylist = function (event, song) {
+	if (event.playlist.currentSong == null) {
+		event.playlist.currentSong = song;
+	} else if (event.playlist.nextSong == null) {
+		event.playlist.nextSong = song;
+	} else {
+		event.playlist.songs.push(song);
+	}
+
+	event.save();
+}

@@ -1,3 +1,4 @@
+var _			= require('underscore');
 var helpers		= require('./helpers');
 var logger 		= require('../logger');
 var status		= require('../status');
@@ -5,17 +6,20 @@ var status		= require('../status');
 /** @module */
 
 /**
- * GET /events/:eventId/playlist/ - Get the playlist
+ * DELETE /events/:eventId/playlist/currentSong/ - End the currently playing song
  *
  * <p>Preconditions: <br>
  * Event exists <br>
  * User has logged in <br>
- * User is at the event <br>
+ * User is the DJ for the requested event <br>
+ *
+ * <p>Postconditions: <br>
+ * The list of songs is resorted by votes <br>
+ * The next song becomes the current song <br>
+ * The first song in the song list becomes the next song <br>
  *
  * @param 				req 							The client request
- * @param 				req.headers 					The headers in the HTTP request
- * @param {String} 		req.headers.userid 				The user's Spotify ID
- * @param {Playlist} 	res								The server response - The event's playlist
+ * @param {Playlist} 	res								The server response - The updated playlist
  * @param {Song}		res.currentSong					The currently playing song
  * @param {String}		res.currentSong.title			The title of the song
  * @param {String} 		res.currentSong.artist			The name of the artist
@@ -53,9 +57,26 @@ var status		= require('../status');
  * @param {Boolean}		res.songs[].isUpvoted			Whether the user upvoted the song
  * @param {Boolean}		res.songs[].isDownvoted			Whether the user downvoted the song
  */
-module.exports.get = function (req, res) {
-	helpers.getUserAtEvent(req.headers.userid, req.eventId, res, function (user, event) {
-		var playlist = helpers.filterVotesForPlaylist(event.playlist, req.headers.userid);
-		res.status(status.OK_GET_RESOURCE).send(playlist);
+module.exports.delete = function (req, res) {
+	helpers.getEvent(req.eventId, res, function (event) {
+		// Because _.sortBy() sorts in ascending order, we need to negate
+		// the songs' voteCounts in order to sort them properly
+		event.playlist.songs = _.sortBy(event.playlist.songs, function (song) {
+			return -1 * song.voteCount;
+		});
+
+		event.playlist.currentSong = event.playlist.nextSong;
+
+		if (event.playlist.songs.length > 0) {
+			// Grab the next song from the front of the list
+			event.playlist.nextSong = event.playlist.songs.splice(0, 1)[0];
+		} else {
+			event.playlist.nextSong = null;
+		}
+
+		event.save();
+
+		var playlist = helpers.filterVotesForPlaylist(event.playlist, req.eventId);
+		res.status(status.OK_DELETE_RESOURCE).send(playlist);
 	});
 };

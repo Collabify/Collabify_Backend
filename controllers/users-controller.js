@@ -1,7 +1,7 @@
+var helpers		= require('./helpers');
 var logger 		= require('../logger');
 var status		= require('../status');
 var User 		= require('../models/user').User;
-var helpers		= require('./helpers');
 
 /** @module */
 

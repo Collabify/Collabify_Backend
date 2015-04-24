@@ -1,11 +1,11 @@
+var helpers		= require('./helpers');
 var logger 		= require('../logger');
 var status		= require('../status');
-var helpers		= require('./helpers');
 
- /** @module */
+/** @module */
 
- /**
- * DELETE /events/:eventId/playlist/:songId/ - Remove song from the playlist
+/**
+ * DELETE /events/:eventId/playlist/songs/:songId/ - Remove song from the playlist's list of songs
  *
  * <p>Preconditions: <br>
  * Event exists <br>
@@ -23,7 +23,7 @@ var helpers		= require('./helpers');
  */
 module.exports.delete = function (req, res) {
 	helpers.getUserAtEvent(req.headers.userid, req.eventId, res, function (user, event) {
-		var song = helpers.getSongFromPlaylist(event, req.songId);
+		var song = helpers.getSongFromSongs(event, req.songId);
 
 		if (song == undefined) {
 			logger.error('Song not in playlist');

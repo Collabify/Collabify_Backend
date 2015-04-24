@@ -1,6 +1,6 @@
+var helpers		= require('./helpers');
 var logger 		= require('../logger');
 var status		= require('../status');
-var helpers		= require('./helpers');
 
 /** @module */
 
@@ -51,7 +51,7 @@ function handleUpdatedVote(req, res, event, song, vote) {
 }
 
 /**
- * PUT /events/:eventId/playlist/:songId/votes/:userId/ - Place vote on song
+ * PUT /events/:eventId/playlist/songs/:songId/votes/:userId/ - Place vote on song
  *
  * <p>Preconditions: <br>
  * Event exists <br>

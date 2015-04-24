@@ -1,7 +1,7 @@
+var helpers 	= require('./helpers');
 var logger 		= require('../logger');
 var status		= require('../status');
 var Event 		= require('../models/event').Event;
-var helpers 	= require('./helpers');
 
 /** @module */
 
