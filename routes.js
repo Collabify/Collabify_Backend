@@ -58,7 +58,7 @@ router.route('/events/:eventId/')
 		EventController.delete(req, res);
 	});
 
-router.route('/events/:evendId/settings/')
+router.route('/events/:eventId/settings/')
 	.get(function (req, res, next) {
 		// Get current settings for the event (DJ only)
 		EventSettingsController.get(req, res);
