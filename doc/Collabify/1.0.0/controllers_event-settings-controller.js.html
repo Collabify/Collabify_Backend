@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: status.js</title>
+    <title>JSDoc: Source: controllers/event-settings-controller.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: status.js</h1>
+    <h1 class="page-title">Source: controllers/event-settings-controller.js</h1>
 
     
 
@@ -26,32 +26,60 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>var logger	= require('./logger');
+            <pre class="prettyprint source linenums"><code>var helpers 	= require('./helpers');
+var logger 		= require('../logger');
+var status		= require('../status');
 
 /** @module */
 
-module.exports = {
-	/** @todo Update these codes to better reflect the status */
-	OK_GET_RESOURCE: 200,
-	OK_CREATE_RESOURCE: 200,
-	OK_UPDATE_RESOURCE: 200,
-	OK_DELETE_RESOURCE: 200,
+/**
+ * GET /events/:eventId/settings/ - Get current settings for the event
+ *
+ * &lt;p>Preconditions: &lt;br>
+ * Event exists &lt;br>
+ * User has logged in &lt;br>
+ * User is the DJ for the requested event &lt;br>
+ *
+ * @param 					req 						The client request
+ * @param {EventSettings} 	res 						The server response - The current event settings
+ * @param {String}			res.password				The event password (or null if there isn't one)
+ * @param {Boolean}			res.locationRestricted		Whether to restrict the event to nearby users
+ * @param {Boolean}			res.allowVoting				Whether to allow users to vote on songs
+ */
+module.exports.get = function (req, res) {
+	helpers.getDJUserAtEvent(req.eventId, res, function (user, event) {
+		res.status(status.OK_GET_RESOURCE).send(event.settings);
+	});
+};
 
-	ERR_UNAUTHORIZED: 401,
-	ERR_RESOURCE_EXISTS: 403,
-	ERR_RESOURCE_NOT_FOUND: 404,
-	ERR_BAD_REQUEST: 400,
+/**
+ * PUT /events/:eventId/settings/ - Change settings for the event
+ *
+ * &lt;p>Preconditions: &lt;br>
+ * Event exists &lt;br>
+ * User has logged in &lt;br>
+ * User is the DJ for the requested event &lt;br>
+ *
+ * &lt;p>Postconditions: &lt;br>
+ * The event's settings are updated &lt;br>
+ *
+ * @param 					req 							The client request
+ * @param {EventSettings}	req.body 						The body of the request - The new event settings
+ * @param {String}			req.body.password				The password for the event, or null if there isn't one
+ * @param {Boolean}			req.body.locationRestricted		Whether to restrict the event to nearby users
+ * @param {Boolean}			req.body.allowVoting			Whether to allow users to vote on songs
+ * @param {EventSettings}	res 							The server response - The new event settings
+ * @param {String}			res.password					The password for the event, or null if there isn't one
+ * @param {Boolean}			res.locationRestricted			Whether to restrict the event to nearby users
+ * @param {Boolean}			res.allowVoting					Whether to allow users to vote on songs
+ */
+module.exports.put = function (req, res) {
+	helpers.getDJUserAtEvent(req.eventId, res, function (user, event) {
+		event.settings = req.body;
+		event.save();
 
-	/**
-	 * Handles database-related errors that don't have a clear cause
-	 *
-	 * @param err The error
-	 * @param res The server response
-	 */
-	handleUnexpectedError: function (err, res) {
-		logger.error(err);
-		res.sendStatus(module.exports.ERR_BAD_REQUEST);
-	}
+		res.status(status.OK_UPDATE_RESOURCE).send(event.settings);
+	});
 };</code></pre>
         </article>
     </section>

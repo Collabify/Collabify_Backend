@@ -84,7 +84,7 @@ module.exports.post = function (req, res) {
 	helpers.getUser(req.headers.userid, res, function (user) {
 		if (user.eventId == req.eventId) {
 			// Nothing to do, the user is already at the event
-			helpers.getEvent(req.eventId, res, function (event) {
+			return helpers.getEvent(req.eventId, res, function (event) {
 				var eventCopy = copyEventForCollabifier(event, req.headers.userid);
 				return res.status(status.OK_CREATE_RESOURCE).send(eventCopy);
 			});

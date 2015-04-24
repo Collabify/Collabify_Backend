@@ -29,4 +29,5 @@ module.exports.SongDef = {
 	votes: 		{type: [VoteDef], default: []}
 };
 
+/** Song document schema */
 module.exports.SongSchema = new Schema(module.exports.SongDef);

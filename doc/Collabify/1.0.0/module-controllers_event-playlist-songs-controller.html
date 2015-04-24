@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: controllers/event-users-controller</title>
+    <title>JSDoc: Module: controllers/event-playlist-songs-controller</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: controllers/event-users-controller</h1>
+    <h1 class="page-title">Module: controllers/event-playlist-songs-controller</h1>
 
     
 
@@ -61,255 +61,6 @@
 
     
 
-    <h4 class="name" id=".get"><span class="type-signature">(static) </span>get<span class="signature">(req, res)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    GET /events/:eventId/users/ - Get list of users at event (not including the DJ)
-
-<p>Preconditions: <br>
-Event exists <br>
-User has logged in <br>
-User is the DJ for the requested event <br>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>req</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The client request</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>res</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;User></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The server response - The list of users at the event not including the DJ
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The user's name</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>userId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The user's Spotify ID</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>role</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The user's role</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_event-users-controller.js.html">controllers/event-users-controller.js</a>, <a href="controllers_event-users-controller.js.html#line124">line 124</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
     <h4 class="name" id=".post"><span class="type-signature">(static) </span>post<span class="signature">(req, res)</span><span class="type-signature"></span></h4>
 
     
@@ -317,17 +68,17 @@ User is the DJ for the requested event <br>
 
 
 <div class="description">
-    POST /events/:eventId/users/ - Join event
+    POST /events/:eventId/playlist/songs/ - Add song to playlist
 
 <p>Preconditions: <br>
 Event exists <br>
 User has logged in <br>
-User is not at another event <br>
+User is at the event <br>
+User is not blacklisted <br>
+Song is not already in the playlist <br>
 
 <p>Postconditions: <br>
-User is added to the event's user list if they weren't already <br>
-User's eventId is changed to match the event if they weren't already at the event <br>
-User's role is changed to 'Collabifier' if they weren't already at the event <br>
+Song is added to the end of the playlist <br>
 </div>
 
 
@@ -464,6 +215,193 @@ User's role is changed to 'Collabifier' if they weren't already at the event <br
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>body</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Song</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The body of the request - The song to add
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>title</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The song's title</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>artist</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The artist of the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>album</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The album the song appears on</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>year</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The year the album was released</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>songId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The Spotify ID for the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>artworkUrl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The URL to retrieve the album art</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -480,189 +418,6 @@ User's role is changed to 'Collabifier' if they weren't already at the event <br
             <td class="type">
             
                 
-<span class="param-type">Event</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The server response - The event the user just joined
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The name of the event</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>eventId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The ID of the event, equal to the DJ's userId</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>location</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Location</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The location of the event
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>latitude</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The latitude of the event</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>longitude</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The longitude of the event</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>playlist</code></td>
-            
-
-            <td class="type">
-            
-                
 <span class="param-type">Playlist</span>
 
 
@@ -673,7 +428,7 @@ User's role is changed to 'Collabifier' if they weren't already at the event <br
 
             
 
-            <td class="description last">The event's playlist
+            <td class="description last">The server response - The event's playlist
                 <h6>Properties</h6>
                 
 
@@ -1609,18 +1364,129 @@ User's role is changed to 'Collabifier' if they weren't already at the event <br
         </tr>
 
     
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="controllers_event-playlist-songs-controller.js.html">controllers/event-playlist-songs-controller.js</a>, <a href="controllers_event-playlist-songs-controller.js.html#line68">line 68</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".put"><span class="type-signature">(static) </span>put<span class="signature">(req, res)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    PUT /events/:eventId/playlist/songs/ - Move a song in the playlist
+
+<p>Preconditions: <br>
+Event exists <br>
+User has logged in <br>
+User is the DJ for the requested event <br>
+
+<p>Postconditions: <br>
+The specified song is moved from the old index to the new index
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
 
         <tr>
             
-                <td class="name"><code>settings</code></td>
+                <td class="name"><code>req</code></td>
             
 
             <td class="type">
-            
-                
-<span class="param-type">EventSettings</span>
-
-
             
             </td>
 
@@ -1628,7 +1494,7 @@ User's role is changed to 'Collabifier' if they weren't already at the event <br
 
             
 
-            <td class="description last">The settings for the event
+            <td class="description last">The client request
                 <h6>Properties</h6>
                 
 
@@ -1654,7 +1520,44 @@ User's role is changed to 'Collabifier' if they weren't already at the event <br
 
         <tr>
             
-                <td class="name"><code>password</code></td>
+                <td class="name"><code>headers</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The headers in the HTTP request
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>oldindex</code></td>
             
 
             <td class="type">
@@ -1670,14 +1573,342 @@ User's role is changed to 'Collabifier' if they weren't already at the event <br
 
             
 
-            <td class="description last">The event password (or null if there isn't one)</td>
+            <td class="description last">The old index for the song</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>locationRestricted</code></td>
+                <td class="name"><code>newindex</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The new index for the song</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>res</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Playlist</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The server response - The event's playlist
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>currentSong</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Song</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The currently playing song
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>title</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The title of the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>artist</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the artist</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>album</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the album the song appears on</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>year</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The year the song was released</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>songId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The Spotify ID for the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>artworkUrl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The URL where the album art can be found</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>userId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The Spotify ID of the user who added the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>voteCount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The song's current number of (upvotes - downvotes)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vote</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Vote</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The vote placed by the user for the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isUpvoted</code></td>
             
 
             <td class="type">
@@ -1693,14 +1924,14 @@ User's role is changed to 'Collabifier' if they weren't already at the event <br
 
             
 
-            <td class="description last">Whether to restrict the event to nearby users</td>
+            <td class="description last">Whether the user upvoted the song</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>allowVoting</code></td>
+                <td class="name"><code>isDownvoted</code></td>
             
 
             <td class="type">
@@ -1716,7 +1947,611 @@ User's role is changed to 'Collabifier' if they weren't already at the event <br
 
             
 
-            <td class="description last">Whether to allow users to vote</td>
+            <td class="description last">Whether the user downvoted the song</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nextSong</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Song</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The next song to be played
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>title</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The title of the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>artist</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the artist</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>album</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the album the song appears on</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>year</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The year the song was released</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>songId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The Spotify ID for the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>artworkUrl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The URL where the album art can be found</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>userId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The Spotify ID of the user who added the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>voteCount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The song's current number of (upvotes - downvotes)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vote</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Vote</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The vote placed by the user for the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isUpvoted</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether the user upvoted the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isDownvoted</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether the user downvoted the song</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>songs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;Song></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The playlist's list of songs
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>title</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The title of the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>artist</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the artist</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>album</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the album the song appears on</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>year</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The year the song was released</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>songId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The Spotify ID for the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>artworkUrl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The URL where the album art can be found</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>userId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The Spotify ID of the user who added the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>voteCount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The song's current number of (upvotes - downvotes)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vote</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Vote</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The vote placed by the user for the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isUpvoted</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether the user upvoted the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isDownvoted</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether the user downvoted the song</td>
         </tr>
 
     
@@ -1771,7 +2606,7 @@ User's role is changed to 'Collabifier' if they weren't already at the event <br
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_event-users-controller.js.html">controllers/event-users-controller.js</a>, <a href="controllers_event-users-controller.js.html#line83">line 83</a>
+        <a href="controllers_event-playlist-songs-controller.js.html">controllers/event-playlist-songs-controller.js</a>, <a href="controllers_event-playlist-songs-controller.js.html#line143">line 143</a>
     </li></ul></dd>
     
 
@@ -1779,6 +2614,13 @@ User's role is changed to 'Collabifier' if they weren't already at the event <br
 
     
 
+    
+    <dt class="tag-todo">To Do:</dt>
+    <dd class="tag-todo">
+        <ul>
+            <li>Once WebSockets are implemented, this endpoint should work for Promoted users as well</li>
+        </ul>
+    </dd>
     
 </dl>
 

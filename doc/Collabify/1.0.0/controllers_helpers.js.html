@@ -208,13 +208,12 @@ module.exports.leaveEvent = function (userId, eventId, res, callback) {
 /**
  * Ends the event.  If successful, the callback is invoked.
  *
- * @param {String}		userId 		The userId to search for
  * @param {String} 		eventId 	The eventId to search for
  * @param 				res 		The server response
  * @param {Function} 	callback()  Callback to invoke after ending the event
  */
-module.exports.endEvent = function (userId, eventId, res, callback) {
-	module.exports.getDJUserAtEvent(userId, eventId, res, function (user, event) {
+module.exports.endEvent = function (eventId, res, callback) {
+	module.exports.getDJUserAtEvent(eventId, res, function (user, event) {
 		// Remove users from the event
 		User.update({userId: {$in: event.userIds}}, {eventId: null, role: 'NoRole'}, function (err) {
 			if (err) {
@@ -235,13 +234,13 @@ module.exports.endEvent = function (userId, eventId, res, callback) {
 };
 
 /**
- * Attempts to find the song in the event's playlist
+ * Attempts to find the song in the playlist's song list, which doesn't include the current or next songs
  *
  * @param 	{Event} 			event 	The event whose playlist is to be searched
  * @param 	{String} 			songId 	The songId to search for
  * @return 	{Song|Undefined}			The song or undefined if not found
  */
-module.exports.getSongFromPlaylist = function (event, songId) {
+module.exports.getSongFromSongs = function (event, songId) {
 	/** @todo Find a better way to do this */
 	var song = event.playlist.songs.filter(function (song) {
 		if (song.songId == songId) {
@@ -252,6 +251,29 @@ module.exports.getSongFromPlaylist = function (event, songId) {
 	})[0];
 
 	return song;
+};
+
+/**
+ * Attempts to find the song in the event's playlist, including the current and next songs
+ *
+ * @param 	{Event} 			event 	The event whose playlist is to be searched
+ * @param 	{String} 			songId 	The songId to search for
+ * @return 	{Song|Undefined}			The song or undefined if not found
+ */
+module.exports.getSongFromPlaylist = function (event, songId) {
+	var song = event.playlist.currentSong;
+
+	if (song != null &amp;&amp; song.songId == songId) {
+		return song;
+	}
+
+	song = event.playlist.nextSong;
+
+	if (song != null &amp;&amp; song.songId == songId) {
+		return song;
+	}
+
+	return module.exports.getSongFromSongs(event, songId);
 };
 
 /**
@@ -327,12 +349,43 @@ module.exports.filterVotesForSong = function (song, userId) {
 module.exports.filterVotesForPlaylist = function (playlist, userId) {
 	var copy = module.exports.deepCopy(playlist);
 
+	// No need to keep vote information for the current and next songs
+	if (copy.currentSong != null) {
+		delete copy.currentSong.voteCount;
+		delete copy.currentSong.votes;
+	}
+
+	if (copy.nextSong != null) {
+		delete copy.nextSong.voteCount;
+		delete copy.nextSong.votes;
+	}
+
+	// Filter votes in the playlist's song list
 	copy.songs = copy.songs.map(function (song) {
 		return module.exports.filterVotesForSong(song, userId);
 	});
 
 	return copy;
-};</code></pre>
+};
+
+/**
+ * Add song to the event's playlist.  If the playlist doesn't have a current song or next
+ * song, those are updated before the song list.
+ *
+ * @param {Event}	event	The event whose playlist the song is being added to
+ * @param {Song}	song	The song to add
+ */
+module.exports.addSongToPlaylist = function (event, song) {
+	if (event.playlist.currentSong == null) {
+		event.playlist.currentSong = song;
+	} else if (event.playlist.nextSong == null) {
+		event.playlist.nextSong = song;
+	} else {
+		event.playlist.songs.push(song);
+	}
+
+	event.save();
+}</code></pre>
         </article>
     </section>
 
@@ -342,13 +395,13 @@ module.exports.filterVotesForPlaylist = function (playlist, userId) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_event-controller.html">controllers/event-controller</a></li><li><a href="module-controllers_event-playlist-controller.html">controllers/event-playlist-controller</a></li><li><a href="module-controllers_event-playlist-song-controller.html">controllers/event-playlist-song-controller</a></li><li><a href="module-controllers_event-playlist-song-votes-user-controller.html">controllers/event-playlist-song-votes-user-controller</a></li><li><a href="module-controllers_event-user-controller.html">controllers/event-user-controller</a></li><li><a href="module-controllers_event-user-role-controller.html">controllers/event-user-role-controller</a></li><li><a href="module-controllers_event-users-controller.html">controllers/event-users-controller</a></li><li><a href="module-controllers_events-controller.html">controllers/events-controller</a></li><li><a href="module-controllers_helpers.html">controllers/helpers</a></li><li><a href="module-controllers_user-controller.html">controllers/user-controller</a></li><li><a href="module-controllers_users-controller.html">controllers/users-controller</a></li><li><a href="module-models_event.html">models/event</a></li><li><a href="module-models_event-settings.html">models/event-settings</a></li><li><a href="module-models_location.html">models/location</a></li><li><a href="module-models_playlist.html">models/playlist</a></li><li><a href="module-models_song.html">models/song</a></li><li><a href="module-models_user.html">models/user</a></li><li><a href="module-models_user-settings.html">models/user-settings</a></li><li><a href="module-models_vote.html">models/vote</a></li><li><a href="module-routes.html">routes</a></li><li><a href="module-status.html">status</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_event-controller.html">controllers/event-controller</a></li><li><a href="module-controllers_event-playlist-controller.html">controllers/event-playlist-controller</a></li><li><a href="module-controllers_event-playlist-current-song-controller.html">controllers/event-playlist-current-song-controller</a></li><li><a href="module-controllers_event-playlist-song-controller.html">controllers/event-playlist-song-controller</a></li><li><a href="module-controllers_event-playlist-song-votes-user-controller.html">controllers/event-playlist-song-votes-user-controller</a></li><li><a href="module-controllers_event-playlist-songs-controller.html">controllers/event-playlist-songs-controller</a></li><li><a href="module-controllers_event-settings-controller.html">controllers/event-settings-controller</a></li><li><a href="module-controllers_event-user-controller.html">controllers/event-user-controller</a></li><li><a href="module-controllers_event-user-role-controller.html">controllers/event-user-role-controller</a></li><li><a href="module-controllers_event-users-controller.html">controllers/event-users-controller</a></li><li><a href="module-controllers_events-controller.html">controllers/events-controller</a></li><li><a href="module-controllers_helpers.html">controllers/helpers</a></li><li><a href="module-controllers_user-controller.html">controllers/user-controller</a></li><li><a href="module-controllers_user-settings-controller.html">controllers/user-settings-controller</a></li><li><a href="module-controllers_users-controller.html">controllers/users-controller</a></li><li><a href="module-models_event.html">models/event</a></li><li><a href="module-models_event-settings.html">models/event-settings</a></li><li><a href="module-models_location.html">models/location</a></li><li><a href="module-models_playlist.html">models/playlist</a></li><li><a href="module-models_song.html">models/song</a></li><li><a href="module-models_user.html">models/user</a></li><li><a href="module-models_user-settings.html">models/user-settings</a></li><li><a href="module-models_vote.html">models/vote</a></li><li><a href="module-routes.html">routes</a></li><li><a href="module-status.html">status</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Wed Apr 22 2015 01:03:50 GMT-0500 (CDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Thu Apr 23 2015 23:33:52 GMT-0500 (CDT)
 </footer>
 
 <script> prettyPrint(); </script>

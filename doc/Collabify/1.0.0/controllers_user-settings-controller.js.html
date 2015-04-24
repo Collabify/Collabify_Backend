@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: status.js</title>
+    <title>JSDoc: Source: controllers/user-settings-controller.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: status.js</h1>
+    <h1 class="page-title">Source: controllers/user-settings-controller.js</h1>
 
     
 
@@ -26,32 +26,34 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>var logger	= require('./logger');
+            <pre class="prettyprint source linenums"><code>var helpers		= require('./helpers');
+var logger 		= require('../logger');
+var status		= require('../status');
 
 /** @module */
 
-module.exports = {
-	/** @todo Update these codes to better reflect the status */
-	OK_GET_RESOURCE: 200,
-	OK_CREATE_RESOURCE: 200,
-	OK_UPDATE_RESOURCE: 200,
-	OK_DELETE_RESOURCE: 200,
+/**
+ * PUT /users/:userId/settings/ - Change user settings
+ *
+ * &lt;p>Preconditions: &lt;br>
+ * User has logged in &lt;br>
+ *
+ * &lt;p>Postconditions: &lt;br>
+ * User's settings are updated
+ *
+ * @param 					req 					The client request
+ * @param {UserSettings}	req.body 				The body of the request - The new user settings
+ * @param {String} 			req.body.showName 		Whether to display the user's Spotify username or 'anonymous'
+ * @param {UserSettings}	res 					The server response - The new user settings
+ * @param {String}			res.showName			Whether to display the user's Spotify username or 'anonymous'
+ */
+module.exports.put = function (req, res) {
+	helpers.getUser(req.userId, res, function (user) {
+		user.settings = req.body;
+		user.save();
 
-	ERR_UNAUTHORIZED: 401,
-	ERR_RESOURCE_EXISTS: 403,
-	ERR_RESOURCE_NOT_FOUND: 404,
-	ERR_BAD_REQUEST: 400,
-
-	/**
-	 * Handles database-related errors that don't have a clear cause
-	 *
-	 * @param err The error
-	 * @param res The server response
-	 */
-	handleUnexpectedError: function (err, res) {
-		logger.error(err);
-		res.sendStatus(module.exports.ERR_BAD_REQUEST);
-	}
+		res.status(status.OK_UPDATE_RESOURCE).send(user.settings);
+	});
 };</code></pre>
         </article>
     </section>

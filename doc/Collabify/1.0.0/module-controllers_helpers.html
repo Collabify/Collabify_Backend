@@ -61,6 +61,161 @@
 
     
 
+    <h4 class="name" id=".addSongToPlaylist"><span class="type-signature">(static) </span>addSongToPlaylist<span class="signature">(event, song)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Add song to the event's playlist.  If the playlist doesn't have a current song or next
+song, those are updated before the song list.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>event</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Event</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The event whose playlist the song is being added to</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>song</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Song</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The song to add</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line350">line 350</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id=".deepCopy"><span class="type-signature">(static) </span>deepCopy<span class="signature">(object)</span><span class="type-signature"> &rarr; {Object}</span></h4>
 
     
@@ -161,7 +316,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line257">line 257</a>
+        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line279">line 279</a>
     </li></ul></dd>
     
 
@@ -221,7 +376,7 @@
 
     
 
-    <h4 class="name" id=".endEvent"><span class="type-signature">(static) </span>endEvent<span class="signature">(userId, eventId, res, callback())</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".endEvent"><span class="type-signature">(static) </span>endEvent<span class="signature">(eventId, res, callback())</span><span class="type-signature"></span></h4>
 
     
 
@@ -260,29 +415,6 @@
     </thead>
 
     <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>userId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The userId to search for</td>
-        </tr>
-
     
 
         <tr>
@@ -385,7 +517,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line188">line 188</a>
+        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line187">line 187</a>
     </li></ul></dd>
     
 
@@ -541,7 +673,7 @@ property for each song.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line299">line 299</a>
+        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line321">line 321</a>
     </li></ul></dd>
     
 
@@ -719,7 +851,7 @@ the song.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line270">line 270</a>
+        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line292">line 292</a>
     </li></ul></dd>
     
 
@@ -1618,7 +1750,7 @@ found, they are passed to a callback
 
 
 <div class="description">
-    Attempts to find the song in the event's playlist
+    Attempts to find the song in the event's playlist, including the current and next songs
 </div>
 
 
@@ -1734,7 +1866,186 @@ found, they are passed to a callback
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line216">line 216</a>
+        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line235">line 235</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The song or undefined if not found
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Song</span>
+|
+
+<span class="param-type">Undefined</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".getSongFromSongs"><span class="type-signature">(static) </span>getSongFromSongs<span class="signature">(event, songId)</span><span class="type-signature"> &rarr; {Song|Undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Attempts to find the song in the playlist's song list, which doesn't include the current or next songs
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>event</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Event</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The event whose playlist is to be searched</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>songId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The songId to search for</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line215">line 215</a>
     </li></ul></dd>
     
 
@@ -2360,7 +2671,7 @@ they are passed to a callback
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line236">line 236</a>
+        <a href="controllers_helpers.js.html">controllers/helpers.js</a>, <a href="controllers_helpers.js.html#line258">line 258</a>
     </li></ul></dd>
     
 
@@ -2622,13 +2933,13 @@ they are passed to a callback
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_event-controller.html">controllers/event-controller</a></li><li><a href="module-controllers_event-playlist-controller.html">controllers/event-playlist-controller</a></li><li><a href="module-controllers_event-playlist-song-controller.html">controllers/event-playlist-song-controller</a></li><li><a href="module-controllers_event-playlist-song-votes-user-controller.html">controllers/event-playlist-song-votes-user-controller</a></li><li><a href="module-controllers_event-user-controller.html">controllers/event-user-controller</a></li><li><a href="module-controllers_event-user-role-controller.html">controllers/event-user-role-controller</a></li><li><a href="module-controllers_event-users-controller.html">controllers/event-users-controller</a></li><li><a href="module-controllers_events-controller.html">controllers/events-controller</a></li><li><a href="module-controllers_helpers.html">controllers/helpers</a></li><li><a href="module-controllers_user-controller.html">controllers/user-controller</a></li><li><a href="module-controllers_users-controller.html">controllers/users-controller</a></li><li><a href="module-models_event.html">models/event</a></li><li><a href="module-models_event-settings.html">models/event-settings</a></li><li><a href="module-models_location.html">models/location</a></li><li><a href="module-models_playlist.html">models/playlist</a></li><li><a href="module-models_song.html">models/song</a></li><li><a href="module-models_user.html">models/user</a></li><li><a href="module-models_user-settings.html">models/user-settings</a></li><li><a href="module-models_vote.html">models/vote</a></li><li><a href="module-routes.html">routes</a></li><li><a href="module-status.html">status</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_event-controller.html">controllers/event-controller</a></li><li><a href="module-controllers_event-playlist-controller.html">controllers/event-playlist-controller</a></li><li><a href="module-controllers_event-playlist-current-song-controller.html">controllers/event-playlist-current-song-controller</a></li><li><a href="module-controllers_event-playlist-song-controller.html">controllers/event-playlist-song-controller</a></li><li><a href="module-controllers_event-playlist-song-votes-user-controller.html">controllers/event-playlist-song-votes-user-controller</a></li><li><a href="module-controllers_event-playlist-songs-controller.html">controllers/event-playlist-songs-controller</a></li><li><a href="module-controllers_event-settings-controller.html">controllers/event-settings-controller</a></li><li><a href="module-controllers_event-user-controller.html">controllers/event-user-controller</a></li><li><a href="module-controllers_event-user-role-controller.html">controllers/event-user-role-controller</a></li><li><a href="module-controllers_event-users-controller.html">controllers/event-users-controller</a></li><li><a href="module-controllers_events-controller.html">controllers/events-controller</a></li><li><a href="module-controllers_helpers.html">controllers/helpers</a></li><li><a href="module-controllers_user-controller.html">controllers/user-controller</a></li><li><a href="module-controllers_user-settings-controller.html">controllers/user-settings-controller</a></li><li><a href="module-controllers_users-controller.html">controllers/users-controller</a></li><li><a href="module-models_event.html">models/event</a></li><li><a href="module-models_event-settings.html">models/event-settings</a></li><li><a href="module-models_location.html">models/location</a></li><li><a href="module-models_playlist.html">models/playlist</a></li><li><a href="module-models_song.html">models/song</a></li><li><a href="module-models_user.html">models/user</a></li><li><a href="module-models_user-settings.html">models/user-settings</a></li><li><a href="module-models_vote.html">models/vote</a></li><li><a href="module-routes.html">routes</a></li><li><a href="module-status.html">status</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Wed Apr 22 2015 01:03:50 GMT-0500 (CDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Thu Apr 23 2015 23:33:52 GMT-0500 (CDT)
 </footer>
 
 <script> prettyPrint(); </script>
