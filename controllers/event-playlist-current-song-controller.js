@@ -1,4 +1,3 @@
-var _			= require('underscore');
 var helpers		= require('./helpers');
 var logger 		= require('../logger');
 var status		= require('../status');
@@ -59,11 +58,7 @@ var status		= require('../status');
  */
 module.exports.delete = function (req, res) {
 	helpers.getEvent(req.eventId, res, function (event) {
-		// Because _.sortBy() sorts in ascending order, we need to negate
-		// the songs' voteCounts in order to sort them properly
-		event.playlist.songs = _.sortBy(event.playlist.songs, function (song) {
-			return -1 * song.voteCount;
-		});
+		event.playlist.songs = helpers.decayVotes(helpers.sortSongs(event.playlist.songs));
 
 		event.playlist.currentSong = event.playlist.nextSong;
 

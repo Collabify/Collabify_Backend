@@ -1,3 +1,4 @@
+var _			= require('underscore');
 var logger 		= require('../logger');
 var status		= require('../status');
 var Event 		= require('../models/event').Event;
@@ -342,4 +343,31 @@ module.exports.addSongToPlaylist = function (event, userId, song) {
 	}
 
 	event.save();
+}
+
+/**
+ * Sort the list of songs using the amcolash algorithm
+ *
+ * @param 	{Song[]}	songs	The list of songs to sort
+ * @return	{Song[]}			The sorted list of songs
+ */
+module.exports.sortSongs = function (songs) {
+	return _.sortBy(songs, function (song, index) {
+		// Because _.sortBy() sorts in ascending order, we need to negate the
+		// songs' scores in order to sort them properly
+		var score = (0.75 * (songs.length - index)) + (0.25 * song.voteCount);
+		return -1 * score;
+	});
+}
+
+/**
+ * Apply a depreciation function to the voteCount for each song in the playlist
+ *
+ * @param 	{Song[]}	songs	The list of songs to update
+ * @return	{Song[]}			The updated list of songs
+ */
+module.exports.decayVotes = function (songs) {
+	return songs.map(function (song) {
+		return Math.ceil(0.75 * song.voteCount);
+	});
 }
