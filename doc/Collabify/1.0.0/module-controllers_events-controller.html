@@ -647,7 +647,7 @@ still join it
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_events-controller.js.html">controllers/events-controller.js</a>, <a href="controllers_events-controller.js.html#line103">line 103</a>
+        <a href="controllers_events-controller.js.html">controllers/events-controller.js</a>, <a href="controllers_events-controller.js.html#line138">line 138</a>
     </li></ul></dd>
     
 
@@ -1400,7 +1400,7 @@ User is assigned the 'DJ' role for the event <br>
 
             
 
-            <td class="description last">The playlist for the event
+            <td class="description last">The event's playlist, which is initially empty
                 <h6>Properties</h6>
                 
 
@@ -1426,6 +1426,662 @@ User is assigned the 'DJ' role for the event <br>
 
         <tr>
             
+                <td class="name"><code>currentSong</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Song</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The currently playing song, initially null
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>title</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The title of the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>artist</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the artist</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>album</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the album the song appears on</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>year</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The year the song was released</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>songId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The Spotify ID for the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>artworkUrl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The URL where the album art can be found</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>userId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The Spotify ID of the user who added the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>voteCount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The song's current number of (upvotes - downvotes)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vote</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Vote</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The vote placed by the user for the song
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isUpvoted</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether the user upvoted the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isDownvoted</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether the user downvoted the song</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nextSong</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Song</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The next song to be played, initially null
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>title</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The title of the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>artist</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the artist</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>album</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the album the song appears on</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>year</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The year the song was released</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>songId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The Spotify ID for the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>artworkUrl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The URL where the album art can be found</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>userId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The Spotify ID of the user who added the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>voteCount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The song's current number of (upvotes - downvotes)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vote</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Vote</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The vote placed by the user for the song
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isUpvoted</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether the user upvoted the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isDownvoted</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether the user downvoted the song</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>songs</code></td>
             
 
@@ -1442,7 +2098,312 @@ User is assigned the 'DJ' role for the event <br>
 
             
 
-            <td class="description last">The playlist is initially empty</td>
+            <td class="description last">The playlist's list of songs, initially empty
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>title</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The title of the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>artist</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the artist</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>album</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the album the song appears on</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>year</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The year the song was released</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>songId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The Spotify ID for the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>artworkUrl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The URL where the album art can be found</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>userId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The Spotify ID of the user who added the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>voteCount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The song's current number of (upvotes - downvotes)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vote</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Vote</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The vote placed by the user for the song
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isUpvoted</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether the user upvoted the song</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isDownvoted</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether the user downvoted the song</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -1615,7 +2576,7 @@ User is assigned the 'DJ' role for the event <br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_events-controller.js.html">controllers/events-controller.js</a>, <a href="controllers_events-controller.js.html#line52">line 52</a>
+        <a href="controllers_events-controller.js.html">controllers/events-controller.js</a>, <a href="controllers_events-controller.js.html#line87">line 87</a>
     </li></ul></dd>
     
 
@@ -1657,13 +2618,13 @@ User is assigned the 'DJ' role for the event <br>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_event-controller.html">controllers/event-controller</a></li><li><a href="module-controllers_event-playlist-controller.html">controllers/event-playlist-controller</a></li><li><a href="module-controllers_event-playlist-song-controller.html">controllers/event-playlist-song-controller</a></li><li><a href="module-controllers_event-user-controller.html">controllers/event-user-controller</a></li><li><a href="module-controllers_event-user-role-controller.html">controllers/event-user-role-controller</a></li><li><a href="module-controllers_event-users-controller.html">controllers/event-users-controller</a></li><li><a href="module-controllers_events-controller.html">controllers/events-controller</a></li><li><a href="module-controllers_helpers.html">controllers/helpers</a></li><li><a href="module-controllers_user-controller.html">controllers/user-controller</a></li><li><a href="module-controllers_users-controller.html">controllers/users-controller</a></li><li><a href="module-models_event.html">models/event</a></li><li><a href="module-models_event-settings.html">models/event-settings</a></li><li><a href="module-models_location.html">models/location</a></li><li><a href="module-models_playlist.html">models/playlist</a></li><li><a href="module-models_song.html">models/song</a></li><li><a href="module-models_user.html">models/user</a></li><li><a href="module-models_user-settings.html">models/user-settings</a></li><li><a href="module-routes.html">routes</a></li><li><a href="module-status.html">status</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_event-controller.html">controllers/event-controller</a></li><li><a href="module-controllers_event-playlist-controller.html">controllers/event-playlist-controller</a></li><li><a href="module-controllers_event-playlist-current-song-controller.html">controllers/event-playlist-current-song-controller</a></li><li><a href="module-controllers_event-playlist-song-controller.html">controllers/event-playlist-song-controller</a></li><li><a href="module-controllers_event-playlist-song-votes-user-controller.html">controllers/event-playlist-song-votes-user-controller</a></li><li><a href="module-controllers_event-playlist-songs-controller.html">controllers/event-playlist-songs-controller</a></li><li><a href="module-controllers_event-settings-controller.html">controllers/event-settings-controller</a></li><li><a href="module-controllers_event-user-controller.html">controllers/event-user-controller</a></li><li><a href="module-controllers_event-user-role-controller.html">controllers/event-user-role-controller</a></li><li><a href="module-controllers_event-users-controller.html">controllers/event-users-controller</a></li><li><a href="module-controllers_events-controller.html">controllers/events-controller</a></li><li><a href="module-controllers_helpers.html">controllers/helpers</a></li><li><a href="module-controllers_user-controller.html">controllers/user-controller</a></li><li><a href="module-controllers_user-settings-controller.html">controllers/user-settings-controller</a></li><li><a href="module-controllers_users-controller.html">controllers/users-controller</a></li><li><a href="module-models_event.html">models/event</a></li><li><a href="module-models_event-settings.html">models/event-settings</a></li><li><a href="module-models_location.html">models/location</a></li><li><a href="module-models_playlist.html">models/playlist</a></li><li><a href="module-models_song.html">models/song</a></li><li><a href="module-models_user.html">models/user</a></li><li><a href="module-models_user-settings.html">models/user-settings</a></li><li><a href="module-models_vote.html">models/vote</a></li><li><a href="module-routes.html">routes</a></li><li><a href="module-status.html">status</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Tue Apr 14 2015 08:31:46 GMT-0500 (CDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0-dev</a> on Mon Apr 27 2015 02:48:54 GMT-0500 (CDT)
 </footer>
 
 <script> prettyPrint(); </script>

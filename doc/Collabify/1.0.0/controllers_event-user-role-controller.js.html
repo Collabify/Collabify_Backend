@@ -26,9 +26,9 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>var logger		= require('../logger');
+            <pre class="prettyprint source linenums"><code>var helpers		= require('./helpers');
+var logger		= require('../logger');
 var status		= require('../status');
-var helpers		= require('./helpers');
 
 /** @module */
 
@@ -47,36 +47,31 @@ var helpers		= require('./helpers');
  * Affected user has their role changed &lt;br>
  *
  * @param 			req 					The client request
- * @param 			req.headers 			The headers in the HTTP request
- * @param {String} 	req.headers.userid 		The requestig user's Spotify ID
  * @param 			req.body 				The body of the request
  * @param {String} 	req.body.role 			The new role for the affected user
  * @param 			res 					The server response
  * @param {String}	res.role				The new role for the affected user
  */
 module.exports.put = function (req, res) {
-	// First make sure the DJ is the one making the request
-	helpers.getEventAsDJ(req.headers.userid, req.eventId, res, function () {
-		// Make sure the affected user is at the event
-		helpers.getUserAtEvent(req.userId, req.eventId, res, function (user, event) {
-			if (user.role == 'DJ') {
-				logger.error('DJ cannot have their role changed');
-				return res.sendStatus(status.ERR_UNAUTHORIZED);
-			} else if (req.body.role == 'DJ') {
-				logger.error('Cannot promote user to DJ');
-				return res.sendStatus(status.ERR_UNAUTHORIZED);
-			} else if (req.body.role != 'Collabifier'
-					   &amp;&amp; req.body.role != 'Promoted'
-					   &amp;&amp; req.body.role != 'Blacklisted') {
-				logger.error('Invalid role');
-				return res.sendStatus(status.ERR_BAD_REQUEST);
-			}
+	// Make sure the affected user is at the event
+	helpers.getUserAtEvent(req.userId, req.eventId, res, function (user, event) {
+		if (user.role == 'DJ') {
+			logger.error('DJ cannot have their role changed');
+			return res.sendStatus(status.ERR_UNAUTHORIZED);
+		} else if (req.body.role == 'DJ') {
+			logger.error('Cannot promote user to DJ');
+			return res.sendStatus(status.ERR_UNAUTHORIZED);
+		} else if (req.body.role != 'Collabifier'
+				   &amp;&amp; req.body.role != 'Promoted'
+				   &amp;&amp; req.body.role != 'Blacklisted') {
+			logger.error('Invalid role');
+			return res.sendStatus(status.ERR_BAD_REQUEST);
+		}
 
-			user.role = req.body.role;
-			user.save();
+		user.role = req.body.role;
+		user.save();
 
-			res.status(status.OK_UPDATE_RESOURCE).send({role: user.role});
-		});
+		res.status(status.OK_UPDATE_RESOURCE).send({role: user.role});
 	});
 };</code></pre>
         </article>
@@ -88,13 +83,13 @@ module.exports.put = function (req, res) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_event-controller.html">controllers/event-controller</a></li><li><a href="module-controllers_event-playlist-controller.html">controllers/event-playlist-controller</a></li><li><a href="module-controllers_event-playlist-song-controller.html">controllers/event-playlist-song-controller</a></li><li><a href="module-controllers_event-user-controller.html">controllers/event-user-controller</a></li><li><a href="module-controllers_event-user-role-controller.html">controllers/event-user-role-controller</a></li><li><a href="module-controllers_event-users-controller.html">controllers/event-users-controller</a></li><li><a href="module-controllers_events-controller.html">controllers/events-controller</a></li><li><a href="module-controllers_helpers.html">controllers/helpers</a></li><li><a href="module-controllers_user-controller.html">controllers/user-controller</a></li><li><a href="module-controllers_users-controller.html">controllers/users-controller</a></li><li><a href="module-models_event.html">models/event</a></li><li><a href="module-models_event-settings.html">models/event-settings</a></li><li><a href="module-models_location.html">models/location</a></li><li><a href="module-models_playlist.html">models/playlist</a></li><li><a href="module-models_song.html">models/song</a></li><li><a href="module-models_user.html">models/user</a></li><li><a href="module-models_user-settings.html">models/user-settings</a></li><li><a href="module-routes.html">routes</a></li><li><a href="module-status.html">status</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_event-controller.html">controllers/event-controller</a></li><li><a href="module-controllers_event-playlist-controller.html">controllers/event-playlist-controller</a></li><li><a href="module-controllers_event-playlist-current-song-controller.html">controllers/event-playlist-current-song-controller</a></li><li><a href="module-controllers_event-playlist-song-controller.html">controllers/event-playlist-song-controller</a></li><li><a href="module-controllers_event-playlist-song-votes-user-controller.html">controllers/event-playlist-song-votes-user-controller</a></li><li><a href="module-controllers_event-playlist-songs-controller.html">controllers/event-playlist-songs-controller</a></li><li><a href="module-controllers_event-settings-controller.html">controllers/event-settings-controller</a></li><li><a href="module-controllers_event-user-controller.html">controllers/event-user-controller</a></li><li><a href="module-controllers_event-user-role-controller.html">controllers/event-user-role-controller</a></li><li><a href="module-controllers_event-users-controller.html">controllers/event-users-controller</a></li><li><a href="module-controllers_events-controller.html">controllers/events-controller</a></li><li><a href="module-controllers_helpers.html">controllers/helpers</a></li><li><a href="module-controllers_user-controller.html">controllers/user-controller</a></li><li><a href="module-controllers_user-settings-controller.html">controllers/user-settings-controller</a></li><li><a href="module-controllers_users-controller.html">controllers/users-controller</a></li><li><a href="module-models_event.html">models/event</a></li><li><a href="module-models_event-settings.html">models/event-settings</a></li><li><a href="module-models_location.html">models/location</a></li><li><a href="module-models_playlist.html">models/playlist</a></li><li><a href="module-models_song.html">models/song</a></li><li><a href="module-models_user.html">models/user</a></li><li><a href="module-models_user-settings.html">models/user-settings</a></li><li><a href="module-models_vote.html">models/vote</a></li><li><a href="module-routes.html">routes</a></li><li><a href="module-status.html">status</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Tue Apr 14 2015 08:31:46 GMT-0500 (CDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0-dev</a> on Mon Apr 27 2015 02:48:54 GMT-0500 (CDT)
 </footer>
 
 <script> prettyPrint(); </script>

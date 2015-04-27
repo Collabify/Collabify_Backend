@@ -26,65 +26,11 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>var status		= require('../status');
-var User		= require('../models/user').User;
-var helpers 	= require('./helpers');
+            <pre class="prettyprint source linenums"><code>var helpers 	= require('./helpers');
+var logger 		= require('../logger');
+var status		= require('../status');
 
 /** @module */
-
-/**
- * GET /events/:eventId/ - Get current settings for the event
- *
- * &lt;p>Preconditions: &lt;br>
- * Event exists &lt;br>
- * User has logged in &lt;br>
- * User is the DJ for the requested event &lt;br>
- *
- * @param 					req 						The client request
- * @param					req.headers					The headers in the HTTP request
- * @param {String} 			req.headers.userid 			The user's Spotify ID
- * @param {EventSettings} 	res 						The server response - The current event settings
- * @param {String}			res.password				The event password (or null if there isn't one)
- * @param {Boolean}			res.locationRestricted		Whether to restrict the event to nearby users
- * @param {Boolean}			res.allowVoting				Whether to allow users to vote on songs
- */
-module.exports.get = function (req, res) {
-	helpers.getEventAsDJ(req.headers.userid, req.eventId, res, function (event) {
-		res.status(status.OK_GET_RESOURCE).send(event.settings);
-	});
-};
-
-/**
- * PUT /events/:eventId/ - Change settings for the event
- *
- * &lt;p>Preconditions: &lt;br>
- * Event exists &lt;br>
- * User has logged in &lt;br>
- * User is the DJ for the requested event &lt;br>
- *
- * &lt;p>Postconditions: &lt;br>
- * The event's settings are updated &lt;br>
- *
- * @param 					req 							The client request
- * @param					req.headers						The headers in the HTTP request
- * @param {String} 			req.headers.userid 				The user's Spotify ID
- * @param {EventSettings}	req.body 						The body of the request - The new event settings
- * @param {String}			req.body.password				The password for the event, or null if there isn't one
- * @param {Boolean}			req.body.locationRestricted		Whether to restrict the event to nearby users
- * @param {Boolean}			req.body.allowVoting			Whether to allow users to vote on songs
- * @param {EventSettings}	res 							The server response - The new event settings
- * @param {String}			res.password					The password for the event, or null if there isn't one
- * @param {Boolean}			res.locationRestricted			Whether to restrict the event to nearby users
- * @param {Boolean}			res.allowVoting					Whether to allow users to vote on songs
- */
-module.exports.put = function (req, res) {
-	helpers.getEventAsDJ(req.headers.userid, req.eventId, res, function (event) {
-		event.settings = req.body;
-		event.save();
-
-		res.status(status.OK_UPDATE_RESOURCE).send(event.settings);
-	});
-};
 
 /**
  * DELETE /events/:eventId/ - End event
@@ -99,13 +45,11 @@ module.exports.put = function (req, res) {
  * Users at the event (including the DJ) have their eventId reset to null &lt;br>
  * Users at the event (including the DJ) have their role reset to 'NoRole' &lt;br>
  *
- * @param 				req 					The client request
- * @param 				req.headers 			The headers in the HTTP request
- * @param {String} 		req.headers.userid 		The user's Spotify ID
- * @param 				res 					The server response
+ * @param 	req 	The client request
+ * @param 	res 	The server response
  */
 module.exports.delete = function (req, res) {
-	helpers.endEvent(req.headers.userid, req.eventId, res, function () {
+	helpers.endEvent(req.eventId, res, function () {
 		res.sendStatus(status.OK_DELETE_RESOURCE);
 	});
 };</code></pre>
@@ -118,13 +62,13 @@ module.exports.delete = function (req, res) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_event-controller.html">controllers/event-controller</a></li><li><a href="module-controllers_event-playlist-controller.html">controllers/event-playlist-controller</a></li><li><a href="module-controllers_event-playlist-song-controller.html">controllers/event-playlist-song-controller</a></li><li><a href="module-controllers_event-user-controller.html">controllers/event-user-controller</a></li><li><a href="module-controllers_event-user-role-controller.html">controllers/event-user-role-controller</a></li><li><a href="module-controllers_event-users-controller.html">controllers/event-users-controller</a></li><li><a href="module-controllers_events-controller.html">controllers/events-controller</a></li><li><a href="module-controllers_helpers.html">controllers/helpers</a></li><li><a href="module-controllers_user-controller.html">controllers/user-controller</a></li><li><a href="module-controllers_users-controller.html">controllers/users-controller</a></li><li><a href="module-models_event.html">models/event</a></li><li><a href="module-models_event-settings.html">models/event-settings</a></li><li><a href="module-models_location.html">models/location</a></li><li><a href="module-models_playlist.html">models/playlist</a></li><li><a href="module-models_song.html">models/song</a></li><li><a href="module-models_user.html">models/user</a></li><li><a href="module-models_user-settings.html">models/user-settings</a></li><li><a href="module-routes.html">routes</a></li><li><a href="module-status.html">status</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_event-controller.html">controllers/event-controller</a></li><li><a href="module-controllers_event-playlist-controller.html">controllers/event-playlist-controller</a></li><li><a href="module-controllers_event-playlist-current-song-controller.html">controllers/event-playlist-current-song-controller</a></li><li><a href="module-controllers_event-playlist-song-controller.html">controllers/event-playlist-song-controller</a></li><li><a href="module-controllers_event-playlist-song-votes-user-controller.html">controllers/event-playlist-song-votes-user-controller</a></li><li><a href="module-controllers_event-playlist-songs-controller.html">controllers/event-playlist-songs-controller</a></li><li><a href="module-controllers_event-settings-controller.html">controllers/event-settings-controller</a></li><li><a href="module-controllers_event-user-controller.html">controllers/event-user-controller</a></li><li><a href="module-controllers_event-user-role-controller.html">controllers/event-user-role-controller</a></li><li><a href="module-controllers_event-users-controller.html">controllers/event-users-controller</a></li><li><a href="module-controllers_events-controller.html">controllers/events-controller</a></li><li><a href="module-controllers_helpers.html">controllers/helpers</a></li><li><a href="module-controllers_user-controller.html">controllers/user-controller</a></li><li><a href="module-controllers_user-settings-controller.html">controllers/user-settings-controller</a></li><li><a href="module-controllers_users-controller.html">controllers/users-controller</a></li><li><a href="module-models_event.html">models/event</a></li><li><a href="module-models_event-settings.html">models/event-settings</a></li><li><a href="module-models_location.html">models/location</a></li><li><a href="module-models_playlist.html">models/playlist</a></li><li><a href="module-models_song.html">models/song</a></li><li><a href="module-models_user.html">models/user</a></li><li><a href="module-models_user-settings.html">models/user-settings</a></li><li><a href="module-models_vote.html">models/vote</a></li><li><a href="module-routes.html">routes</a></li><li><a href="module-status.html">status</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Tue Apr 14 2015 08:31:46 GMT-0500 (CDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0-dev</a> on Mon Apr 27 2015 02:48:54 GMT-0500 (CDT)
 </footer>
 
 <script> prettyPrint(); </script>

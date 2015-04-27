@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controllers/event-playlist-current-song-controller.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controllers/event-playlist-current-song-controller.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>var helpers		= require('./helpers');
+var logger 		= require('../logger');
+var status		= require('../status');
+
+/** @module */
+
+/**
+ * DELETE /events/:eventId/playlist/currentSong/ - End the currently playing song
+ *
+ * &lt;p>Preconditions: &lt;br>
+ * Event exists &lt;br>
+ * User has logged in &lt;br>
+ * User is the DJ for the requested event &lt;br>
+ *
+ * &lt;p>Postconditions: &lt;br>
+ * The list of songs is resorted by votes &lt;br>
+ * The next song becomes the current song &lt;br>
+ * The first song in the song list becomes the next song &lt;br>
+ *
+ * @param 				req 								The client request
+ * @param {Playlist} 	res									The server response - The updated playlist
+ * @param {Song}		res.currentSong						The currently playing song
+ * @param {String}		res.currentSong.title				The title of the song
+ * @param {String} 		res.currentSong.artist				The name of the artist
+ * @param {String} 		res.currentSong.album				The name of the album the song appears on
+ * @param {Number}		res.currentSong.year				The year the song was released
+ * @param {String} 		res.currentSong.songId				The Spotify ID for the song
+ * @param {String} 		res.currentSong.artworkUrl			The URL where the album art can be found
+ * @param {String} 		res.currentSong.userId				The Spotify ID of the user who added the song
+ * @param {Number}		res.currentSong.voteCount			The song's current number of (upvotes - downvotes)
+ * @param {Vote}		res.currentSong.vote				The vote placed by the user for the song
+ * @param {Boolean}		res.currentSong.vote.isUpvoted		Whether the user upvoted the song
+ * @param {Boolean}		res.currentSong.vote.isDownvoted	Whether the user downvoted the song
+ * @param {Song}		res.nextSong						The next song to be played
+ * @param {String}		res.nextSong.title					The title of the song
+ * @param {String} 		res.nextSong.artist					The name of the artist
+ * @param {String} 		res.nextSong.album					The name of the album the song appears on
+ * @param {Number}		res.nextSong.year					The year the song was released
+ * @param {String} 		res.nextSong.songId					The Spotify ID for the song
+ * @param {String} 		res.nextSong.artworkUrl				The URL where the album art can be found
+ * @param {String} 		res.nextSong.userId					The Spotify ID of the user who added the song
+ * @param {Number}		res.nextSong.voteCount				The song's current number of (upvotes - downvotes)
+ * @param {Vote}		res.nextSong.vote					The vote placed by the user for the song
+ * @param {Boolean}		res.nextSong.vote.isUpvoted			Whether the user upvoted the song
+ * @param {Boolean}		res.nextSong.vote.isDownvoted		Whether the user downvoted the song
+ * @param {Song[]}		res.songs							The playlist's list of songs
+ * @param {String}		res.songs[].title					The title of the song
+ * @param {String} 		res.songs[].artist					The name of the artist
+ * @param {String} 		res.songs[].album					The name of the album the song appears on
+ * @param {Number}		res.songs[].year					The year the song was released
+ * @param {String} 		res.songs[].songId					The Spotify ID for the song
+ * @param {String} 		res.songs[].artworkUrl				The URL where the album art can be found
+ * @param {String} 		res.songs[].userId					The Spotify ID of the user who added the song
+ * @param {Number}		res.songs[].voteCount				The song's current number of (upvotes - downvotes)
+ * @param {Vote}		res.songs[].vote					The vote placed by the user for the song
+ * @param {Boolean}		res.songs[].vote.isUpvoted			Whether the user upvoted the song
+ * @param {Boolean}		res.songs[].vote.isDownvoted		Whether the user downvoted the song
+ */
+module.exports.delete = function (req, res) {
+	helpers.getEvent(req.eventId, res, function (event) {
+		event.playlist.songs = helpers.decayVotes(helpers.sortSongs(event.playlist.songs));
+
+		event.playlist.currentSong = event.playlist.nextSong;
+
+		if (event.playlist.songs.length > 0) {
+			// Grab the next song from the front of the list
+			event.playlist.nextSong = event.playlist.songs.splice(0, 1)[0];
+		} else {
+			event.playlist.nextSong = null;
+		}
+
+		event.save();
+
+		var playlist = helpers.filterVotesForPlaylist(event.playlist, req.eventId);
+		res.status(status.OK_DELETE_RESOURCE).send(playlist);
+	});
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_event-controller.html">controllers/event-controller</a></li><li><a href="module-controllers_event-playlist-controller.html">controllers/event-playlist-controller</a></li><li><a href="module-controllers_event-playlist-current-song-controller.html">controllers/event-playlist-current-song-controller</a></li><li><a href="module-controllers_event-playlist-song-controller.html">controllers/event-playlist-song-controller</a></li><li><a href="module-controllers_event-playlist-song-votes-user-controller.html">controllers/event-playlist-song-votes-user-controller</a></li><li><a href="module-controllers_event-playlist-songs-controller.html">controllers/event-playlist-songs-controller</a></li><li><a href="module-controllers_event-settings-controller.html">controllers/event-settings-controller</a></li><li><a href="module-controllers_event-user-controller.html">controllers/event-user-controller</a></li><li><a href="module-controllers_event-user-role-controller.html">controllers/event-user-role-controller</a></li><li><a href="module-controllers_event-users-controller.html">controllers/event-users-controller</a></li><li><a href="module-controllers_events-controller.html">controllers/events-controller</a></li><li><a href="module-controllers_helpers.html">controllers/helpers</a></li><li><a href="module-controllers_user-controller.html">controllers/user-controller</a></li><li><a href="module-controllers_user-settings-controller.html">controllers/user-settings-controller</a></li><li><a href="module-controllers_users-controller.html">controllers/users-controller</a></li><li><a href="module-models_event.html">models/event</a></li><li><a href="module-models_event-settings.html">models/event-settings</a></li><li><a href="module-models_location.html">models/location</a></li><li><a href="module-models_playlist.html">models/playlist</a></li><li><a href="module-models_song.html">models/song</a></li><li><a href="module-models_user.html">models/user</a></li><li><a href="module-models_user-settings.html">models/user-settings</a></li><li><a href="module-models_vote.html">models/vote</a></li><li><a href="module-routes.html">routes</a></li><li><a href="module-status.html">status</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0-dev</a> on Mon Apr 27 2015 02:48:54 GMT-0500 (CDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

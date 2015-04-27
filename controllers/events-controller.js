@@ -1,7 +1,7 @@
+var helpers 	= require('./helpers');
 var logger 		= require('../logger');
 var status		= require('../status');
 var Event 		= require('../models/event').Event;
-var helpers 	= require('./helpers');
 
 /** @module */
 
@@ -42,8 +42,43 @@ module.exports.MAX_EVENT_DISTANCE = 5;
  * @param {Location}			res.location									The location of the event
  * @param {Number}				res.location.latitude							The latitude of the event
  * @param {Number}				res.location.longitude							The longitude of the event
- * @param {Playlist}			res.playlist									The playlist for the event
- * @param {Song[]}				res.playlist.songs								The playlist is initially empty
+ * @param {Playlist} 			res.playlist									The event's playlist, which is initially empty
+ * @param {Song}				res.playlist.currentSong						The currently playing song, initially null
+ * @param {String}				res.playlist.currentSong.title					The title of the song
+ * @param {String} 				res.playlist.currentSong.artist					The name of the artist
+ * @param {String} 				res.playlist.currentSong.album					The name of the album the song appears on
+ * @param {Number}				res.playlist.currentSong.year					The year the song was released
+ * @param {String} 				res.playlist.currentSong.songId					The Spotify ID for the song
+ * @param {String} 				res.playlist.currentSong.artworkUrl				The URL where the album art can be found
+ * @param {String} 				res.playlist.currentSong.userId					The Spotify ID of the user who added the song
+ * @param {Number}				res.playlist.currentSong.voteCount				The song's current number of (upvotes - downvotes)
+ * @param {Vote}				res.playlist.currentSong.vote					The vote placed by the user for the song
+ * @param {Boolean}				res.playlist.currentSong.vote.isUpvoted			Whether the user upvoted the song
+ * @param {Boolean}				res.playlist.currentSong.vote.isDownvoted		Whether the user downvoted the song
+ * @param {Song}				res.playlist.nextSong							The next song to be played, initially null
+ * @param {String}				res.playlist.nextSong.title						The title of the song
+ * @param {String} 				res.playlist.nextSong.artist					The name of the artist
+ * @param {String} 				res.playlist.nextSong.album						The name of the album the song appears on
+ * @param {Number}				res.playlist.nextSong.year						The year the song was released
+ * @param {String} 				res.playlist.nextSong.songId					The Spotify ID for the song
+ * @param {String} 				res.playlist.nextSong.artworkUrl				The URL where the album art can be found
+ * @param {String} 				res.playlist.nextSong.userId					The Spotify ID of the user who added the song
+ * @param {Number}				res.playlist.nextSong.voteCount					The song's current number of (upvotes - downvotes)
+ * @param {Vote}				res.playlist.nextSong.vote						The vote placed by the user for the song
+ * @param {Boolean}				res.playlist.nextSong.vote.isUpvoted			Whether the user upvoted the song
+ * @param {Boolean}				res.playlist.nextSong.vote.isDownvoted			Whether the user downvoted the song
+ * @param {Song[]}				res.playlist.songs								The playlist's list of songs, initially empty
+ * @param {String}				res.playlist.songs[].title						The title of the song
+ * @param {String} 				res.playlist.songs[].artist						The name of the artist
+ * @param {String} 				res.playlist.songs[].album						The name of the album the song appears on
+ * @param {Number}				res.playlist.songs[].year						The year the song was released
+ * @param {String} 				res.playlist.songs[].songId						The Spotify ID for the song
+ * @param {String} 				res.playlist.songs[].artworkUrl					The URL where the album art can be found
+ * @param {String} 				res.playlist.songs[].userId						The Spotify ID of the user who added the song
+ * @param {Number}				res.playlist.songs[].voteCount					The song's current number of (upvotes - downvotes)
+ * @param {Vote}				res.playlist.songs[].vote						The vote placed by the user for the song
+ * @param {Boolean}				res.playlist.songs[].vote.isUpvoted				Whether the user upvoted the song
+ * @param {Boolean}				res.playlist.songs[].vote.isDownvoted			Whether the user downvoted the song
  * @param {EventSettings}		res.settings									The settings for the event
  * @param {String}				res.settings.password							The event password (or null if there isn't one)
  * @param {Boolean}				res.settings.locationRestricted					Whether to restrict the event to nearby users

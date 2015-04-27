@@ -1,9 +1,53 @@
+var helpers		= require('./helpers');
 var logger 		= require('../logger');
 var status		= require('../status');
 var User 		= require('../models/user').User;
-var helpers		= require('./helpers');
 
 /** @module */
+
+function handleLoggedInUser(req, res, user) {
+	// Just update their name and settings, but do not modify the eventId or
+	// role because these are managed by the database
+	if (req.body.name != undefined) {
+		user.name = req.body.name;
+	}
+
+	if (req.body.settings != undefined) {
+		user.settings = req.body.settings;
+	}
+
+	user.save();
+
+	res.status(status.OK_UPDATE_RESOURCE).send(user);
+}
+
+function handleNewUser(req, res) {
+	// Manually add the userId
+	req.body.userId = req.headers.userid;
+
+	// If the user's name wasn't passed, that probably means they have an
+	// account created via Spotify instead of Facebook.  In that case, their
+	// userId actually corresponds to their name.
+	if (req.body.name == undefined) {
+		req.body.name = req.body.userId;
+	}
+
+	// Make sure the user isn't linked to an event yet
+	req.body.eventId = null;
+	req.body.role = 'NoRole';
+
+	User.create(req.body, function (err) {
+		if (err) {
+			logger.error(err);
+			return res.sendStatus(status.ERR_BAD_REQUEST);
+		}
+
+		// Return the newly created user
+		helpers.getUser(req.body.userId, res, function (user) {
+			res.status(status.OK_CREATE_RESOURCE).send(user);
+		});
+	});
+}
 
 /**
  * POST /users/ - Add a user to the database
@@ -34,39 +78,9 @@ module.exports.post = function (req, res) {
 		}
 
 		if (user != null) {
-			// User already logged in, just update their name and settings but
-			// do not modify the eventId or role because these are managed by
-			// the database
-			if (req.body.name != undefined) {
-				user.name = req.body.name;
-			}
-
-			if (req.body.settings != undefined) {
-				user.settings = req.body.settings;
-			}
-
-			user.save();
-
-			res.status(status.OK_UPDATE_RESOURCE).send(user);
+			handleLoggedInUser(req, res, user);
 		} else {
-			// Manually add the userId
-			req.body.userId = req.headers.userid;
-
-			// Make sure the user isn't linked to an event yet
-			req.body.eventId = null;
-			req.body.role = 'NoRole';
-
-			User.create(req.body, function (err) {
-				if (err) {
-					logger.error(err);
-					return res.sendStatus(status.ERR_BAD_REQUEST);
-				}
-
-				// Return the newly created user
-				helpers.getUser(req.body.userId, res, function (user) {
-					res.status(status.OK_CREATE_RESOURCE).send(user);
-				});
-			});
+			handleNewUser(req, res);
 		}
 	});
 };

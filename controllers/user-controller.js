@@ -1,6 +1,6 @@
+var helpers		= require('./helpers');
 var logger 		= require('../logger');
 var status		= require('../status');
-var helpers		= require('./helpers');
 
 /** @module */
 
@@ -22,30 +22,6 @@ var helpers		= require('./helpers');
 module.exports.get = function (req, res) {
 	helpers.getUser(req.userId, 'name userId eventId role settings', res, function (user) {
 		res.status(status.OK_GET_RESOURCE).send(user);
-	});
-};
-
-/**
- * PUT /users/:userId/ - Change user settings
- *
- * <p>Preconditions: <br>
- * User has logged in <br>
- *
- * <p>Postconditions: <br>
- * User's settings are updated
- *
- * @param 					req 					The client request
- * @param {UserSettings}	req.body 				The body of the request - The new user settings
- * @param {String} 			req.body.showName 		Whether to display the user's Spotify username or 'anonymous'
- * @param {UserSettings}	res 					The server response - The new user settings
- * @param {String}			res.showName			Whether to display the user's Spotify username or 'anonymous'
- */
-module.exports.put = function (req, res) {
-	helpers.getUser(req.userId, res, function (user) {
-		user.settings = req.body;
-		user.save();
-
-		res.status(status.OK_UPDATE_RESOURCE).send(user.settings);
 	});
 };
 
@@ -72,7 +48,7 @@ module.exports.delete = function (req, res) {
 
 		if (user.eventId != null) {
 			if (user.role == 'DJ') {
-				return helpers.endEvent(user.userId, user.eventId, res, logOut);
+				return helpers.endEvent(user.eventId, res, logOut);
 			} else {
 				return helpers.leaveEvent(user.userId, user.eventId, res, logOut);
 			}

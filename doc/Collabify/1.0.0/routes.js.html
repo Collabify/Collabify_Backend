@@ -30,17 +30,20 @@
 var router				= express.Router();
 var logger				= require('./logger');
 
-var UsersController						= require('./controllers/users-controller');
-var UserTokenController					= require('./controllers/user-token-controller');
-var UserController						= require('./controllers/user-controller');
-var EventsController					= require('./controllers/events-controller');
-var EventController						= require('./controllers/event-controller');
-var EventUsersController				= require('./controllers/event-users-controller');
-var EventUserController					= require('./controllers/event-user-controller');
-var EventUserRoleController				= require('./controllers/event-user-role-controller');
-var EventPlaylistController				= require('./controllers/event-playlist-controller');
-var EventPlaylistSongController			= require('./controllers/event-playlist-song-controller');
-var EventPlaylistSongVotesController	= require('./controllers/event-playlist-song-votes-controller');
+var UsersController							= require('./controllers/users-controller');
+var UserController							= require('./controllers/user-controller');
+var UserSettingsController					= require('./controllers/user-settings-controller');
+var EventsController						= require('./controllers/events-controller');
+var EventController							= require('./controllers/event-controller');
+var EventSettingsController					= require('./controllers/event-settings-controller');
+var EventUsersController					= require('./controllers/event-users-controller');
+var EventUserController						= require('./controllers/event-user-controller');
+var EventUserRoleController					= require('./controllers/event-user-role-controller');
+var EventPlaylistController					= require('./controllers/event-playlist-controller');
+var EventPlaylistCurrentSongController		= require('./controllers/event-playlist-current-song-controller');
+var EventPlaylistSongsController			= require('./controllers/event-playlist-songs-controller');
+var EventPlaylistSongController				= require('./controllers/event-playlist-song-controller');
+var EventPlaylistSongVotesUserController	= require('./controllers/event-playlist-song-votes-user-controller');
 
 /** @module */
 
@@ -51,25 +54,20 @@ router.route('/users/')
 		UsersController.post(req, res);
 	});
 
-router.route('/users/:userId/token/')
-	.post(function (req, res, next) {
-		// Request a new access token
-		/** @todo Iteration 2: Implement me */
-		res.send('POST ' + req.path);
-	});
-
 router.route('/users/:userId/')
 	.get(function (req, res, next) {
 		// Get user details
 		UserController.get(req, res);
 	})
-	.put(function (req, res, next) {
-		// Change settings (Collabifier only)
-		UserController.put(req, res);
-	})
 	.delete(function (req, res, next) {
 		// Log out the user and delete them from the database
-		UserController.delete(req, res);
+		UserSettingsController.delete(req, res);
+	});
+
+router.route('/users/:userId/settings/')
+	.put(function (req, res, next) {
+		// Change settings (Collabifier only)
+		UserSettingsController.put(req, res);
 	});
 
 router.route('/events/')
@@ -83,17 +81,19 @@ router.route('/events/')
 	});
 
 router.route('/events/:eventId/')
-	.get(function (req, res, next) {
-		// Get current settings for the event (DJ only)
-		EventController.get(req, res);
-	})
-	.put(function (req, res, next) {
-		// Change settings for the event (DJ only)
-		EventController.put(req, res);
-	})
 	.delete(function (req, res, next) {
 		// End event (DJ only)
 		EventController.delete(req, res);
+	});
+
+router.route('/events/:eventId/settings/')
+	.get(function (req, res, next) {
+		// Get current settings for the event (DJ only)
+		EventSettingsController.get(req, res);
+	})
+	.put(function (req, res, next) {
+		// Change settings for the event (DJ only)
+		EventSettingsController.put(req, res);
 	});
 
 router.route('/events/:eventId/users/')
@@ -119,30 +119,37 @@ router.route('/events/:eventId/users/:userId/role/')
 	});
 
 router.route('/events/:eventId/playlist/')
-	.post(function (req, res, next) {
-		// Add song to playlist
-		EventPlaylistController.post(req, res);
-	})
 	.get(function (req, res, next) {
-		// Get all songs in the playlist in their proper order
+		// Get the playlist
 		EventPlaylistController.get(req, res);
 	})
-	.put(function (req, res, next) {
-		// Reorder songs in the playlist (DJ/Promoted only)
-		EventPlaylistController.put(req, res);
+
+router.route('/events/:eventId/playlist/currentSong/')
+	.delete(function (req, res, next) {
+		// End the currently playing song
+		EventPlaylistCurrentSongController.delete(req, res);
 	});
 
-router.route('/events/:eventId/playlist/:songId/')
+router.route('/events/:eventId/playlist/songs/')
+	.post(function (req, res, next) {
+		// Add song to playlist
+		EventPlaylistSongsController.post(req, res);
+	})
+	.put(function (req, res, next) {
+		// Move a song in the playlist (DJ only)
+		EventPlaylistSongsController.put(req, res);
+	});
+
+router.route('/events/:eventId/playlist/songs/:songId/')
 	.delete(function (req, res, next) {
 		// Remove song from playlist
 		EventPlaylistSongController.delete(req, res);
 	});
 
-router.route('/events/:eventId/playlist/:songId/votes/:userId/')
+router.route('/events/:eventId/playlist/songs/:songId/votes/:userId/')
 	.put(function (req, res, next) {
 		// Place vote on song
-		/** @todo Iteration 2: Implement me */
-		res.send('PUT ' + req.path);
+		EventPlaylistSongVotesUserController.put(req, res);
 	});
 
 // Route parameters
@@ -171,13 +178,13 @@ module.exports = router;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_event-controller.html">controllers/event-controller</a></li><li><a href="module-controllers_event-playlist-controller.html">controllers/event-playlist-controller</a></li><li><a href="module-controllers_event-playlist-song-controller.html">controllers/event-playlist-song-controller</a></li><li><a href="module-controllers_event-user-controller.html">controllers/event-user-controller</a></li><li><a href="module-controllers_event-user-role-controller.html">controllers/event-user-role-controller</a></li><li><a href="module-controllers_event-users-controller.html">controllers/event-users-controller</a></li><li><a href="module-controllers_events-controller.html">controllers/events-controller</a></li><li><a href="module-controllers_helpers.html">controllers/helpers</a></li><li><a href="module-controllers_user-controller.html">controllers/user-controller</a></li><li><a href="module-controllers_users-controller.html">controllers/users-controller</a></li><li><a href="module-models_event.html">models/event</a></li><li><a href="module-models_event-settings.html">models/event-settings</a></li><li><a href="module-models_location.html">models/location</a></li><li><a href="module-models_playlist.html">models/playlist</a></li><li><a href="module-models_song.html">models/song</a></li><li><a href="module-models_user.html">models/user</a></li><li><a href="module-models_user-settings.html">models/user-settings</a></li><li><a href="module-routes.html">routes</a></li><li><a href="module-status.html">status</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_event-controller.html">controllers/event-controller</a></li><li><a href="module-controllers_event-playlist-controller.html">controllers/event-playlist-controller</a></li><li><a href="module-controllers_event-playlist-current-song-controller.html">controllers/event-playlist-current-song-controller</a></li><li><a href="module-controllers_event-playlist-song-controller.html">controllers/event-playlist-song-controller</a></li><li><a href="module-controllers_event-playlist-song-votes-user-controller.html">controllers/event-playlist-song-votes-user-controller</a></li><li><a href="module-controllers_event-playlist-songs-controller.html">controllers/event-playlist-songs-controller</a></li><li><a href="module-controllers_event-settings-controller.html">controllers/event-settings-controller</a></li><li><a href="module-controllers_event-user-controller.html">controllers/event-user-controller</a></li><li><a href="module-controllers_event-user-role-controller.html">controllers/event-user-role-controller</a></li><li><a href="module-controllers_event-users-controller.html">controllers/event-users-controller</a></li><li><a href="module-controllers_events-controller.html">controllers/events-controller</a></li><li><a href="module-controllers_helpers.html">controllers/helpers</a></li><li><a href="module-controllers_user-controller.html">controllers/user-controller</a></li><li><a href="module-controllers_user-settings-controller.html">controllers/user-settings-controller</a></li><li><a href="module-controllers_users-controller.html">controllers/users-controller</a></li><li><a href="module-models_event.html">models/event</a></li><li><a href="module-models_event-settings.html">models/event-settings</a></li><li><a href="module-models_location.html">models/location</a></li><li><a href="module-models_playlist.html">models/playlist</a></li><li><a href="module-models_song.html">models/song</a></li><li><a href="module-models_user.html">models/user</a></li><li><a href="module-models_user-settings.html">models/user-settings</a></li><li><a href="module-models_vote.html">models/vote</a></li><li><a href="module-routes.html">routes</a></li><li><a href="module-status.html">status</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Tue Apr 14 2015 08:31:46 GMT-0500 (CDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0-dev</a> on Mon Apr 27 2015 02:48:54 GMT-0500 (CDT)
 </footer>
 
 <script> prettyPrint(); </script>
