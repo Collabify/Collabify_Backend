@@ -25,6 +25,13 @@ function handleNewUser(req, res) {
 	// Manually add the userId
 	req.body.userId = req.headers.userid;
 
+	// If the user's name wasn't passed, that probably means they have an
+	// account created via Spotify instead of Facebook.  In that case, their
+	// userId actually corresponds to their name.
+	if (req.body.name == undefined) {
+		req.body.name = req.body.userId;
+	}
+
 	// Make sure the user isn't linked to an event yet
 	req.body.eventId = null;
 	req.body.role = 'NoRole';
