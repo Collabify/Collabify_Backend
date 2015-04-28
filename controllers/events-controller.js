@@ -9,7 +9,7 @@ var Event 			= require('../models/event').Event;
  * The max distance, in decimal degress, that a user can be from an event and
  * still join it
  */
-module.exports.MAX_EVENT_DISTANCE = 5;
+module.exports.MAX_EVENT_DISTANCE = 0.1;
 
 /**
  * POST /events/ - Create a new event
