@@ -280,16 +280,20 @@ module.exports.filterVotesForSong = function (song, userId) {
 	var songCopy = module.exports.deepCopy(song);
 	var vote = module.exports.getVoteFromSong(songCopy, userId);
 
+	delete songCopy.votes;
+
 	if (vote == undefined) {
 		// User hasn't placed a vote on the song, return default data
 		songCopy.vote = {
 			isUpvoted: false,
 			isDownvoted: false
 		};
+	} else {
+		// User has placed a vote on the song, return only the upvote/downvote
+		// information
+		songCopy.vote = vote;
+		delete songCopy.vote.userId;
 	}
-
-	delete songCopy.vote.userId;
-	delete songCopy.votes;
 
 	return songCopy;
 };
