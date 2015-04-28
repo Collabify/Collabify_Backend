@@ -9,7 +9,7 @@ var logger = require('./logger');
  * @param {String}	message		The message describing the error
  * @return {CollabifyError}		A new CollabifyError object
  */
-module.exports.CollabifyError = function (statusCode, message) {
+module.exports = function (statusCode, message) {
 	this.statusCode = statusCode;
 	this.message = message;
 
@@ -21,6 +21,6 @@ module.exports.CollabifyError = function (statusCode, message) {
  *
  * @param res The server response object
  */
-module.exports.CollabifyError.prototype.send = function (res) {
+module.exports.prototype.send = function (res) {
 	return res.status(this.statusCode).send(this.message);
 }
