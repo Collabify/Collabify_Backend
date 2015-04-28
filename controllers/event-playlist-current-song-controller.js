@@ -1,6 +1,6 @@
-var helpers		= require('./helpers');
-var logger 		= require('../logger');
-var status		= require('../status');
+var helpers			= require('./helpers');
+var CollabifyError	= require('../collabify-error');
+var status			= require('../status');
 
 /** @module */
 

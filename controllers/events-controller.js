@@ -1,7 +1,7 @@
-var helpers 	= require('./helpers');
-var logger 		= require('../logger');
-var status		= require('../status');
-var Event 		= require('../models/event').Event;
+var helpers			= require('./helpers');
+var CollabifyError	= require('../collabify-error');
+var status			= require('../status');
+var Event 			= require('../models/event').Event;
 
 /** @module */
 
@@ -87,11 +87,10 @@ module.exports.MAX_EVENT_DISTANCE = 5;
 module.exports.post = function (req, res) {
 	helpers.getUser(req.headers.userid, res, function (user) {
 		if (user.eventId == user.userId) {
-			logger.error('Event already exists');
-			return res.sendStatus(status.ERR_RESOURCE_EXISTS);
+			return new CollabifyError(status.ERR_RESOURCE_EXISTS, 'Event already exists').send(res);
 		} else if (user.eventId != null) {
-			logger.error('User is already at another event');
-			return res.sendStatus(status.ERR_RESOURCE_EXISTS);
+			return new CollabifyError(status.ERR_RESOURCE_EXISTS,
+									  'User is already at another event').send(res);
 		}
 
 		// Manually fill in the eventId
@@ -151,7 +150,8 @@ module.exports.get = function (req, res) {
 		})
 		.exec(function (err, events) {
 			if (err) {
-				return status.handleUnexpectedError(err, res);
+				return new CollabifyError(status.ERR_BAD_REQUEST,
+									  'Unexpected error while querying for nearby events').send(res);
 			}
 
 			res.status(status.OK_GET_RESOURCE).send(events);

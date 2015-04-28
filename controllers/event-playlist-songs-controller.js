@@ -1,6 +1,6 @@
-var helpers		= require('./helpers');
-var logger 		= require('../logger');
-var status		= require('../status');
+var helpers			= require('./helpers');
+var CollabifyError	= require('../collabify-error');
+var status			= require('../status');
 
 /** @module */
 
@@ -71,8 +71,7 @@ module.exports.post = function (req, res) {
 		var song = helpers.getSongFromPlaylist(event, req.body.songId);
 
 		if (song != undefined) {
-			logger.error('Song is already in the playlist');
-			return res.sendStatus(status.ERR_RESOURCE_EXISTS);
+			return new CollabifyError(status.ERR_RESOURCE_EXISTS, 'Song is already in the playlist').send(res);
 		}
 
 		helpers.addSongToPlaylist(event, user.userId, req.body);
@@ -141,8 +140,7 @@ module.exports.put = function (req, res) {
 	helpers.getEvent(req.eventId, res, function (event) {
 		if (req.headers.oldindex < 0 || req.headers.oldindex >= event.playlist.songs.length
 			|| req.headers.newindex < 0 || req.headers.newindex > event.playlist.songs.length) {
-			logger.error('Bad index given for moving song');
-			return res.sendStatus(status.ERR_BAD_REQUEST);
+			return new CollabifyError(status.ERR_BAD_REQUEST, 'Bad index given for moving song').send(res);
 		}
 
 		// Remove the song from its old position

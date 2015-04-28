@@ -1,6 +1,6 @@
-var helpers		= require('./helpers');
-var logger		= require('../logger');
-var status		= require('../status');
+var helpers			= require('./helpers');
+var CollabifyError	= require('../collabify-error');
+var status			= require('../status');
 
 /** @module */
 
@@ -28,16 +28,15 @@ module.exports.put = function (req, res) {
 	// Make sure the affected user is at the event
 	helpers.getUserAtEvent(req.userId, req.eventId, res, function (user, event) {
 		if (user.role == 'DJ') {
-			logger.error('DJ cannot have their role changed');
-			return res.sendStatus(status.ERR_UNAUTHORIZED);
+			return new CollabifyError(status.ERR_BAD_REQUEST,
+									  'DJ cannot have their role changed').send(res);
 		} else if (req.body.role == 'DJ') {
-			logger.error('Cannot promote user to DJ');
-			return res.sendStatus(status.ERR_UNAUTHORIZED);
+			return new CollabifyError(status.ERR_BAD_REQUEST,
+									  'Cannot promote user to DJ').send(res);
 		} else if (req.body.role != 'Collabifier'
 				   && req.body.role != 'Promoted'
 				   && req.body.role != 'Blacklisted') {
-			logger.error('Invalid role');
-			return res.sendStatus(status.ERR_BAD_REQUEST);
+			return new CollabifyError(status.ERR_BAD_REQUEST, 'Invalid role').send(res);
 		}
 
 		user.role = req.body.role;

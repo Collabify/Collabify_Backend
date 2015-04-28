@@ -1,6 +1,6 @@
-var helpers		= require('./helpers');
-var logger 		= require('../logger');
-var status		= require('../status');
+var helpers			= require('./helpers');
+var CollabifyError	= require('../collabify-error');
+var status			= require('../status');
 
 /** @module */
 
@@ -26,11 +26,9 @@ module.exports.delete = function (req, res) {
 		var song = helpers.getSongFromSongs(event, req.songId);
 
 		if (song == undefined) {
-			logger.error('Song not in playlist');
-			return res.sendStatus(status.ERROR_RESOURCE_NOT_FOUND);
+			return new CollabifyError(status.ERROR_RESOURCE_NOT_FOUND, 'Song not in playlist').send(res);
 		} else if (user.userId != song.userId && user.role != 'DJ' && user.role != 'Promoted') {
-			logger.error('User is not allowed to delete the song');
-			return res.sendStatus(status.ERR_UNAUTHORIZED);
+			return new CollabifyError(status.ERR_UNAUTHORIZED, 'User is not allowed to delete the song').send(res);
 		}
 
 		song.remove();

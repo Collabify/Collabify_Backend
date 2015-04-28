@@ -1,7 +1,7 @@
-var helpers		= require('./helpers');
-var logger 		= require('../logger');
-var status		= require('../status');
-var User 		= require('../models/user').User;
+var helpers			= require('./helpers');
+var CollabifyError	= require('../collabify-error');
+var status			= require('../status');
+var User 			= require('../models/user').User;
 
 /** @module */
 
@@ -74,7 +74,8 @@ function handleNewUser(req, res) {
 module.exports.post = function (req, res) {
 	User.findOne({userId: req.headers.userid}, function (err, user) {
 		if (err) {
-			return status.handleUnexpectedError(err, res);
+			return new CollabifyError(status.ERR_BAD_REQUEST,
+									  'Unexpected error while querying for user').send(res);
 		}
 
 		if (user != null) {

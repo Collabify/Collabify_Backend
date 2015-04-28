@@ -1,6 +1,6 @@
-var helpers		= require('./helpers');
-var logger 		= require('../logger');
-var status		= require('../status');
+var helpers			= require('./helpers');
+var CollabifyError	= require('../collabify-error');
+var status			= require('../status');
 
 /** @module */
 
@@ -76,16 +76,15 @@ function handleUpdatedVote(req, res, event, song, vote) {
  */
 module.exports.put = function (req, res) {
 	if (req.body.isUpvoted && req.body.isDownvoted) {
-		logger.error("Can't upvote and downvote a song at the same time");
-		return res.sendStatus(status.ERR_BAD_REQUEST);
+		return new CollabifyError(status.ERR_BAD_REQUEST,
+								  "Can't upvote and downvote a song at the same time").send(res);
 	}
 
 	helpers.getNichtBlacklistedUserAtEvent(req.userId, req.eventId, res, function (user, event) {
 		var song = helpers.getSongFromPlaylist(event, req.songId);
 
 		if (song == undefined) {
-			logger.error('Song not in playlist');
-			return res.sendStatus(status.ERR_RESOURCE_NOT_FOUND);
+			return new CollabifyError(status.ERR_RESOURCE_NOT_FOUND, 'Song not in playlist').send(res);
 		}
 
 		var vote = helpers.getVoteFromSong(song, req.userId);

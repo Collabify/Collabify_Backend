@@ -13,15 +13,4 @@ module.exports = {
 	ERR_RESOURCE_EXISTS: 403,
 	ERR_RESOURCE_NOT_FOUND: 404,
 	ERR_BAD_REQUEST: 400,
-
-	/**
-	 * Handles database-related errors that don't have a clear cause
-	 *
-	 * @param err The error
-	 * @param res The server response
-	 */
-	handleUnexpectedError: function (err, res) {
-		logger.error(err);
-		res.sendStatus(module.exports.ERR_BAD_REQUEST);
-	}
 };

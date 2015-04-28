@@ -1,8 +1,9 @@
-var _			= require('underscore');
-var logger 		= require('../logger');
-var status		= require('../status');
-var Event 		= require('../models/event').Event;
-var User		= require('../models/user').User;
+var _				= require('underscore');
+var helpers			= require('./helpers');
+var CollabifyError	= require('../collabify-error');
+var status			= require('../status');
+var Event 			= require('../models/event').Event;
+var User			= require('../models/user').User;
 
 /** @module */
 
@@ -24,10 +25,10 @@ module.exports.getUser = function (userId, select, res, callback) {
 
 	User.findOne({userId: userId}, select, function (err, user) {
 		if (err) {
-			return status.handleUnexpectedError(err, res);
+			return new CollabifyError(status.ERR_BAD_REQUEST,
+									  'Unexpected error while querying for user').send(res);
 		} else if (user == null) {
-			logger.error('User not found');
-			return res.sendStatus(status.ERR_RESOURCE_NOT_FOUND);
+			return new CollabifyError(status.ERR_RESOURCE_NOT_FOUND, 'User not found').send(res);
 		}
 
 		callback(user);
@@ -52,10 +53,10 @@ module.exports.getEvent = function (eventId, select, res, callback) {
 
 	Event.findOne({eventId: eventId}, select, function (err, event) {
 		if (err) {
-			return status.handleUnexpectedError(err, res);
+			return new CollabifyError(status.ERR_BAD_REQUEST,
+									  'Unexpected error while querying for event').send(res);
 		} else if (event == null) {
-			logger.error('Event not found');
-			return res.sendStatus(status.ERR_RESOURCE_NOT_FOUND);
+			return new CollabifyError(status.ERR_RESOURCE_NOT_FOUND, 'Event not found').send(res);
 		}
 
 		callback(event);
@@ -74,8 +75,7 @@ module.exports.getEvent = function (eventId, select, res, callback) {
 module.exports.getUserAtEvent = function (userId, eventId, res, callback) {
 	module.exports.getUser(userId, res, function (user) {
 		if (user.eventId != eventId) {
-			logger.error('User not at event');
-			return res.sendStatus(status.ERR_UNAUTHORIZED);
+			return new CollabifyError(status.ERR_UNAUTHORIZED, 'User is not at event').send(res);
 		}
 
 		module.exports.getEvent(eventId, res, function (event) {
@@ -96,8 +96,7 @@ module.exports.getUserAtEvent = function (userId, eventId, res, callback) {
 module.exports.getNichtBlacklistedUserAtEvent = function (userId, eventId, res, callback) {
 	module.exports.getUserAtEvent(userId, eventId, res, function (user, event) {
 		if (user.role == 'Blacklisted') {
-			logger.error('User is Blacklisted');
-			return res.sendStatus(status.ERR_UNAUTHORIZED);
+			return new CollabifyError(status.ERR_UNAUTHORIZED, 'User is Blacklisted').send(res);
 		}
 
 		callback(user, event);
@@ -116,8 +115,8 @@ module.exports.getNichtBlacklistedUserAtEvent = function (userId, eventId, res, 
 module.exports.getDJOrPromotedUserAtEvent = function (userId, eventId, res, callback) {
 	module.exports.getUserAtEvent(userId, eventId, res, function (user, event) {
 		if (user.role != 'DJ' && user.role != 'Promoted') {
-			logger.error('User is not the DJ or a Promoted Collabifier');
-			return res.sendStatus(status.ERR_UNAUTHORIZED);
+			return new CollabifyError(status.ERR_UNAUTHORIZED,
+									  'User is not the DJ or a Promoted Collabifier').send(res);
 		}
 
 		callback(user, event);
@@ -135,15 +134,15 @@ module.exports.getDJOrPromotedUserAtEvent = function (userId, eventId, res, call
 module.exports.leaveEvent = function (userId, eventId, res, callback) {
 	module.exports.getUserAtEvent(userId, eventId, res, function (user, event) {
 		if (user.role == 'DJ') {
-			logger.error('DJ cannot leave event');
-			return res.sendStatus(status.ERR_UNAUTHORIZED);
+			return new CollabifyError(status.ERR_BAD_REQUEST,
+									  'DJ cannot leave their own event').send(res);
 		}
 
 		var userIdIndex = event.userIds.indexOf(user.userId);
 
 		if (userIdIndex == -1) {
-			logger.error('User not at event');
-			return res.sendStatus(status.ERR_BAD_REQUEST);
+			return new CollabifyError(status.ERR_RESOURCE_NOT_FOUND,
+									  'User is not at event').send(res);
 		}
 
 		// Remove the user from the event
@@ -170,7 +169,8 @@ module.exports.endEvent = function (eventId, res, callback) {
 		// Remove users from the event
 		User.update({userId: {$in: event.userIds}}, {eventId: null, role: 'NoRole'}, function (err) {
 			if (err) {
-				return status.handleUnexpectedError(err, res);
+				return new CollabifyError(status.ERR_BAD_REQUEST,
+										  'Unexpected error while ending event').send(res);
 			}
 
 			// End the event
