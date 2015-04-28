@@ -239,6 +239,10 @@ module.exports.getSongFromPlaylist = function (event, songId) {
  * @return 	{Vote|Undefined}			The vote or undefined if not found
  */
 module.exports.getVoteFromSong = function (song, userId) {
+	if (song.votes == undefined) {
+		return null;
+	}
+
 	/** @todo Find a better way to do this */
 	var vote = song.votes.filter(function (vote) {
 		if (vote.userId == userId) {
