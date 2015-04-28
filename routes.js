@@ -33,7 +33,7 @@ router.route('/users/:userId/')
 	})
 	.delete(function (req, res, next) {
 		// Log out the user and delete them from the database
-		UserSettingsController.delete(req, res);
+		UserController.delete(req, res);
 	});
 
 router.route('/users/:userId/settings/')
