@@ -78,7 +78,7 @@ module.exports.getUserAtEvent = function (userId, eventId, eventSelect, res, cal
         // eventSelect parameter was not passed
         callback = arguments[3];
         res = arguments[2];
-        select = null;
+        eventSelect = null;
     }
 
     module.exports.getUser(userId, res, function (user) {
