@@ -5,6 +5,31 @@ var status			= require('../status');
 /** @module */
 
 /**
+ * GET /events/:eventId/ - Get event details
+ *
+ * <p>Preconditions: <br>
+ * Event exists <br>
+ * User has logged in <br>
+ * User is at the event <br>
+ *
+ * @param 					req 										The client request
+ * @param 					req.headers 								The headers in the HTTP request
+ * @param {String} 			req.headers.userid 							The user's Spotify ID
+ * @param {Event}			res											The server response - The event's details
+ * @param {String} 			res.name									The name of the event
+ * @param {String}			res.eventId									The ID of the event, equal to the DJ's userId
+ * @param {EventSettings}	res.settings								The settings for the event
+ * @param {String}			res.settings.password						The event password (or null if there isn't one)
+ * @param {Boolean}			res.settings.locationRestricted				Whether to restrict the event to nearby users
+ * @param {Boolean}			res.settings.allowVoting					Whether to allow users to vote
+ */
+module.exports.get = function (req, res) {
+	helpers.getUserAtEvent(req.headers.userid, req.eventId, 'name eventId settings', res, function (user, event) {
+		res.status(status.OK_GET_RESOURCE).send(event);
+	});
+};
+
+/**
  * DELETE /events/:eventId/ - End event
  *
  * <p>Preconditions: <br>

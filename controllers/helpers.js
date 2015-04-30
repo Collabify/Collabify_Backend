@@ -69,16 +69,24 @@ module.exports.getEvent = function (eventId, select, res, callback) {
  *
  * @param {String} 		userId 					The userId to search for
  * @param {String} 		eventId 				The eventId to search for
+ * @param {String}		[eventSelect=null]		Optional select parameter for the event
  * @param 				res 					The server response
  * @param {Function}	callback(user, event)	Callback with the user and event found
  */
-module.exports.getUserAtEvent = function (userId, eventId, res, callback) {
+module.exports.getUserAtEvent = function (userId, eventId, eventSelect, res, callback) {
+	if (arguments.length == 4) {
+		// eventSelect parameter was not passed
+		callback = arguments[3];
+		res = arguments[2];
+		select = null;
+	}
+
 	module.exports.getUser(userId, res, function (user) {
 		if (user.eventId != eventId) {
 			return new CollabifyError(status.ERR_UNAUTHORIZED, 'User is not at event').send(res);
 		}
 
-		module.exports.getEvent(eventId, res, function (event) {
+		module.exports.getEvent(eventId, eventSelect, res, function (event) {
 			callback(user, event);
 		});
 	});
