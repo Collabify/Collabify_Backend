@@ -58,20 +58,35 @@ var status          = require('../status');
  */
 module.exports.delete = function (req, res) {
     helpers.getEvent(req.eventId, res, function (event) {
+        console.log("Before decay votes");
+        console.log(event.playlist);
         event.playlist.songs = helpers.decayVotes(helpers.sortSongs(event.playlist.songs));
 
+        console.log("Before currentSong = nextSong");
+        console.log(event.playlist);
         event.playlist.currentSong = event.playlist.nextSong;
 
         if (event.playlist.songs.length > 0) {
+            console.log("Before splice");
+        console.log(event.playlist);
             // Grab the next song from the front of the list
             event.playlist.nextSong = event.playlist.songs.splice(0, 1)[0];
         } else {
+            console.log("Before nextSong = null");
+        console.log(event.playlist);
             event.playlist.nextSong = null;
         }
 
+        console.log("Before save");
+        console.log(event.playlist);
         event.save();
 
+        console.log("Before filter");
+        console.log(event.playlist);
         var playlist = helpers.filterVotesForPlaylist(event.playlist, req.eventId);
+
+        console.log("Before response");
+        console.log(event.playlist);
         res.status(status.OK_DELETE_RESOURCE).send(playlist);
     });
 };
