@@ -384,6 +384,7 @@ module.exports.sortSongs = function (songs) {
  */
 module.exports.decayVotes = function (songs) {
     return songs.map(function (song) {
-        return Math.ceil(0.75 * song.voteCount);
+        song.voteCount = Math.ceil(0.75 * song.voteCount);
+        return song;
     });
 }
