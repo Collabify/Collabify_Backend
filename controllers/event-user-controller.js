@@ -1,6 +1,6 @@
-var helpers			= require('./helpers');
-var CollabifyError	= require('../collabify-error');
-var status			= require('../status');
+var helpers         = require('./helpers');
+var CollabifyError  = require('../collabify-error');
+var status          = require('../status');
 
 /** @module */
 
@@ -18,11 +18,11 @@ var status			= require('../status');
  * User's eventId is reset to null <br>
  * User's role is reset to 'NoRole' <br>
  *
- * @param 	req		The client request
- * @param 	res 	The server response
+ * @param   req     The client request
+ * @param   res     The server response
  */
 module.exports.delete = function (req, res) {
-	helpers.leaveEvent(req.userId, req.eventId, res, function () {
-		res.sendStatus(status.OK_DELETE_RESOURCE);
-	});
+    helpers.leaveEvent(req.userId, req.eventId, res, function () {
+        res.sendStatus(status.OK_DELETE_RESOURCE);
+    });
 };

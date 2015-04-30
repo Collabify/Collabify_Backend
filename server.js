@@ -5,21 +5,21 @@
  *  \ \_____\  \ \_____\  \ \_____\  \ \_____\  \ \_\ \_\  \ \_____\  \ \_\  \ \_\    \/\_____\
  *   \/_____/   \/_____/   \/_____/   \/_____/   \/_/\/_/   \/_____/   \/_/   \/_/     \/_____/
  *
- *	Authors:
- *			Ricardo Lopez <rlopez@sporks.io>
- *			David Gardner <smartydude010@hotmail.com>
- *			Sydney Johnson <syjohnso@gmail.com>
+ *  Authors:
+ *          Ricardo Lopez <rlopez@sporks.io>
+ *          David Gardner <smartydude010@hotmail.com>
+ *          Sydney Johnson <syjohnso@gmail.com>
  */
 
-var express 		= require('express');
-var app 			= express();
-var server			= require('http').createServer(app)
-var morgan			= require('morgan');
-var io				= require('socket.io').listen(server);
-var bodyParser		= require('body-parser');
-var mongoose		= require('mongoose');
-var routes			= require('./routes');
-var logger			= require('./logger');
+var express         = require('express');
+var app             = express();
+var server          = require('http').createServer(app)
+var morgan          = require('morgan');
+var io              = require('socket.io').listen(server);
+var bodyParser      = require('body-parser');
+var mongoose        = require('mongoose');
+var routes          = require('./routes');
+var logger          = require('./logger');
 
 var serverPort = process.env.PORT || 1338;
 logger.info('Using port ' + serverPort);
@@ -43,14 +43,14 @@ app.use(routes);
 // socket connection
 io.sockets.on('connection', function (socket) {
 
-	io.sockets.emit('blast', {msg: 'someone connected!'});
+    io.sockets.emit('blast', {msg: 'someone connected!'});
 
-	socket.on('blast', function(data, fn){
-		logger.debug(data);
-		io.sockets.emit('blast', {msg:data.msg});
+    socket.on('blast', function(data, fn){
+        logger.debug(data);
+        io.sockets.emit('blast', {msg:data.msg});
 
-		fn();//call the client back to clear out the field
-	});
+        fn();//call the client back to clear out the field
+    });
 
 });
 
