@@ -57,6 +57,10 @@ router.route('/events/:eventId/')
         // Get event details
         EventController.get(req, res);
     })
+    .put(function (req, res, next) {
+        // Change the event details
+        EventController.put(req, res);
+    })
     .delete(function (req, res, next) {
         // End event (DJ only)
         EventController.delete(req, res);
