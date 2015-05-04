@@ -12,6 +12,7 @@ var status          = require('../status');
  *
  * <p>Postconditions: <br>
  * User's settings are updated
+ * User's songs in their current event are updated based on the 'showName' field
  *
  * @param                   req                     The client request
  * @param {UserSettings}    req.body                The body of the request - The new user settings
@@ -24,6 +25,16 @@ module.exports.put = function (req, res) {
         user.settings = req.body;
         user.save();
 
-        res.status(status.OK_UPDATE_RESOURCE).send(user.settings);
+        if (user.eventId != null) {
+            // Update all songs added by the user in their current event based
+            // on the updated showName setting
+            helpers.getEvent(user.eventId, res, function (event) {
+                helpers.setUsernameForSongs(user, event);
+                res.status(status.OK_UPDATE_RESOURCE).send(user.settings);
+            });
+        } else {
+            // User isn't part of an event; no need to do anything
+            res.status(status.OK_UPDATE_RESOURCE).send(user.settings);
+        }
     });
 };

@@ -24,6 +24,7 @@ var status          = require('../status');
  * @param {String}      res.currentSong.songId              The Spotify ID for the song
  * @param {String}      res.currentSong.artworkUrl          The URL where the album art can be found
  * @param {String}      res.currentSong.userId              The Spotify ID of the user who added the song
+ * @param {String}      res.currentSong.username            The name of the user who added the song, or 'Anonymous' if they do not want to show their username
  * @param {Number}      res.currentSong.voteCount           The song's current number of (upvotes - downvotes)
  * @param {Vote}        res.currentSong.vote                The vote placed by the user for the song
  * @param {Boolean}     res.currentSong.vote.isUpvoted      Whether the user upvoted the song
@@ -36,6 +37,7 @@ var status          = require('../status');
  * @param {String}      res.nextSong.songId                 The Spotify ID for the song
  * @param {String}      res.nextSong.artworkUrl             The URL where the album art can be found
  * @param {String}      res.nextSong.userId                 The Spotify ID of the user who added the song
+ * @param {String}      res.nextSong.username               The name of the user who added the song, or 'Anonymous' if they do not want to show their username
  * @param {Number}      res.nextSong.voteCount              The song's current number of (upvotes - downvotes)
  * @param {Vote}        res.nextSong.vote                   The vote placed by the user for the song
  * @param {Boolean}     res.nextSong.vote.isUpvoted         Whether the user upvoted the song
@@ -48,6 +50,7 @@ var status          = require('../status');
  * @param {String}      res.songs[].songId                  The Spotify ID for the song
  * @param {String}      res.songs[].artworkUrl              The URL where the album art can be found
  * @param {String}      res.songs[].userId                  The Spotify ID of the user who added the song
+ * @param {String}      res.songs[].username                The name of the user who added the song, or 'Anonymous' if they do not want to show their username
  * @param {Number}      res.songs[].voteCount               The song's current number of (upvotes - downvotes)
  * @param {Vote}        res.songs[].vote                    The vote placed by the user for the song
  * @param {Boolean}     res.songs[].vote.isUpvoted          Whether the user upvoted the song

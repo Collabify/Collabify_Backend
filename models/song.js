@@ -14,6 +14,7 @@ var VoteDef     = require('./vote').VoteDef;
  * @property {String}   songId          The Spotify ID for the song
  * @property {String}   artworkUrl      The URL where the album art can be found
  * @property {String}   userId          The Spotify ID of the user who added the song
+ * @property {String}   username        The name of the user who added the song, or 'Anonymous' if they do not want to show their username
  * @property {Number}   [voteCount=0]   The song's current number of (upvotes - downvotes)
  * @property {Vote[]}   votes           The individual votes placed by each user
  */
@@ -25,6 +26,7 @@ module.exports.SongDef = {
     songId:     {type: String, required: true},
     artworkUrl: {type: String, required: true},
     userId:     {type: String, required: true},
+    username:   {type: String, required: true},
     voteCount:  {type: Number, required: true},
     votes:      {type: [VoteDef], default: []}
 };
