@@ -98,8 +98,8 @@ module.exports.post = function (req, res) {
 
         Event.create(req.body, function (err) {
             if (err) {
-                logger.error(err);
-                return res.sendStatus(status.ERR_BAD_REQUEST);
+                return new CollabifyError(status.ERR_BAD_REQUEST,
+                                          'Unexpected error while creating event').send(res);
             }
 
             // Because the user is creating the event (they are now a DJ),
@@ -151,7 +151,7 @@ module.exports.get = function (req, res) {
         .exec(function (err, events) {
             if (err) {
                 return new CollabifyError(status.ERR_BAD_REQUEST,
-                                      'Unexpected error while querying for nearby events').send(res);
+                                          'Unexpected error while querying for nearby events').send(res);
             }
 
             res.status(status.OK_GET_RESOURCE).send(events);

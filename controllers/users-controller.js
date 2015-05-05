@@ -38,8 +38,8 @@ function handleNewUser(req, res) {
 
     User.create(req.body, function (err) {
         if (err) {
-            logger.error(err);
-            return res.sendStatus(status.ERR_BAD_REQUEST);
+            return new CollabifyError(status.ERR_BAD_REQUEST,
+                                      'Unexpected error while creating user').send(res);
         }
 
         // Return the newly created user
