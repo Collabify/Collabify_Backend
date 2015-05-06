@@ -18,7 +18,7 @@ var status          = require('../status');
  * @param {UserSettings}    req.body                The body of the request - The new user settings
  * @param {Boolean}         req.body.showName       Whether to display the user's Spotify username or 'anonymous'
  * @param {UserSettings}    res                     The server response - The new user settings
- * @param {String}          res.showName            Whether to display the user's Spotify username or 'anonymous'
+ * @param {Boolean}         res.showName            Whether to display the user's Spotify username or 'anonymous'
  */
 module.exports.put = function (req, res) {
     helpers.getUser(req.userId, res, function (user) {
