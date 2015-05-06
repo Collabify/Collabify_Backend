@@ -368,6 +368,7 @@ module.exports.setUsernameForSongs = function (user, event) {
         module.exports.setUsernameForSong(user, song);
     });
 
+    event.markModified('playlist');
     event.save();
 };
 
